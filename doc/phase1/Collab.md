@@ -40,13 +40,13 @@
     * The random food thing urbanspoon used to have - when looking for food, can select random and it will pick random 
       culinary type and show restaurants nearby
    
-   #### For the second meeting (during tutorial) 
+   #### The second meeting (during tutorial) 
    we tired querying data using Amazon, BestBuy, and Walmart’s APIs. We were able to successfully obtain the API key for Walmart and got some data back. Our BestBuy API key is still pending for approval
    
-   #### For the third meeting (slack) 
+   #### The third meeting (slack) 
    we decided on the project we want to work on, tried to get a rough idea of how our app is going look like, and wrote down some of the rough test cases
    
-   #### For the fourth meeting (slack) 
+   #### The fourth meeting (slack) 
    we continued to work on the documentation
    
    #### For the fifth meeting (in-person)
