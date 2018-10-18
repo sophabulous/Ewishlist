@@ -1,4 +1,4 @@
-### Testing Application
+## Testing Application
   ### Backend
    * JUnit tests for functions
    * Compare tracked prices with other price trackers (See if they have same prices)
