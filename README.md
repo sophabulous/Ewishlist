@@ -11,7 +11,7 @@ With many e-commerce websites offering competitive prices and products, it can b
 Customers tracking items they would like to buy for a sale.
 
  <h2>Use cases</h2>
- 
+
 * manage wishlist:
 
 	* add product urls to wishlist
@@ -56,10 +56,15 @@ Customers tracking items they would like to buy for a sale.
 
 
  <h2>Models</h2>
-User
-Product
-Wishlist
-Notification
+
+* User
+
+* Product
+
+* Wishlist
+
+* Notification
+
 
 
 
