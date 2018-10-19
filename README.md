@@ -11,6 +11,7 @@ With many e-commerce websites offering competitive prices and products, it can b
 Customers tracking items they would like to buy for a sale.
 
  <h2>Use cases</h2>
+ 
 * manage wishlist:
 
 	* add product urls to wishlist
@@ -41,7 +42,7 @@ Customers tracking items they would like to buy for a sale.
 	* view, in the app, the current price of the products being tracked
 
 	* view the price trend of the products being tracked
-	
+
 
 * manage account: 
 
