@@ -11,25 +11,48 @@ With many e-commerce websites offering competitive prices and products, it can b
 Customers tracking items they would like to buy for a sale.
 
  <h2>Use cases</h2>
-* manage wishlist
-* add product urls to wishlist
-* remove product url from wishlist
+* manage wishlist:
+
+	* add product urls to wishlist
+
+	* remove product url from wishlist
+
+
 * manage tracking preferences per product: 
-* set a time frame to track products
-* set a price threshold such that the user will only be notified if the price goes      below that threshold
+
+	* set a time frame to track products
+
+	* set a price threshold such that the user will only be notified if the price goes below that threshold
+
+
 * manage notification preferences:
-* enable desktop notification
-* update email to be notified in
-* send reminders about the product when it is on a sale
-* daily activity email preference (?)
+
+	* enable desktop notification
+
+	* update email to be notified in
+
+	* send reminders about the product when it is on a sale
+
+	* daily activity email preference (?)
+
+
 * view product status:
-* view, in the app, the current price of the products being tracked
-* view the price trend of the products being tracked
-* manage account 
-* change password 
-* change email
-* Log in/log out
-* Register page (creating account)
+	
+	* view, in the app, the current price of the products being tracked
+
+	* view the price trend of the products being tracked
+	
+
+* manage account: 
+
+	* log in/log out
+	
+	* register(create account)
+
+	* change password 
+	
+	* change email
+
 
  <h2>Models</h2>
 User
