@@ -1,0 +1,384 @@
+swagger: "2.0"
+info:
+  description: "This is the api spec for Team SpaceWhales."
+  version: "1.0.0"
+  title: ""
+  contact: 
+    name: ""
+  license:
+    name: "<insert license here>"
+host: "<unknown_domain_insert_here>"
+basePath: "/space_whales"
+tags:
+- name: "User"
+  description: "Everything related to user login, management and authentication"
+- name: "Tracking"
+  description: "Everything related to product tracking and management"
+schemes:
+- "https"
+paths:
+
+  /users:
+    put:
+      tags: 
+      - "User"
+      summary: "Create new user"
+      description: ""
+      operationId: "newUser"
+      consumes: 
+      - "application/json"
+      produces: 
+      - "application/json"
+      parameters: 
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/NewUserRequest"
+      responses:
+        200:
+          description: "Successful user creation"
+        401:
+          description: "Invalid account creation arguments"
+
+    post:
+      tags:
+      - "User"
+      summary: "Update a user's info" 
+      description: ""
+      operationId: "updateUser"
+      consumes: 
+      - "application/json"
+      produces: 
+      - "application/json"
+      parameters: 
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/UpdateUserRequest"
+      responses:
+        200:
+          description: "Successful user update"
+        401:
+          description: "Invalid user update arguments"
+        405:
+          description: "Invalid token"
+
+    delete:
+      tags:
+      - "User"
+      summary: "Delete a user"
+      description: ""
+      operationId: "deleteUser"
+      consumes: 
+      - "application/json"
+      produces: 
+      - "application/json"
+      parameters: 
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/LoginToken"
+      responses:
+        200:
+          description: "Successful user deletion"
+        401:
+          description: "Could not delete user"
+        405:
+          description: "Invalid token"
+
+  /users/token/login:
+    post:
+      tags:
+      - "User"
+      summary: "Create and return user login token based on provided username and password hash"  
+      description: ""
+      operationId: "getUserToken"
+      consumes: 
+      - "application/json"
+      produces: 
+      - "application/json"
+      parameters: 
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/LoginRequest"
+      responses:
+        200:
+          description: "Successful login"
+          schema:
+            $ref: "#/definitions/LoginToken"
+        405:
+          description: "Invalid login credentials"
+
+  /users/token/invalidateToken:
+    post:
+      tags:
+      - "User"
+      summary: "Invalidate an existing token - primary use case is logoff."
+      description: ""
+      operationId: "invalidateToken"
+      consumes: 
+      - "application/json"
+      produces: 
+      - "application/json"
+      parameters: 
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/LoginToken"
+      responses:
+        200:
+          description: "Successful invalidation"
+        405:
+          description: "Provided token is invalid"
+
+  /users/token/validate:
+    get:
+      tags:
+      - "User"
+      summary: "Validates whether a given token is valid - primarily for inter-service communication"
+      description: ""
+      operationId: "authenticateToken"
+      consumes: 
+      - "application/json"
+      produces: 
+      - "application/json"
+      parameters: 
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/LoginRequest"
+      responses:
+        200:
+          description: "Token is valid"
+        405:
+          description: "Invalid token"
+          
+  /tracking:
+    get:
+      tags:
+      - "Tracking"
+      summary: "Get all product information for a user defined by their token"
+      description: ""
+      operationId: "getTrackedProducts"
+      consumes: 
+      - "application/json"
+      produces: 
+      - "application/json"
+      parameters: 
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/LoginToken"
+      responses:
+        200:
+          description: "Successful"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/ProductItem"
+        401:
+          description: "Invalid/expired login token"
+        405:
+          description: "Product does not exist"
+    
+    put:
+      tags: 
+      - "Tracking"
+      summary: "Add a product to the user's wishlist"
+      description: ""
+      operationId: "addTrackedProduct"
+      consumes: 
+      - "application/json"
+      produces: 
+      - "application/json"
+      parameters: 
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/NewProductRequest"
+      responses:
+        200:
+          description: "Successful"
+          schema:
+            $ref: "#/definitions/ProductItem"
+        401:
+          description: "Invalid/expired login token"
+        405:
+          description: "Product could not be tracked"
+    
+  /tracking/{productId}:
+    get:
+      tags:
+      - "Tracking"
+      summary: "Information about an item being tracked by the user defined by the login token"
+      description: ""
+      operationId: "getTrackedProductInfo"
+      consumes: 
+      - "application/json"
+      produces: 
+      - "application/json"
+      parameters:
+      - name: "productId"
+        in: "path"
+        required: true
+        type: "integer"
+        
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/LoginToken"
+      responses:
+        200:
+          description: "Successful"
+          schema:
+            $ref: "#/definitions/ProductItem"
+        401:
+          description: "Invalid/expired login token"
+        405:
+          description: "Product does not exist"
+
+
+
+    post:
+      tags: 
+      - "Tracking"
+      summary: "Update a tracked product"
+      description: ""
+      operationId: "updateProductItem"
+      parameters: 
+      - name: "productId"
+        in: "path"
+        required: true
+        type: "integer"
+      
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/ProductItem"
+      responses:
+        200:
+          description: "Successful"
+          schema:
+            $ref: "#/definitions/ProductItem"
+        401:
+          description: "Invalid/expired login token"
+        405:
+          description: "Could not update product item"
+
+    delete:
+      tags: 
+      - "Tracking"
+      summary: "Delete a product from the user's wishlist"
+      description: ""
+      operationId: "deleteTrackedProduct"
+      consumes: 
+      - "application/json"
+      produces: 
+      - "application/json"
+      parameters: 
+      - name: "productId"
+        in: "path"
+        required: true
+        type: "integer"
+      responses:
+        200:
+          description: "Successful"
+          schema:
+            $ref: "#/definitions/ProductItem"
+        401:
+          description: "Invalid/expired login token"
+        405:
+          description: "Product could not be tracked"
+
+
+definitions:
+  Username:
+    type: "string"
+    minLength: 8
+    maxLength: 32
+
+  ProductId:
+    type: "integer"
+
+  LoginRequest:
+    type: "object"
+    properties:
+      username:
+        $ref: "#/definitions/Username"
+      password:
+        type: "string"
+        description: "Password hashed by client"
+
+  LoginToken:
+    type: "object"
+    properties:
+      username:
+        $ref: "#/definitions/Username"
+      sessionToken:
+        type: "string"
+        minLength: 128
+        maxLength: 256
+      expiryTime:
+        type: "string"
+        format: "date-time"
+
+  ProductItem:
+    type: "object"
+    properties:
+      productId:
+        $ref: "#/definitions/ProductId"
+      productName:
+        type: "string"
+      currentPrice:
+        type: "number"
+        format: "float"
+      trackedPrice:
+        type: "number"
+        format: "float"
+      trackedTime:
+        type: "string"
+        format: "date-time"
+      vendor:
+        type: "string"
+      url:
+        type: "string"
+        format: "uri"
+
+  NewProductRequest:
+    type: "object"
+    properties:
+      url:
+        type: "string"
+        format: "uri"
+      loginToken:
+        $ref: "#/definitions/LoginToken"
+
+  NewUserRequest:
+    type: "object"
+    properties:
+      username:
+        $ref: "#/definitions/Username"
+      password:
+        type: "string"
+      email:
+        type: "string"
+        format: "email"
+        
+  UpdateUserRequest:
+    type: "object"
+    properties:
+      loginToken:
+        $ref: "#/definitions/LoginToken"
+      #idk what we actually want to let them change, so idk what more to put here
+        
