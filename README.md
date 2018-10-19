@@ -8,7 +8,7 @@
 With many e-commerce websites offering competitive prices and products, it can be difficult to track the price of a favourite product for when it goes on sale. This app eases this experience for the user by tracking the price of the product and notifying the customer when the item’s price is reduced. 
 
  <h2>Actors</h2>
-Customers tracking items they would like to buy for a sale.
+Customers tracking items they would like to buy.
 
  <h2>Use cases</h2>
 
