@@ -28,8 +28,8 @@
 
    #### Database 
    * will store the information about the users information and the list of products the user is currently tracking, and their current price
-   #### Used Cases
-   * The use cases are in the used-cases.md
+   #### Use Cases
+   * The use cases are in the use-cases.md
 
 ## Team Goals for this application
 
