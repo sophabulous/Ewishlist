@@ -15,7 +15,7 @@
     * enable desktop notification
     * update email to be notified at
     * send reminders about the product when it is on a sale
-    * daily activity email preference (?)
+    * daily activity email preference 
   * view product status:
     * view, in the app, the current price of the products being tracked
     * view the price trend of the products being tracked
