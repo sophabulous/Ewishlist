@@ -34,7 +34,7 @@ Customers tracking items they would like to buy.
 
 	* send reminders about the product when it is on a sale
 
-	* daily activity email preference (?)
+	* daily activity email preference 
 
 
 * view product status:
@@ -54,16 +54,6 @@ Customers tracking items they would like to buy.
 	
 	* change email
 
-
- <h2>Models</h2>
-
-* User
-
-* Product
-
-* Wishlist
-
-* Notification
 
 
 

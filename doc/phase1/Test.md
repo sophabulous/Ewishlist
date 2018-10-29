@@ -6,3 +6,5 @@
    * Manual testing of basic functionality and UI
   
   > In order to achieve TDD and CI, we will run necessary tests before we commit
+  
+  > We will setup Travis to run the tests with every merge to master.
