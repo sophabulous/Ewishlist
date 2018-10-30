@@ -1,7 +1,14 @@
+sudo: required 
+services:
+ - docker
 matrix:
   include:
     - language: java
       jdk: oraclejdk8
+      before_install: 
+      - docker build -t bucketList /backend/Ebucketlist/ 
+      - docker run -d -p 9090:9090 bucketList
+      - docker ps -a
 
     - language: node_js
       node_js: 8
