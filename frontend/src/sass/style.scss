@@ -1,0 +1,111 @@
+$mobileBreakpoint: 425px;
+$tabletBreakpoint: 768px;
+$desktopBreakpoint: 1024px;
+$roboto: 'Roboto', sans-serif;
+$poppins: 'Poppins', sans-serif;
+$open-sans: 'Open Sans', sans-serif;
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+    margin: 0;
+    font-family: $poppins;
+    font-size: 40px;
+}
+
+.container {
+    text-align: center;
+}
+
+.banner-section-container {
+    width: 100%;
+    background-color: #000000;
+    color: #ffffff;
+    text-align: center;
+    overflow: hidden;
+    font-family: $poppins;
+
+    h3 {
+      font-size: 1.25em;
+    }
+
+    @media (min-width: #{$tabletBreakpoint}) {
+        background-color: #000000;
+    }
+}
+
+.dontHaveAccount{
+  font-size: 12px;
+}
+
+.form-section-container {
+    margin: 0 auto;
+    position: relative;
+}
+
+.logInPage{
+    font-family: $roboto;
+
+    h1 {
+      font-family: $poppins;
+      padding: 50px 0 0;
+      margin: 0;
+    }
+}
+
+.logInForm {
+  text-align: left;
+  padding: 5% 40%;
+
+  input {
+      height: 50px;
+      font-size: 18px;
+      padding: 10px;
+      width: 100%;
+      box-sizing: border-box;
+      margin-bottom: 50px;
+      font-family: $roboto;
+      background-color: #E8E6E6;
+  }
+}
+
+.submitBtn {
+  position: relative;
+  padding: 0 30%;
+}
+
+.submitBtn input{
+    height: 40px;
+    color: #ffffff;
+    font-size: 16px;
+    background-color: #000000;
+    padding: 10px;
+    text-decoration: none;
+    text-align: center;
+    margin: 20px 0;
+    border-radius: 0;
+    font-weight: 500;
+
+    &:hover {
+        color:#ffffff;
+        background-color: #282727;
+        cursor: pointer;
+    }
+}
+
+@media (min-width: #{$tabletBreakpoint}) {
+    width: 33%;
+}
+
+.footer{
+  height: 40px;
+  background-color: #000000;
+  color: #ffffff;
+  font-family: $open-sans;
+  text-align: center;
+  overflow: hidden;
+  font-size: 14px;
+}

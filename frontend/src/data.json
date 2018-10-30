@@ -1,0 +1,26 @@
+{
+    "siteName": "EBUCKETLIST",
+    "dontHaveAccountText": "Don't have an account? ",
+    "signUpText": "Sign up",
+
+    "itemList": [
+        {
+            "sectionTitle": "Section Title",
+            "sectionHeading": "Heading of this section",
+            "sectionBody": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.",
+            "sectionLogoURL": "./src/assets/wii.jpg"
+        },
+        {
+            "sectionTitle": "Section Title",
+            "sectionHeading": "Heading of this section",
+            "sectionBody": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.",
+            "sectionLogoURL": "./src/assets/dress.jpg"
+        },
+        {
+            "sectionTitle": "Section Title",
+            "sectionHeading": "Heading of this section",
+            "sectionBody": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.",
+            "sectionLogoURL": "./src/assets/racket.jpg"
+        }
+    ]
+}
