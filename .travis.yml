@@ -6,7 +6,7 @@ matrix:
     - language: java
       jdk: oraclejdk8
       before_install: 
-      - docker build -t bucketList /backend/Ebucketlist/ 
+      - docker build -t bucketList /backend/
       - docker run -d -p 9090:9090 bucketList
       - docker ps -a
 
