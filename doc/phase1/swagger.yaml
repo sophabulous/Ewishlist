@@ -19,6 +19,16 @@ schemes:
 paths:
 
   /users:
+    get:
+      tags: 
+      - "User"
+      summary: "ping"
+      description: ""
+      operationId: "ping"
+      responses:
+        200:
+          description: "ping"
+
     put:
       tags: 
       - "User"
@@ -153,13 +163,13 @@ paths:
         name: "body"
         required: true
         schema:
-          $ref: "#/definitions/LoginRequest"
+          $ref: "#/definitions/LoginToken"
       responses:
         200:
           description: "Token is valid"
         405:
           description: "Invalid token"
-          
+
   /tracking:
     get:
       tags:
@@ -380,5 +390,4 @@ definitions:
     properties:
       loginToken:
         $ref: "#/definitions/LoginToken"
-      #idk what we actually want to let them change, so idk what more to put here
-        
+#idk what we actually want to let them change, so idk what more to put here
