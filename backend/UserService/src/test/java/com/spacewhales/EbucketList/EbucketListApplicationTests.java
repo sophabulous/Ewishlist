@@ -1,5 +1,7 @@
 package com.spacewhales.EbucketList;
 
+import java.util.Date;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,8 +17,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import io.swagger.api.UsersApiController;
+import io.swagger.model.LoginRequest;
+import io.swagger.model.LoginToken;
+import io.swagger.model.NewUserRequest;
+import io.swagger.model.UpdateUserRequest;
 
 @EnableAutoConfiguration
 @RunWith(SpringRunner.class)
@@ -32,8 +37,18 @@ public class EbucketListApplicationTests
 
 	private ObjectMapper om;
 
-	private String createURLWithPort(String uri) {
+	private String createURLWithPort(String uri)
+	{
 		return "http://localhost:" + port + uri;
+	}
+	
+	private LoginToken createMockLoginToken()
+	{
+		LoginToken t = new LoginToken();
+		t.setUsername("testUsername");
+		t.sessionToken("TokenTokenTokenTokenTokenTokenTokenTokenTokenTokenTokenTokenTokenTokenTokenTokenTokenTokenTokenTokenTokenTokenTokenTokenTokenTokenTokenTokenTokenTokenTokenTokenTokenTokenTokenTokenTokenTokenTokenTokenTokenTokenTokenTokenTokenTokenTokenTokenTokenToken");
+		t.setExpiryTime(new Date());
+		return t;
 	}
 	
 	@Before
@@ -45,6 +60,7 @@ public class EbucketListApplicationTests
 		headers.add("Content-Type", "application/json");
 
 		om = new ObjectMapper();
+		om.findAndRegisterModules();
 	}
 	
 	@Test
@@ -62,26 +78,96 @@ public class EbucketListApplicationTests
 
 		assert(response.getStatusCode().equals(HttpStatus.NOT_IMPLEMENTED));
 	}
-	
-	/*
-	Removed for now due to serialization issues.
+
+	@Test
+	public void hitEndpointCreateUser() throws Exception 
+	{
+		NewUserRequest r = new NewUserRequest();
+		r.setUsername("testUsr");
+		r.setPassword("testPwd");
+		r.setEmail("test@mail.com");
+		
+		HttpEntity<String> entity = new HttpEntity<String>(om.writeValueAsString(r), headers);
+
+		ResponseEntity<String> response = restTemplate.exchange(
+				createURLWithPort("/users/manage"),
+				HttpMethod.PUT, entity, String.class);
+
+		assert(response.getStatusCode().equals(HttpStatus.NOT_IMPLEMENTED));
+	}
+
+	@Test
+	public void hitEndpointUpdateUser() throws Exception 
+	{
+		UpdateUserRequest r = new UpdateUserRequest();
+		r.setLoginToken(createMockLoginToken());
+		
+		HttpEntity<String> entity = new HttpEntity<String>(om.writeValueAsString(r), headers);
+
+		ResponseEntity<String> response = restTemplate.exchange(
+				createURLWithPort("/users/manage"),
+				HttpMethod.POST, entity, String.class);
+
+		assert(response.getStatusCode().equals(HttpStatus.NOT_IMPLEMENTED));
+	}
 	
 	@Test
-	public void hitEndpointTokenValidate() throws Exception 
+	public void hitEndpointDeleteUser() throws Exception 
 	{
-		LoginToken t = new LoginToken();
-		t.setUsername("testUsername");
-		t.sessionToken("randomToken");
-		t.setExpiryTime(OffsetDateTime.now());
+		UpdateUserRequest r = new UpdateUserRequest();
+		r.setLoginToken(createMockLoginToken());
+		
+		HttpEntity<String> entity = new HttpEntity<String>(om.writeValueAsString(r), headers);
+
+		ResponseEntity<String> response = restTemplate.exchange(
+				createURLWithPort("/users/manage"),
+				HttpMethod.DELETE, entity, String.class);
+
+		assert(response.getStatusCode().equals(HttpStatus.NOT_IMPLEMENTED));
+	}
+	
+	@Test
+	public void hitEndpointLogin() throws Exception
+	{
+		LoginRequest r = new LoginRequest();
+		r.setUsername("testUsr");
+		r.setPassword("testPwd");
+		
+		HttpEntity<String> entity = new HttpEntity<String>(om.writeValueAsString(r), headers);
+		
+		ResponseEntity<String> response = restTemplate.exchange(
+				createURLWithPort("/users/token/login"),
+				HttpMethod.POST, entity, String.class);
+
+		assert(response.getStatusCode().equals(HttpStatus.INTERNAL_SERVER_ERROR));
+	}
+	
+	@Test
+	public void hitEndpointTokenInvalidate() throws Exception 
+	{
+		LoginToken t = createMockLoginToken();
 		
 		HttpEntity<String> entity = new HttpEntity<String>(om.writeValueAsString(t), headers);
 
 		ResponseEntity<String> response = restTemplate.exchange(
-				createURLWithPort("/users/token/validate"),
-				HttpMethod.GET, entity, String.class);
+				createURLWithPort("/users/token/invalidateToken"),
+				HttpMethod.POST, entity, String.class);
 
 		assert(response.getStatusCode().equals(HttpStatus.NOT_IMPLEMENTED));
 	}
-	*/
+	
+	@Test
+	public void hitEndpointTokenValidate() throws Exception 
+	{
+		LoginToken t = createMockLoginToken();
+		
+		HttpEntity<String> entity = new HttpEntity<String>(om.writeValueAsString(t), headers);
+
+		ResponseEntity<String> response = restTemplate.exchange(
+				createURLWithPort("/users/token/validateToken"),
+				HttpMethod.POST, entity, String.class);
+
+		assert(response.getStatusCode().equals(HttpStatus.NOT_IMPLEMENTED));
+	}
 	
 }

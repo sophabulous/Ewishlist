@@ -24,7 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.util.List;
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-11-01T15:19:42.864Z")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-11-01T17:36:03.863Z")
 
 @Api(value = "users", description = "the users API")
 public interface UsersApi {
@@ -33,10 +33,10 @@ public interface UsersApi {
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "Token is valid"),
         @ApiResponse(code = 405, message = "Invalid token") })
-    @RequestMapping(value = "/users/token/validate",
+    @RequestMapping(value = "/users/token/validateToken",
         produces = { "application/json" }, 
         consumes = { "application/json" },
-        method = RequestMethod.GET)
+        method = RequestMethod.POST)
     ResponseEntity<Void> authenticateToken(@ApiParam(value = "" ,required=true )  @Valid @RequestBody LoginToken body);
 
 
@@ -45,7 +45,7 @@ public interface UsersApi {
         @ApiResponse(code = 200, message = "Successful user deletion"),
         @ApiResponse(code = 401, message = "Could not delete user"),
         @ApiResponse(code = 405, message = "Invalid token") })
-    @RequestMapping(value = "/users",
+    @RequestMapping(value = "/users/manage",
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.DELETE)
@@ -78,7 +78,7 @@ public interface UsersApi {
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "Successful user creation"),
         @ApiResponse(code = 401, message = "Invalid account creation arguments") })
-    @RequestMapping(value = "/users",
+    @RequestMapping(value = "/users/manage",
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.PUT)
@@ -98,7 +98,7 @@ public interface UsersApi {
         @ApiResponse(code = 200, message = "Successful user update"),
         @ApiResponse(code = 401, message = "Invalid user update arguments"),
         @ApiResponse(code = 405, message = "Invalid token") })
-    @RequestMapping(value = "/users",
+    @RequestMapping(value = "/users/manage",
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.POST)

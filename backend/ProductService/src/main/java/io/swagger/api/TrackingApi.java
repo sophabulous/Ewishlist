@@ -23,7 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.util.List;
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-11-01T15:19:42.864Z")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-11-01T17:36:03.863Z")
 
 @Api(value = "tracking", description = "the tracking API")
 public interface TrackingApi {
@@ -33,7 +33,7 @@ public interface TrackingApi {
         @ApiResponse(code = 200, message = "Successful", response = ProductItem.class),
         @ApiResponse(code = 401, message = "Invalid/expired login token"),
         @ApiResponse(code = 405, message = "Product could not be tracked") })
-    @RequestMapping(value = "/tracking",
+    @RequestMapping(value = "/tracking/all",
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.PUT)
@@ -57,10 +57,10 @@ public interface TrackingApi {
         @ApiResponse(code = 200, message = "Successful", response = ProductItem.class),
         @ApiResponse(code = 401, message = "Invalid/expired login token"),
         @ApiResponse(code = 405, message = "Product does not exist") })
-    @RequestMapping(value = "/tracking/{productId}",
+    @RequestMapping(value = "/tracking/{productId}/info",
         produces = { "application/json" }, 
         consumes = { "application/json" },
-        method = RequestMethod.GET)
+        method = RequestMethod.POST)
     ResponseEntity<ProductItem> getTrackedProductInfo(@ApiParam(value = "",required=true) @PathVariable("productId") Integer productId,@ApiParam(value = "" ,required=true )  @Valid @RequestBody LoginToken body);
 
 
@@ -69,10 +69,10 @@ public interface TrackingApi {
         @ApiResponse(code = 200, message = "Successful", response = ProductItem.class, responseContainer = "List"),
         @ApiResponse(code = 401, message = "Invalid/expired login token"),
         @ApiResponse(code = 405, message = "Product does not exist") })
-    @RequestMapping(value = "/tracking",
+    @RequestMapping(value = "/tracking/all",
         produces = { "application/json" }, 
         consumes = { "application/json" },
-        method = RequestMethod.GET)
+        method = RequestMethod.POST)
     ResponseEntity<List<ProductItem>> getTrackedProducts(@ApiParam(value = "" ,required=true )  @Valid @RequestBody LoginToken body);
 
 

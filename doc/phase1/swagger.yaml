@@ -29,7 +29,7 @@ paths:
         200:
           description: "ping"
 
-  /users:
+  /users/manage:
     put:
       tags: 
       - "User"
@@ -148,8 +148,8 @@ paths:
         405:
           description: "Provided token is invalid"
 
-  /users/token/validate:
-    get:
+  /users/token/validateToken:
+    post:
       tags:
       - "User"
       summary: "Validates whether a given token is valid - primarily for inter-service communication"
@@ -182,8 +182,8 @@ paths:
         200:
           description: "ping"
 
-  /tracking:
-    get:
+  /tracking/all:
+    post:
       tags:
       - "Tracking"
       summary: "Get all product information for a user defined by their token"
@@ -237,8 +237,8 @@ paths:
         405:
           description: "Product could not be tracked"
     
-  /tracking/{productId}:
-    get:
+  /tracking/{productId}/info:
+    post:
       tags:
       - "Tracking"
       summary: "Information about an item being tracked by the user defined by the login token"
@@ -269,8 +269,7 @@ paths:
         405:
           description: "Product does not exist"
 
-
-
+  /tracking/{productId}:
     post:
       tags: 
       - "Tracking"

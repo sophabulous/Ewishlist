@@ -1,8 +1,11 @@
 package io.swagger.model;
 
+import java.util.Date;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.threeten.bp.OffsetDateTime;
@@ -24,7 +27,7 @@ public class LoginToken   {
   private String sessionToken = null;
 
   @JsonProperty("expiryTime")
-  private OffsetDateTime expiryTime = null;
+  private Date expiryTime = null;
 
   public LoginToken username(String username) {
     this.username = username;
@@ -66,7 +69,7 @@ public class LoginToken   {
     this.sessionToken = sessionToken;
   }
 
-  public LoginToken expiryTime(OffsetDateTime expiryTime) {
+  public LoginToken expiryTime(Date expiryTime) {
     this.expiryTime = expiryTime;
     return this;
   }
@@ -78,12 +81,12 @@ public class LoginToken   {
   @ApiModelProperty(value = "")
 
   @Valid
-
-  public OffsetDateTime getExpiryTime() {
+  @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm:ss.SSSZ", timezone = "EST")
+  public Date getExpiryTime() {
     return expiryTime;
   }
 
-  public void setExpiryTime(OffsetDateTime expiryTime) {
+  public void setExpiryTime(Date expiryTime) {
     this.expiryTime = expiryTime;
   }
 
