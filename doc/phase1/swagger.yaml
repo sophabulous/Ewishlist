@@ -18,17 +18,18 @@ schemes:
 - "https"
 paths:
 
-  /users:
+  /users/ping:
     get:
       tags: 
       - "User"
       summary: "ping"
       description: ""
-      operationId: "ping"
+      operationId: "pingUsers"
       responses:
         200:
           description: "ping"
 
+  /users:
     put:
       tags: 
       - "User"
@@ -169,6 +170,17 @@ paths:
           description: "Token is valid"
         405:
           description: "Invalid token"
+
+  /tracking/ping:
+    get:
+      tags: 
+      - "Tracking"
+      summary: "ping"
+      description: ""
+      operationId: "pingTracking"
+      responses:
+        200:
+          description: "ping"
 
   /tracking:
     get:
