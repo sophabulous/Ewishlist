@@ -1,7 +1,5 @@
 sudo: required 
-branches:
-  only:
-    - /.*/
+
 services:
  - docker
 matrix:
