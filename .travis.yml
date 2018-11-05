@@ -30,6 +30,3 @@ matrix:
       - docker build -f Dockefile_deploy -t product_service .
       - docker run -d -p 9095:9095 product_service
       - docker ps -a
-  # build frontend
-    - language: node_js
-      node_js: 8
