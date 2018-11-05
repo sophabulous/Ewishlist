@@ -7,9 +7,6 @@
 	<artifactId>EbucketList</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
-	<build>
-        <finalName>user_service</finalName>
-    </build>
 
 	<name>EbucketList</name>
 	<description>Demo project for Spring Boot</description>

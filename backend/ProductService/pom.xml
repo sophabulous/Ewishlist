@@ -7,9 +7,8 @@
 	<artifactId>UserService</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
-	<build>
-        <finalName>product_service</finalName>
-    </build>
+
+	<name>UserService</name>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
