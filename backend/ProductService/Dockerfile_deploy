@@ -1,0 +1,6 @@
+# this docker file is used to run the service
+# it assumes the jar file has already been created.
+FROM openjdk
+WORKDIR product
+COPY target/product_service-0.1.0.jar .
+ENTRYPOINT ["java", "-jar", "product_service-0.1.0.jar"]

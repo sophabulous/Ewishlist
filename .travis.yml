@@ -1,14 +1,33 @@
+---
 sudo: required 
 services:
  - docker
 matrix:
   include:
+  # build user service first
     - language: java
       jdk: oraclejdk8
       before_install: 
-      - docker build -t bucketlist .
-      - docker run -d -p 9090:9090 bucketlist
+      - cd backend
+      - cd UserService
+      - docker build -f Dockerfile -t bucketlist_user .
+      - docker run -d -p 9090:9090 bucketlist_user
+      - docker ps -a
+      after_success:
+      - docker build -f Dockefile_deploy -t user_service .
+      - docker run -d -p 9090:9090 user_service
+      - docker ps -a
+  # build product service next
+    - language: java
+      jdk: oraclejdk8
+      before_install: 
+      - cd backend
+      - cd ProductService
+      - docker build -f Dockerfile -t bucketlist_product .
+      - docker run -d -p 9095:9095 bucketlist_product
+      - docker ps -a
+      after_success:
+      - docker build -f Dockefile_deploy -t product_service .
+      - docker run -d -p 9095:9095 product_service
       - docker ps -a
 
-    - language: node_js
-      node_js: 8
