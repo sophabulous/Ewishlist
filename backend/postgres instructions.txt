@@ -1,0 +1,20 @@
+Starting server:
+postgres -D [location of Postgresql data]
+ -D "C:\Program Files\PostgreSQL\11\data"
+
+Connect to server:
+psql [database] [username]
+psql SpaceWhales postgres
+
+Export server (dump):
+pg_dump [database] > [outfile]
+pg_dump -U [username] [database] > [outfile]
+pg_dump -U postgres SpaceWhales > SpaceWhalesDB
+
+Import server ('<' doesnt work in powershell):
+psql [database] < [infile]
+psql -U [username] [database] < [outfile]
+psql -U postgres SpaceWhales < SpaceWhalesDB
+notes: 
+use '-1' flag to load in one transaction (either loads everything or nothing)
+the database has to already be created before import
