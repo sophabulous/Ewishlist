@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Header from '../components/Header';
 import LogInForm from '../components/LogInForm';
+import SignUpPage from '../pages/SignUpPage';
 import data from '../data.json';
 
 class LogInPage extends Component {

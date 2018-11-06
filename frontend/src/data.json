@@ -2,6 +2,9 @@
     "siteName": "EBUCKETLIST",
     "dontHaveAccountText": "Don't have an account? ",
     "signUpText": "Sign up",
+    "username": "Test-user1",
+    "Password": "Password",
+    "img": "./src/assets/user.png",
 
     "itemList": [
         {
