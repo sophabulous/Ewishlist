@@ -24,7 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.util.List;
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-11-01T17:36:03.863Z")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-11-06T22:21:14.340Z")
 
 @Api(value = "users", description = "the users API")
 public interface UsersApi {
@@ -32,7 +32,8 @@ public interface UsersApi {
     @ApiOperation(value = "Validates whether a given token is valid - primarily for inter-service communication", nickname = "authenticateToken", notes = "", tags={ "User", })
     @ApiResponses(value = { 
         @ApiResponse(code = 200, message = "Token is valid"),
-        @ApiResponse(code = 405, message = "Invalid token") })
+        @ApiResponse(code = 405, message = "Expired token"),
+        @ApiResponse(code = 418, message = "Fake token") })
     @RequestMapping(value = "/users/token/validateToken",
         produces = { "application/json" }, 
         consumes = { "application/json" },

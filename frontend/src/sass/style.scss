@@ -55,7 +55,60 @@ h1 {
       margin: 0;
     }
 }
+.SignUpPage{
+  font-family: $roboto;
 
+  h1 {
+    font-family: $poppins;
+    padding: 50px 0 0;
+    margin: 0;
+  }
+}
+.SignUpForm{
+  text-align: left;
+  padding: 5% 40%;
+  input {
+    width: 100%;
+    height: 50px;
+    margin-bottom: 10px;
+    font-family: $roboto;
+    //padding-left: 10px;
+    background-color: #E8E6E6;
+  }
+}
+.ProfilePage {
+  font-family: $roboto;
+
+  h1 {
+    font-family: $poppins;
+    padding: 50px 0 0;
+    margin: 0;
+  }
+}
+.ProfileDetails{
+  text-align: left;
+  padding: 5% 40%;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  input {
+    width: 100%;
+    height: 50px;
+    margin-bottom: 10px;
+    font-family: $roboto;
+    //padding-left: 10px;
+    background-color: #E8E6E6;
+  }
+}
+.ProfileImg{
+  width: 50%;
+  text-align: center;
+  height: 50%;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 20px;
+}
 .logInForm {
   text-align: left;
   padding: 5% 40%;
@@ -69,6 +122,7 @@ h1 {
       margin-bottom: 50px;
       font-family: $roboto;
       background-color: #E8E6E6;
+
   }
 }
 
