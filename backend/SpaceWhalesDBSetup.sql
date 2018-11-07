@@ -56,13 +56,16 @@ ALTER TABLE public.users
     OWNER to postgres;
 
 -- Table: public.wishlist
+-- current_price the present price
+-- prev_price the price before the current
 
 DROP TABLE IF EXISTS public.wishlist CASCADE;
 
 CREATE TABLE public.wishlist
 (
     user_id int NOT NULL,
-    site text COLLATE pg_catalog."default" NOT NULL,
+    current_price real NOT NULL,
+    prev_price real NOT NULL,
     CONSTRAINT wishlist_pkey PRIMARY KEY (user_id, site),
     CONSTRAINT wishlist_site_fkey FOREIGN KEY (site)
         REFERENCES public.products (site) MATCH SIMPLE

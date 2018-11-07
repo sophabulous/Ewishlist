@@ -1,5 +1,6 @@
 package io.swagger.api;
 
+import com.EbucketList.database.ProductJdbcDatabase;
 import io.swagger.model.LoginToken;
 import io.swagger.model.NewProductRequest;
 import io.swagger.model.ProductItem;
@@ -33,17 +34,29 @@ public class TrackingApiController implements TrackingApi {
 
     private final HttpServletRequest request;
 
+    private final ProductJdbcDatabase db = new ProductJdbcDatabase();
+
     @org.springframework.beans.factory.annotation.Autowired
     public TrackingApiController(ObjectMapper objectMapper, HttpServletRequest request) {
         this.objectMapper = objectMapper;
         this.request = request;
     }
 
+
     public ResponseEntity<ProductItem> addTrackedProduct(@ApiParam(value = "" ,required=true )  @Valid @RequestBody NewProductRequest body) {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
             try {
-                return new ResponseEntity<ProductItem>(objectMapper.readValue("{  \"trackedTime\" : \"2000-01-23T04:56:07.000+00:00\",  \"productId\" : { },  \"vendor\" : \"vendor\",  \"currentPrice\" : 0.8008282,  \"trackedPrice\" : 6.0274563,  \"productName\" : \"productName\",  \"url\" : \"http://example.com/aeiou\"}", ProductItem.class), HttpStatus.NOT_IMPLEMENTED);
+                if(! db.validateToken(body.getLoginToken())){
+                    ProductItem productItem = null;
+                    return new ResponseEntity<ProductItem>(productItem, HttpStatus.FORBIDDEN);
+                }
+                else{
+                    db.trackProduct(body); //update to use new model
+                    return null; //update to return new model
+                }
+
+
             } catch (IOException e) {
                 log.error("Couldn't serialize response for content type application/json", e);
                 return new ResponseEntity<ProductItem>(HttpStatus.INTERNAL_SERVER_ERROR);

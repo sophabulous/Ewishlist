@@ -1,6 +1,7 @@
 package com.EbucketList.database;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
@@ -9,12 +10,17 @@ import io.swagger.model.*;
 
 import javax.sql.DataSource;
 
+import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.Map;
+
 
 public class ProductJdbcDatabase {
 
-//    @Autowired
+	@Value("#{new String('{DB_URL}')}")
+	String dbUrl;
+
 	private DriverManagerDataSource dataSource;
 
 	private JdbcTemplate jdbcTemplate;
@@ -23,7 +29,7 @@ public class ProductJdbcDatabase {
 		dataSource = new DriverManagerDataSource();
 		dataSource.setDriverClassName("org.postgresql.Driver");
 		// replace with local database
-		dataSource.setUrl("localhost");
+		dataSource.setUrl(dbUrl);
 		dataSource.setUsername("username");
 		dataSource.setPassword("password");
 		jdbcTemplate = new JdbcTemplate(dataSource);
@@ -87,6 +93,32 @@ public class ProductJdbcDatabase {
 		return out;
 
 	}
+
+    /**
+     * Validates whether a token is valid or not
+     *
+     * @param token
+     * @throws IOException
+     */
+    public boolean validateToken(LoginToken token) throws IOException {
+        SimpleJdbcCall jdbcCall = new SimpleJdbcCall(dataSource).withProcedureName("validateToken");
+        MapSqlParameterSource in = new MapSqlParameterSource().addValue("user_name", token.getUsername());
+        in.addValue("session_token", token.getSessionToken());
+
+        Map<String, Object> out = jdbcCall.execute(in);
+
+        if (!(boolean)out.get("status") && (Date)out.get("expiry") == null)
+        {
+            throw new IOException("counterfeit token");
+        }
+        else if ((Date)out.get("expiry") == null)
+        {
+            // expired token
+            return false;
+        }
+
+        return true;
+    }
 
 	/**
 	 * @return JdbcTemplate
