@@ -24,7 +24,8 @@ CREATE TABLE public.products
 (
     item_name text COLLATE pg_catalog."default" NOT NULL,
     site text COLLATE pg_catalog."default" NOT NULL,
-    trigger_price real NOT NULL,
+    yesterday_price real NOT NULL,
+	current_price real NOT NULL,
     CONSTRAINT items_pkey PRIMARY KEY (site)
 )
 WITH (
@@ -63,6 +64,7 @@ CREATE TABLE public.wishlist
 (
     user_id int NOT NULL,
     site text COLLATE pg_catalog."default" NOT NULL,
+    trigger_price real NOT NULL,
     CONSTRAINT wishlist_pkey PRIMARY KEY (user_id, site),
     CONSTRAINT wishlist_site_fkey FOREIGN KEY (site)
         REFERENCES public.products (site) MATCH SIMPLE

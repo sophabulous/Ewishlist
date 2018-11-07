@@ -1,6 +1,6 @@
 Starting server:
 postgres -D [location of Postgresql data]
- -D "C:\Program Files\PostgreSQL\11\data"
+postgres -D "C:\Program Files\PostgreSQL\11\data"
 
 Connect to server:
 psql [database] [username]
