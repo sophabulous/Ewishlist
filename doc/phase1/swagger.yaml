@@ -169,7 +169,9 @@ paths:
         200:
           description: "Token is valid"
         405:
-          description: "Invalid token"
+          description: "Expired token"
+        418:
+          description: "Fake token"
 
   /tracking/ping:
     get:

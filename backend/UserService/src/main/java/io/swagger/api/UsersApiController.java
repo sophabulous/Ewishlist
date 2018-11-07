@@ -4,6 +4,8 @@ import io.swagger.model.LoginRequest;
 import io.swagger.model.LoginToken;
 import io.swagger.model.NewUserRequest;
 import io.swagger.model.UpdateUserRequest;
+
+import com.EbucketList.database.UserJdbcDatabase;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.*;
 import org.slf4j.Logger;
@@ -41,8 +43,24 @@ public class UsersApiController implements UsersApi {
     }
 
     public ResponseEntity<Void> authenticateToken(@ApiParam(value = "" ,required=true )  @Valid @RequestBody LoginToken body) {
-        String accept = request.getHeader("Accept");
-        return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
+        UserJdbcDatabase db;
+        try {
+            db = new UserJdbcDatabase();
+        } catch (IOException e) {
+            log.error("database connection could not be established");
+            return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        
+        try {
+            if(db.validateToken(body)) {
+                return new ResponseEntity<Void>(HttpStatus.OK);
+            } else {
+                return new ResponseEntity<Void>(HttpStatus.METHOD_NOT_ALLOWED);
+            }
+        } catch (IOException e) {
+            return new ResponseEntity<Void>(HttpStatus.I_AM_A_TEAPOT);
+        }
+        
     }
 
     public ResponseEntity<Void> deleteUser(@ApiParam(value = "" ,required=true )  @Valid @RequestBody LoginToken body) {
@@ -54,24 +72,47 @@ public class UsersApiController implements UsersApi {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
             try {
-                return new ResponseEntity<LoginToken>(objectMapper.readValue("{  \"sessionToken\" : \"sessionToken\",  \"expiryTime\" : \"2000-01-23T04:56:07.000+00:00\",  \"username\" : { }}", LoginToken.class), HttpStatus.NOT_IMPLEMENTED);
+
+                LoginToken t;
+                UserJdbcDatabase db = new UserJdbcDatabase();
+                try {
+                    t = db.loginUser(body);
+                } catch(IOException e) {
+                    return new ResponseEntity<LoginToken>(HttpStatus.METHOD_NOT_ALLOWED);
+                }
+                return new ResponseEntity<LoginToken>(t, HttpStatus.OK);
+
             } catch (IOException e) {
+                log.error("database connection could not be established");
+                return new ResponseEntity<LoginToken>(HttpStatus.INTERNAL_SERVER_ERROR);
+            } catch (Exception e) {
                 log.error("Couldn't serialize response for content type application/json", e);
                 return new ResponseEntity<LoginToken>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
 
-        return new ResponseEntity<LoginToken>(HttpStatus.NOT_IMPLEMENTED);
+        return new ResponseEntity<LoginToken>(HttpStatus.METHOD_NOT_ALLOWED);
     }
 
     public ResponseEntity<Void> invalidateToken(@ApiParam(value = "" ,required=true )  @Valid @RequestBody LoginToken body) {
-        String accept = request.getHeader("Accept");
         return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
     }
 
     public ResponseEntity<Void> newUser(@ApiParam(value = "" ,required=true )  @Valid @RequestBody NewUserRequest body) {
-        String accept = request.getHeader("Accept");
-        return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
+        UserJdbcDatabase db;
+        try {
+            db = new UserJdbcDatabase();
+        } catch (IOException e) {
+            log.error("database connection could not be established");
+            return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        
+        try {
+            db.createUser(body);
+            return new ResponseEntity<Void>(HttpStatus.OK);
+        } catch (IOException e) {
+            return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+        }
     }
 
     public ResponseEntity<Void> pingUsers() {

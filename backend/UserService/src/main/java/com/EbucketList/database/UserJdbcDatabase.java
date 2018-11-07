@@ -8,68 +8,107 @@ import io.swagger.model.*;
 
 import javax.sql.DataSource;
 
+import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.Map;
 
 public class UserJdbcDatabase {
 	private JdbcTemplate jdbcTemplate;
 	private DriverManagerDataSource dataSource;
 
-	public UserJdbcDatabase() {
+	public UserJdbcDatabase() throws IOException {
 		dataSource = new DriverManagerDataSource();
 		dataSource.setDriverClassName("org.postgresql.Driver");
 		// replace with local database
+		// this worked for me, you need to specify the actual path on the localhost
+		// dataSource.setUrl("jdbc:postgresql://localhost:5432/postgres");
 		dataSource.setUrl("localhost");
 		dataSource.setUsername("username");
 		dataSource.setPassword("password");
 		jdbcTemplate = new JdbcTemplate(dataSource);
+		
 		// check connection
 		try {
 			dataSource.getConnection();
 		} catch (SQLException e) {
 			e.printStackTrace();
+			throw new IOException();
 		}
 	}
 
 	/**
-	 * store new user info in database
+	 * create new user in database
 	 * 
 	 * @param user
+	 * @throws IOException
 	 */
-	public void saveUser(NewUserRequest user) {
-		SimpleJdbcCall jdbcCall = new SimpleJdbcCall(dataSource).withProcedureName("storeUser");
+	public void createUser(NewUserRequest user) throws IOException {
+		SimpleJdbcCall jdbcCall = new SimpleJdbcCall(dataSource).withProcedureName("createUser");
 		MapSqlParameterSource in = new MapSqlParameterSource().addValue("user_name", user.getUsername());
 		in.addValue("password", user.getPassword());
 		in.addValue("email", user.getEmail());
 		Map<String, Object> out = jdbcCall.execute(in);
+		
+		if ((boolean)out.get("status") == false)
+		{
+			throw new IOException("invalid login arguments");
+		}
 	}
 
 	/**
-	 * check if user is in database
+	 * logs a user in (creates session token)
 	 * 
 	 * @param user
+	 * @throws IOException 
 	 */
-	public String findUser(LoginRequest user) {
-		SimpleJdbcCall jdbcCall = new SimpleJdbcCall(dataSource).withProcedureName("findUser");
+	public LoginToken loginUser(LoginRequest user) throws IOException {
+		SimpleJdbcCall jdbcCall = new SimpleJdbcCall(dataSource).withProcedureName("loginUser");
 		MapSqlParameterSource in = new MapSqlParameterSource().addValue("user_name", user.getUsername());
 		in.addValue("password", user.getPassword());
-		in.addValue("email", user.getPassword());
+		//in.addValue("email", user.getPassword());
 		Map<String, Object> out = jdbcCall.execute(in);
-		return (String) out.get("user_name");
+
+		if (out.get("session_token") == null || out.get("expiry") == null)
+		{
+			throw new IOException("invalid login information");
+		}
+		
+		LoginToken t = new LoginToken();
+		t.setUsername(user.getUsername());
+		t.setExpiryTime((Date) out.get("expiry"));
+		t.setSessionToken((String) out.get("session_token"));
+		
+		return t;
 	}
 
 	/**
-	 * store token in database
+	 * Validates whether a token is valid or not
 	 * 
 	 * @param token
+	 * @throws IOException
 	 */
-	public void storeToken(LoginToken token) {
-		SimpleJdbcCall jdbcCall = new SimpleJdbcCall(dataSource).withProcedureName("storeToken");
+	public boolean validateToken(LoginToken token) throws IOException {
+		SimpleJdbcCall jdbcCall = new SimpleJdbcCall(dataSource).withProcedureName("validateToken");
 		MapSqlParameterSource in = new MapSqlParameterSource().addValue("user_name", token.getUsername());
-		in.addValue("token", token.getSessionToken());
+		in.addValue("session_token", token.getSessionToken());
+		
 		Map<String, Object> out = jdbcCall.execute(in);
-	}
 
+		if (!(boolean)out.get("status") && (Date)out.get("expiry") == null)
+		{
+			throw new IOException("counterfeit token");
+		}
+		else if ((Date)out.get("expiry") == null)
+		{
+			// expired token
+			return false;
+		}
+		
+		return true;
+	}
+	
+	
 	/**
 	 * @return JdbcTemplate
 	 */
