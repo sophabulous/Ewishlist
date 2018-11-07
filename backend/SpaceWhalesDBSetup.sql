@@ -25,7 +25,7 @@ CREATE TABLE public.products
     item_name text COLLATE pg_catalog."default" NOT NULL,
     site text COLLATE pg_catalog."default" NOT NULL,
     yesterday_price real NOT NULL,
-	current_price real NOT NULL,
+    current_price real NOT NULL,
     CONSTRAINT items_pkey PRIMARY KEY (site)
 )
 WITH (
