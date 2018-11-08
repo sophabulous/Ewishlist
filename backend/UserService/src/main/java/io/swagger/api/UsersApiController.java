@@ -95,7 +95,23 @@ public class UsersApiController implements UsersApi {
     }
 
     public ResponseEntity<Void> invalidateToken(@ApiParam(value = "" ,required=true )  @Valid @RequestBody LoginToken body) {
-        return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
+        UserJdbcDatabase db;
+        try {
+            db = new UserJdbcDatabase();
+        } catch (IOException e) {
+            log.error("database connection could not be established");
+            return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        
+        try {
+            if(db.invalidateToken(body)) {
+                return new ResponseEntity<Void>(HttpStatus.OK);
+            } else {
+                return new ResponseEntity<Void>(HttpStatus.METHOD_NOT_ALLOWED);
+            }
+        } catch (IOException e) {
+            return new ResponseEntity<Void>(HttpStatus.I_AM_A_TEAPOT);
+        }
     }
 
     public ResponseEntity<Void> newUser(@ApiParam(value = "" ,required=true )  @Valid @RequestBody NewUserRequest body) {

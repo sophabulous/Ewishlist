@@ -1,5 +1,6 @@
 package com.EbucketList.database;
 
+import org.apache.tomcat.util.http.fileupload.FileItemStream.ItemSkippedException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
@@ -108,6 +109,26 @@ public class UserJdbcDatabase {
 		return true;
 	}
 	
+	/**
+	 * Manually invalidates a token if it is a legal token and still valid
+	 *
+	 * @param token
+	 * @throws IOException
+	 */
+	public boolean invalidateToken(LoginToken token) throws IOException {
+		SimpleJdbcCall jdbcCall = new SimpleJdbcCall(dataSource).withProcedureName("invalidateToken");
+		MapSqlParameterSource in = new MapSqlParameterSource().addValue("user_name", token.getUsername());
+		in.addValue("session_token", token.getSessionToken());
+
+		Map<String, Object> out = jdbcCall.execute(in);
+
+		if (!(boolean)out.get("legaltoken"))
+		{
+			throw new IOException("counterfeit token");
+		}
+
+		return (boolean)out.get("status");
+	}
 	
 	/**
 	 * @return JdbcTemplate

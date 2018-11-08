@@ -94,7 +94,8 @@ CREATE TABLE public.user_session
     start_time timestamp NOT NULL,
     expiry_time timestamp NOT NULL,
     extended_count int NOT NULL, -- number of times we've extended this session
-    CONSTRAINT user_session_pkey PRIMARY KEY (user_id, session_uuid)
+    terminated boolean DEFAULT FALSE NOT NULL, -- indicates if this session has been manually terminated and should be treated as inactive
+    CONSTRAINT user_session_pkey PRIMARY KEY (user_id, session_uuid),
     CONSTRAINT user_session_userid_fkey FOREIGN KEY (user_id)
         REFERENCES public.users (user_id) MATCH SIMPLE
         ON UPDATE NO ACTION
@@ -125,11 +126,9 @@ begin
     VALUES (createUser.user_name, createUser.password, createUser.email);
     
     status := TRUE;
-end;
+END;
 $$
 language plpgsql;
-
-
 
 -- Takes a username and password hash
 -- if invalid credentials, return null.
@@ -137,8 +136,8 @@ language plpgsql;
 -- else logs in a user and gives them a new token.
 CREATE OR REPLACE FUNCTION loginUser(IN user_name text, IN password text, OUT session_token text, OUT expiry timestamp)
 AS $$
-declare u_id int;
-begin
+DECLARE u_id INT;
+BEGIN
     SELECT U.user_id INTO u_id
     FROM users U
     WHERE U.user_name = loginUser.user_name AND U.password_hash = loginUser.password;
@@ -155,12 +154,19 @@ begin
     -- existing active session - we'll extend it
     -- can reasonably occur if a user uses multiple devices - we don't want to invalidate the 
     -- other session, and it's a lot more work to make device-based sessions.
-    IF EXISTS(SELECT * FROM user_session S WHERE S.user_id = u_id AND S.expiry_time > NOW()) THEN
+    IF EXISTS(SELECT * FROM user_session S WHERE S.user_id = u_id AND S.expiry_time > NOW() AND S.terminated = FALSE) THEN
         UPDATE user_session S
         SET expiry_time = expiry, extended_count = extended_count + 1
-        WHERE S.user_id = u_id AND S.expiry_time > NOW();
+        WHERE S.user_id = u_id 
+        AND S.expiry_time > NOW() 
+        AND S.terminated = FALSE;
 
-        session_token := (SELECT S.session_uuid FROM user_session S WHERE S.user_id = u_id AND S.expiry_time > NOW());
+        session_token := (
+            SELECT S.session_uuid 
+            FROM user_session S 
+            WHERE S.user_id = u_id 
+            AND S.expiry_time > NOW() 
+            AND S.terminated = FALSE);
         RETURN;
     END IF;
 
@@ -170,24 +176,65 @@ begin
     INSERT INTO user_session 
         VALUES (u_id, session_token, NOW(), expiry, 0);
 
-end;
-$$ language plpgsql;
+END;
+$$
+language plpgsql;
 
 
 -- Takes a parameterized login token
 -- if the token is currently valid, set status to true, else false
--- if the token has ever been valid, return the expiration time
+-- if the token has ever been valid, return the expiration time, else null
 CREATE OR REPLACE FUNCTION validateToken(IN user_name text, IN session_token text, OUT expiry timestamp, OUT status boolean)
 AS $$
 begin
     SELECT T.expiry_time INTO expiry
     FROM (SELECT expiry_time
-        FROM users U 
-        JOIN user_session S on U.user_id = S.user_id 
-        WHERE U.user_name = validateToken.user_name and S.session_uuid = session_token) AS T;
+            FROM users U 
+            JOIN user_session S on U.user_id = S.user_id 
+            WHERE U.user_name = validateToken.user_name 
+            AND S.session_uuid = session_token 
+            AND S.terminated = FALSE) AS T;
 
     status := expiry IS NOT NULL AND expiry > NOW();
-end;
+END;
+$$
+language plpgsql; 
+
+
+-- Takes a parameterized login token 
+-- if the token is currently valid, set status to true and invalidate the user_session
+-- if the token has been previously terminated or has expired, set status to false, else true.
+-- if the provided token was invalid, set legalToken to false, else true.
+CREATE OR REPLACE FUNCTION invalidateToken(IN user_name text, IN session_token text, OUT legalToken boolean, OUT status boolean)
+AS $$
+DECLARE u_id int;
+DECLARE term boolean;
+BEGIN
+    SELECT U.user_id, S.terminated OR S.expiry_time < NOW() INTO u_id, term
+        FROM users U
+        JOIN user_session S on U.user_id = S.user_id 
+        WHERE U.user_name = invalidateToken.user_name 
+        AND S.session_uuid = session_token;
+
+    IF u_id IS NOT NULL THEN
+        legalToken := TRUE;
+
+        IF term = FALSE THEN
+            UPDATE user_session S
+            SET terminated = TRUE
+            WHERE S.user_id = u_id AND S.session_uuid = session_token;
+
+            status := TRUE;
+
+        ELSE
+            status := FALSE;
+
+        END IF;
+    ELSE
+        status := FALSE;
+        legalToken := FALSE;
+    END IF;
+END;
 $$
 language plpgsql; 
 

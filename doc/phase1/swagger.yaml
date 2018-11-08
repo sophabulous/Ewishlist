@@ -146,7 +146,9 @@ paths:
         200:
           description: "Successful invalidation"
         405:
-          description: "Provided token is invalid"
+          description: "Provided token is already expired"
+        418:
+          description: "Fake token"
 
   /users/token/validateToken:
     post:
