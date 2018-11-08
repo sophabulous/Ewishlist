@@ -155,7 +155,8 @@ public class EbucketListApplicationTests
 				createURLWithPort("/users/token/invalidateToken"),
 				HttpMethod.POST, entity, String.class);
 
-		assert(response.getStatusCode().equals(HttpStatus.NOT_IMPLEMENTED));
+		assert(response.getStatusCode().equals(HttpStatus.OK) || response.getStatusCode().equals(HttpStatus.I_AM_A_TEAPOT)
+				|| response.getStatusCode().equals(HttpStatus.METHOD_NOT_ALLOWED));
 	}
 	
 	@Test
