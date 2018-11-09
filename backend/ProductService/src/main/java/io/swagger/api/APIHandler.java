@@ -1,18 +1,21 @@
-package com.spacewhales.EbucketList;
+package io.swagger.api;
 
+import io.swagger.model.Product;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import java.net.MalformedURLException;
 
 public interface APIHandler {
 
 	/**
 	 * Get the price for an item. 
 	 */
-	public abstract Double getPrice(String productID);
+	public abstract Double getPrice(String url) throws MalformedURLException;
 
 	/**
 	 * Get the product details.
 	 */
-	public abstract String getProduct(String productID);
+	public abstract Product getProduct(String url) throws MalformedURLException;
 	
 }

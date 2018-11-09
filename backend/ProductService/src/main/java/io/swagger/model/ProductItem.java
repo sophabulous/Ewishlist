@@ -38,10 +38,6 @@ public class ProductItem   {
   @JsonProperty("url")
   private String url = null;
 
-  public ProductItem productId(Integer productId) {
-    this.productId = productId;
-    return this;
-  }
 
   /**
    * Get productId

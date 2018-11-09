@@ -26,8 +26,6 @@ public class TrackProductResponse {
     @JsonProperty("url")
     private String url;
 
-
-
     public String getProductId() {
         return productId;
     }
