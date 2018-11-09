@@ -15,7 +15,7 @@ public class WalmartDao {
 
     private final String baseUrl = "https://api.walmartlabs.com";
 
-    @Value("#{new String('{APIKEY}')}")
+    @Value("#{new String('{WALMART_API_KEY}')}")
     String apiKey;
 
     public Item getItem(String productUrl) throws MalformedURLException {

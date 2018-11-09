@@ -1,6 +1,6 @@
 package io.swagger.api;
 
-import com.spacewhales.EbucketList.APIHandler;
+import io.swagger.api.APIHandler;
 import io.swagger.dao.WalmartDao;
 import io.swagger.model.Item;
 import io.swagger.model.Product;
@@ -26,7 +26,7 @@ public class WalmartApiHandler implements APIHandler {
     /**
      * Get the product details.
      */
-    public Product getProduct(String productID) throws MalformedURLException{
+    public Product getProduct(String url) throws MalformedURLException{
         if(item == null){
             item = walmartDao.getItem(url);
         }
