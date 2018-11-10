@@ -1,6 +1,5 @@
 package com.EbucketList.database;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -10,6 +9,7 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import io.swagger.model.*;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 
 import java.io.IOException;
@@ -17,15 +17,23 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.Map;
 
+@Configuration
 @Component
 public class ProductJdbcDatabase {
+
+	@Value("${DB_URL}")
+	String dbUrl;
 
 	private DriverManagerDataSource dataSource;
 
 	private JdbcTemplate jdbcTemplate;
 
-	@Autowired
-	public ProductJdbcDatabase(@Value("${DB_URL}") String dbUrl) {
+	public ProductJdbcDatabase() {
+
+	}
+
+	@PostConstruct
+	public void init(){
 		dataSource = new DriverManagerDataSource();
 		dataSource.setDriverClassName("org.postgresql.Driver");
 		// replace with local database

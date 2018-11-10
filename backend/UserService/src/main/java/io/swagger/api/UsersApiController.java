@@ -46,6 +46,7 @@ public class UsersApiController implements UsersApi {
         UserJdbcDatabase db;
         try {
             db = new UserJdbcDatabase();
+            db.init();
         } catch (IOException e) {
             log.error("database connection could not be established");
             return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -75,6 +76,7 @@ public class UsersApiController implements UsersApi {
 
                 LoginToken t;
                 UserJdbcDatabase db = new UserJdbcDatabase();
+                db.init();
                 try {
                     t = db.loginUser(body);
                 } catch(IOException e) {
@@ -98,6 +100,7 @@ public class UsersApiController implements UsersApi {
         UserJdbcDatabase db;
         try {
             db = new UserJdbcDatabase();
+            db.init();
         } catch (IOException e) {
             log.error("database connection could not be established");
             return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -118,6 +121,7 @@ public class UsersApiController implements UsersApi {
         UserJdbcDatabase db;
         try {
             db = new UserJdbcDatabase();
+            db.init();
         } catch (IOException e) {
             log.error("database connection could not be established");
             return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);

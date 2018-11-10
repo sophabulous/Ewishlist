@@ -33,8 +33,7 @@ public class TrackingApiController implements TrackingApi {
 
     private final HttpServletRequest request;
 
-    @Autowired
-    private ProductJdbcDatabase db;
+    private ProductJdbcDatabase db = new ProductJdbcDatabase();
 
     @org.springframework.beans.factory.annotation.Autowired
     public TrackingApiController(ObjectMapper objectMapper, HttpServletRequest request) {

@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import io.swagger.model.*;
 
+import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 
 import java.io.IOException;
@@ -18,10 +19,16 @@ import java.util.Map;
 public class UserJdbcDatabase {
 	private JdbcTemplate jdbcTemplate;
 	private DriverManagerDataSource dataSource;
+
 	@Value("#{new String('{DB_URL}')}")
 	String dbUrl;
 
-	public UserJdbcDatabase() throws IOException {
+	public UserJdbcDatabase() {
+
+	}
+
+	@PostConstruct
+	public void init() throws IOException{
 		dataSource = new DriverManagerDataSource();
 		dataSource.setDriverClassName("org.postgresql.Driver");
 		// replace with local database
@@ -31,7 +38,7 @@ public class UserJdbcDatabase {
 		dataSource.setUsername("username");
 		dataSource.setPassword("password");
 		jdbcTemplate = new JdbcTemplate(dataSource);
-		
+
 		// check connection
 		try {
 			dataSource.getConnection();
@@ -40,7 +47,6 @@ public class UserJdbcDatabase {
 			throw new IOException();
 		}
 	}
-
 	/**
 	 * create new user in database
 	 * 
