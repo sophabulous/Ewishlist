@@ -1,6 +1,5 @@
 package com.EbucketList.database;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -46,7 +45,7 @@ public class ProductJdbcDatabase {
 	 * 
 	 * @param product
 	 */
-	public void trackProduct(NewProductRequest product) {
+	public void trackProduct(AddProductRequest product) {
 		SimpleJdbcCall jdbcCall = new SimpleJdbcCall(dataSource).withProcedureName("trackProduct");
 		MapSqlParameterSource in = new MapSqlParameterSource().addValue("token", product.getLoginToken());
 		in.addValue("site", product.getUrl());
@@ -56,14 +55,14 @@ public class ProductJdbcDatabase {
 	/**
 	 * delete product to wishlist
 	 * 
-	 * @param product
+	 * @param productId
 	 */
-	public void untrackProduct(NewProductRequest product) {
+	public void untrackProduct(Long productId) {
 
 		SimpleJdbcCall jdbcCall = new SimpleJdbcCall(dataSource).withProcedureName("untrackProduct");
-		MapSqlParameterSource in = new MapSqlParameterSource().addValue("token", product.getLoginToken());
-		in.addValue("site", product.getUrl());
-		Map<String, Object> out = jdbcCall.execute(in);
+		//MapSqlParameterSource in = new MapSqlParameterSource().addValue("token", product.getLoginToken());  //does this validatte the token? If so I already check if token is valid
+		//in.addValue("site", product.getUrl());
+		//Map<String, Object> out = jdbcCall.execute(in);
 	}
 
 	/**
@@ -84,7 +83,7 @@ public class ProductJdbcDatabase {
 	 * 
 	 * @param product
 	 */
-	public Map<String, Object> getProduct(NewProductRequest product) {
+	public Map<String, Object> getProduct(AddProductRequest product) {
 		// check log in id
 		SimpleJdbcCall jdbcCall = new SimpleJdbcCall(dataSource).withProcedureName("getProduct");
 		MapSqlParameterSource in = new MapSqlParameterSource().addValue("token", product.getLoginToken());

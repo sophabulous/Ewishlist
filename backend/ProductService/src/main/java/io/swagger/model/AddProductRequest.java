@@ -2,28 +2,24 @@ package io.swagger.model;
 
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import io.swagger.model.LoginToken;
 import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
-import javax.validation.constraints.*;
 
 /**
- * NewProductRequest
+ * AddProductRequest
  */
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-10-30T16:11:09.391Z")
 
-public class NewProductRequest   {
+public class AddProductRequest {
   @JsonProperty("url")
   private String url = null;
 
   @JsonProperty("loginToken")
   private LoginToken loginToken = null;
 
-  public NewProductRequest url(String url) {
+  public AddProductRequest url(String url) {
     this.url = url;
     return this;
   }
@@ -43,7 +39,7 @@ public class NewProductRequest   {
     this.url = url;
   }
 
-  public NewProductRequest loginToken(LoginToken loginToken) {
+  public AddProductRequest loginToken(LoginToken loginToken) {
     this.loginToken = loginToken;
     return this;
   }
@@ -73,7 +69,7 @@ public class NewProductRequest   {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    NewProductRequest newProductRequest = (NewProductRequest) o;
+    AddProductRequest newProductRequest = (AddProductRequest) o;
     return Objects.equals(this.url, newProductRequest.url) &&
         Objects.equals(this.loginToken, newProductRequest.loginToken);
   }
@@ -86,7 +82,7 @@ public class NewProductRequest   {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class NewProductRequest {\n");
+    sb.append("class AddProductRequest {\n");
     
     sb.append("    url: ").append(toIndentedString(url)).append("\n");
     sb.append("    loginToken: ").append(toIndentedString(loginToken)).append("\n");
