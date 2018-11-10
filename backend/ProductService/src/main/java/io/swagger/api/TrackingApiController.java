@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -32,7 +33,8 @@ public class TrackingApiController implements TrackingApi {
 
     private final HttpServletRequest request;
 
-    private final ProductJdbcDatabase db = new ProductJdbcDatabase();
+    @Autowired
+    private ProductJdbcDatabase db;
 
     @org.springframework.beans.factory.annotation.Autowired
     public TrackingApiController(ObjectMapper objectMapper, HttpServletRequest request) {
@@ -47,7 +49,7 @@ public class TrackingApiController implements TrackingApi {
             try {
                 if(! db.validateToken(body.getLoginToken())){
                     ProductItem productItem = null;
-                    return new ResponseEntity<ProductItem>(productItem, HttpStatus.FORBIDDEN);
+                    return new ResponseEntity<ProductItem>(HttpStatus.FORBIDDEN);
                 }
                 else{
                     db.trackProduct(body); //update to use new model
@@ -85,7 +87,7 @@ public class TrackingApiController implements TrackingApi {
             try {
                 if(! db.validateToken(body.getLoginToken())){
                     ProductItem productItem = null;
-                    return new ResponseEntity<ProductItem>(productItem, HttpStatus.FORBIDDEN);
+                    return new ResponseEntity<ProductItem>(HttpStatus.FORBIDDEN);
                 }
                 else{
                     ProductItem productItem  = null; //TODO: Update this to fetch the actual product and return it once the fetch from db is implmented
@@ -108,11 +110,11 @@ public class TrackingApiController implements TrackingApi {
             try {
                 if(! db.validateToken(body.getLoginToken())){
                     ProductItem productItem = null;
-                    return new ResponseEntity<ProductItem>(productItem, HttpStatus.FORBIDDEN);
+                    return new ResponseEntity<ProductItem>(HttpStatus.FORBIDDEN);
                 }
                 else{
                     ProductItem productItem  = null; //TODO: Update this to fetch the actual product and return it once the fetch from db is implmented
-                    return new ResponseEntity<ProductItem>(productItem, HttpStatus.ACCEPTED);
+                    return new ResponseEntity<ProductItem>(HttpStatus.ACCEPTED);
                 }
 
             } catch (IOException e) {
@@ -131,12 +133,12 @@ public class TrackingApiController implements TrackingApi {
                 if(! db.validateToken(body)){
                     ProductItem productItem = null;
                     ArrayList<ProductItem> productList = null;
-                    return new ResponseEntity<List<ProductItem>>(productList, HttpStatus.FORBIDDEN);
+                    return new ResponseEntity<List<ProductItem>>(HttpStatus.FORBIDDEN);
                 }
                 else{
                     ProductItem productItem  = null; //TODO: Update this to fetch the actual product and return it once the fetch from db is implmented
                     ArrayList<ProductItem> productList = null;
-                    return new ResponseEntity<List<ProductItem>>(productList, HttpStatus.FORBIDDEN);
+                    return new ResponseEntity<List<ProductItem>>(HttpStatus.ACCEPTED);
                 }
 
             } catch (IOException e) {
