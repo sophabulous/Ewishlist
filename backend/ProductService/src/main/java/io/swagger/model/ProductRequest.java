@@ -7,19 +7,19 @@ import org.springframework.validation.annotation.Validated;
 import javax.validation.Valid;
 
 /**
- * AddProductRequest
+ * ProductRequest
  */
 @Validated
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-10-30T16:11:09.391Z")
 
-public class AddProductRequest {
+public class ProductRequest {
   @JsonProperty("url")
   private String url = null;
 
   @JsonProperty("loginToken")
   private LoginToken loginToken = null;
 
-  public AddProductRequest url(String url) {
+  public ProductRequest url(String url) {
     this.url = url;
     return this;
   }
@@ -39,7 +39,7 @@ public class AddProductRequest {
     this.url = url;
   }
 
-  public AddProductRequest loginToken(LoginToken loginToken) {
+  public ProductRequest loginToken(LoginToken loginToken) {
     this.loginToken = loginToken;
     return this;
   }
@@ -69,7 +69,7 @@ public class AddProductRequest {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    AddProductRequest newProductRequest = (AddProductRequest) o;
+    ProductRequest newProductRequest = (ProductRequest) o;
     return Objects.equals(this.url, newProductRequest.url) &&
         Objects.equals(this.loginToken, newProductRequest.loginToken);
   }
@@ -82,7 +82,7 @@ public class AddProductRequest {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class AddProductRequest {\n");
+    sb.append("class ProductRequest {\n");
     
     sb.append("    url: ").append(toIndentedString(url)).append("\n");
     sb.append("    loginToken: ").append(toIndentedString(loginToken)).append("\n");

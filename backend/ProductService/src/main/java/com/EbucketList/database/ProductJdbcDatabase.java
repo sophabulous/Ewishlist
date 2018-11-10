@@ -45,7 +45,7 @@ public class ProductJdbcDatabase {
 	 * 
 	 * @param product
 	 */
-	public void trackProduct(AddProductRequest product) {
+	public void trackProduct(ProductRequest product) {
 		SimpleJdbcCall jdbcCall = new SimpleJdbcCall(dataSource).withProcedureName("trackProduct");
 		MapSqlParameterSource in = new MapSqlParameterSource().addValue("token", product.getLoginToken());
 		in.addValue("site", product.getUrl());
@@ -57,7 +57,7 @@ public class ProductJdbcDatabase {
 	 * 
 	 * @param productId
 	 */
-	public void untrackProduct(Long productId) {
+	public void untrackProduct(Long productId, ProductRequest product) {
 
 		SimpleJdbcCall jdbcCall = new SimpleJdbcCall(dataSource).withProcedureName("untrackProduct");
 		//MapSqlParameterSource in = new MapSqlParameterSource().addValue("token", product.getLoginToken());  //does this validatte the token? If so I already check if token is valid
@@ -83,7 +83,7 @@ public class ProductJdbcDatabase {
 	 * 
 	 * @param product
 	 */
-	public Map<String, Object> getProduct(AddProductRequest product) {
+	public Map<String, Object> getProduct(ProductRequest product) {
 		// check log in id
 		SimpleJdbcCall jdbcCall = new SimpleJdbcCall(dataSource).withProcedureName("getProduct");
 		MapSqlParameterSource in = new MapSqlParameterSource().addValue("token", product.getLoginToken());

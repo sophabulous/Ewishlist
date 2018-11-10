@@ -1,7 +1,7 @@
 package io.swagger.api;
 
 import com.EbucketList.database.ProductJdbcDatabase;
-import io.swagger.model.AddProductRequest;
+import io.swagger.model.ProductRequest;
 import io.swagger.model.LoginToken;
 import io.swagger.model.Product;
 import io.swagger.model.ProductItem;
@@ -41,7 +41,7 @@ public class TrackingApiController implements TrackingApi {
     }
 
 
-    public ResponseEntity<ProductItem> addTrackedProduct(@ApiParam(value = "" ,required=true )  @Valid @RequestBody AddProductRequest body) {
+    public ResponseEntity<ProductItem> addTrackedProduct(@ApiParam(value = "" ,required=true )  @Valid @RequestBody ProductRequest body) {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
             try {
@@ -79,17 +79,17 @@ public class TrackingApiController implements TrackingApi {
         return new ResponseEntity<ProductItem>(HttpStatus.NOT_IMPLEMENTED);
     }
 
-    public ResponseEntity<ProductItem> deleteTrackedProduct(@ApiParam(value = "",required=true) @PathVariable("productId") Long productId, @Valid @RequestBody LoginToken token) {
+    public ResponseEntity<ProductItem> deleteTrackedProduct(@ApiParam(value = "",required=true) @PathVariable("productId") Long productId, @Valid @RequestBody ProductRequest body) {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
             try {
-                if(! db.validateToken(token)){
+                if(! db.validateToken(body.getLoginToken())){
                     ProductItem productItem = null;
                     return new ResponseEntity<ProductItem>(productItem, HttpStatus.FORBIDDEN);
                 }
                 else{
                     ProductItem productItem  = null; //TODO: Update this to fetch the actual product and return it once the fetch from db is implmented
-                    db.untrackProduct(productId);
+                    db.untrackProduct(productId, body);
                     return new ResponseEntity<ProductItem>(productItem, HttpStatus.ACCEPTED);
                 }
 
@@ -102,11 +102,11 @@ public class TrackingApiController implements TrackingApi {
         return new ResponseEntity<ProductItem>(HttpStatus.BAD_REQUEST);
     }
 
-    public ResponseEntity<ProductItem> getTrackedProductInfo(@ApiParam(value = "",required=true) @PathVariable("productId") Long productId,@ApiParam(value = "" ,required=true )  @Valid @RequestBody LoginToken body) {
+    public ResponseEntity<ProductItem> getTrackedProductInfo(@ApiParam(value = "",required=true) @PathVariable("productId") Long productId,@ApiParam(value = "" ,required=true )  @Valid @RequestBody ProductRequest body) {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
             try {
-                if(! db.validateToken(body)){
+                if(! db.validateToken(body.getLoginToken())){
                     ProductItem productItem = null;
                     return new ResponseEntity<ProductItem>(productItem, HttpStatus.FORBIDDEN);
                 }
