@@ -285,6 +285,11 @@ paths:
         in: "path"
         required: true
         type: "integer"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/LoginToken"
       
       - in: "body"
         name: "body"
@@ -316,6 +321,11 @@ paths:
         in: "path"
         required: true
         type: "integer"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/LoginToken"
       responses:
         200:
           description: "Successful"
