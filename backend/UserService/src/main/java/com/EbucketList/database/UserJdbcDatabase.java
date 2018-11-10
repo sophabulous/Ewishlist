@@ -1,6 +1,7 @@
 package com.EbucketList.database;
 
 import org.apache.tomcat.util.http.fileupload.FileItemStream.ItemSkippedException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
@@ -17,6 +18,8 @@ import java.util.Map;
 public class UserJdbcDatabase {
 	private JdbcTemplate jdbcTemplate;
 	private DriverManagerDataSource dataSource;
+	@Value("#{new String('{DB_URL}')}")
+	String dbUrl;
 
 	public UserJdbcDatabase() throws IOException {
 		dataSource = new DriverManagerDataSource();
@@ -24,7 +27,7 @@ public class UserJdbcDatabase {
 		// replace with local database
 		// this worked for me, you need to specify the actual path on the localhost
 		// dataSource.setUrl("jdbc:postgresql://localhost:5432/postgres");
-		dataSource.setUrl("localhost");
+		dataSource.setUrl(dbUrl);
 		dataSource.setUsername("username");
 		dataSource.setPassword("password");
 		jdbcTemplate = new JdbcTemplate(dataSource);

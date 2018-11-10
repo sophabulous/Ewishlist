@@ -85,6 +85,6 @@ public interface TrackingApi {
         @ApiResponse(code = 405, message = "Could not update product item") })
     @RequestMapping(value = "/tracking/{productId}",
         method = RequestMethod.POST)
-    ResponseEntity<ProductItem> updateProductItem(@ApiParam(value = "",required=true) @PathVariable("productId") Integer productId,@ApiParam(value = "" ,required=true )  @Valid @RequestBody ProductItem body);
+    ResponseEntity<ProductItem> updateProductItem(@ApiParam(value = "",required=true) @PathVariable("productId")  Long productId,@ApiParam(value = "" ,required=true )  @Valid @RequestBody ProductRequest body);
 
 }

@@ -154,11 +154,19 @@ public class TrackingApiController implements TrackingApi {
         return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
     }
 
-    public ResponseEntity<ProductItem> updateProductItem(@ApiParam(value = "",required=true) @PathVariable("productId") Integer productId,@ApiParam(value = "" ,required=true )  @Valid @RequestBody ProductItem body) {
+    public ResponseEntity<ProductItem> updateProductItem(@ApiParam(value = "",required=true) @PathVariable("productId") Long productId,@ApiParam(value = "" ,required=true )  @Valid @RequestBody ProductRequest body) {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
             try {
-                return new ResponseEntity<ProductItem>(objectMapper.readValue("{  \"trackedTime\" : \"2000-01-23T04:56:07.000+00:00\",  \"productId\" : { },  \"vendor\" : \"vendor\",  \"currentPrice\" : 0.8008282,  \"trackedPrice\" : 6.0274563,  \"productName\" : \"productName\",  \"url\" : \"http://example.com/aeiou\"}", ProductItem.class), HttpStatus.NOT_IMPLEMENTED);
+                if(! db.validateToken(body.getLoginToken())){
+                    ProductItem productItem = null;
+                    return new ResponseEntity<ProductItem>(productItem, HttpStatus.FORBIDDEN);
+                }
+                else{
+                    ProductItem productItem  = null; //TODO: Update this to fetch the actual product and return it once the fetch from db is implmented
+                    return new ResponseEntity<ProductItem>(productItem, HttpStatus.ACCEPTED);
+                }
+
             } catch (IOException e) {
                 log.error("Couldn't serialize response for content type application/json", e);
                 return new ResponseEntity<ProductItem>(HttpStatus.INTERNAL_SERVER_ERROR);
