@@ -8,8 +8,10 @@ class SignUpPage extends Component {
         return (
           <div className="container SignUpPage">
               <Header />
-              <h1>Sign Up</h1>
-              <SignUpForm />
+              <div className="page">
+                <h1>Sign Up</h1>
+                <SignUpForm />
+              </div>
           </div>
         );
     }

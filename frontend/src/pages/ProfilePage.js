@@ -8,8 +8,10 @@ class ProfilePage extends Component {
         return (
           <div className="container ProfilePage">
               <Header />
-              <h1>Profile</h1>
-              <Profile />
+              <div className="page">
+                <h1>Profile</h1>
+                <Profile />
+              </div>
           </div>
         );
     }

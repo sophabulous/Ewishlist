@@ -10,12 +10,14 @@ class LogInPage extends Component {
         return (
             <div className="container logInPage">
                 <Header />
-                <h1>Log In</h1>
-                <LogInForm />
-                <span className="dontHaveAccount">
-                  {data.dontHaveAccountText}
-                  <a href="#">{data.signUpText}</a>
-                </span>
+                <div className="page">
+                  <h1>Log In</h1>
+                  <LogInForm />
+                  <span className="dontHaveAccount">
+                    {data.dontHaveAccountText}
+                    <a href="#">{data.signUpText}</a>
+                  </span>
+                </div>
             </div>
         );
     }
