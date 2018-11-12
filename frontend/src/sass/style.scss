@@ -197,6 +197,7 @@ h1 {
     background-color: #E8E6E6;
   }
 }
+
 .ProfileImg{
   width: 50%;
   text-align: center;
@@ -206,6 +207,7 @@ h1 {
   margin-right: auto;
   margin-top: 20px;
 }
+
 .logInForm {
   text-align: left;
   padding: 5% 40% 0;
@@ -341,29 +343,29 @@ h1 {
     &:hover{
       background: #eaeaea;
     }
+
+    .thumbnailContainer{
+        position: relative;
+        width: 100px;
+        height: 100px;
+        overflow: hidden;
+        float: left;
+    }
+
+    .thumbnailContainer img {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        height: 100%;
+        width: auto;
+        -webkit-transform: translate(-50%,-50%);
+            -ms-transform: translate(-50%,-50%);
+                transform: translate(-50%,-50%);
+    }
 }
 
 .listItemSection:not(:last-child){
     border-bottom: 1px solid #EEE;
-}
-
-.thumbnailContainer{
-    position: relative;
-    width: 100px;
-    height: 100px;
-    overflow: hidden;
-    float: left;
-}
-
-.thumbnailContainer img {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    height: 100%;
-    width: auto;
-    -webkit-transform: translate(-50%,-50%);
-        -ms-transform: translate(-50%,-50%);
-            transform: translate(-50%,-50%);
 }
 
 .listItemContentContainer{
@@ -380,6 +382,89 @@ h1 {
       color: #3b3d3f;
     }
 }
+
+.confirmationPage {
+  text-align: center;
+  width: 100%;
+
+  h1 {
+    margin-top: 5%;
+    margin-bottom: 5%;
+  }
+}
+
+.confirmationContentContainer{
+  margin: auto 20%;
+
+  .thumbnailContainer{
+      position: relative;
+      width: 50%;
+      height: 200px;
+      overflow: hidden;
+      float: left;
+  }
+
+  .thumbnailContainer img {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      height: 100%;
+      width: auto;
+      -webkit-transform: translate(-50%,-50%);
+          -ms-transform: translate(-50%,-50%);
+              transform: translate(-50%,-50%);
+  }
+
+  .confirmationText{
+    width: 50%;
+    float: right;
+    text-align: left;
+    font-family: $roboto;
+
+    h2 {
+      margin-top: 0;
+    }
+
+    p {
+      color: #3b3d3f;
+    }
+  }
+}
+
+.confirmButtonsContainer{
+    margin-top: 10%;
+
+    button:last-child{
+      background-color: #7a7a7a;
+      color: #000000;
+      margin-left: 5%;
+
+      &:hover {
+          color:#ffffff;
+          background-color: #38BA7C;
+          cursor: pointer;
+      }
+    }
+}
+
+.confirmButton {
+  font-size: 18px;
+  width: 30%;
+  float: left;
+  height: 50px;
+  padding: 0;
+  transition: all 200ms ease-in;
+  cursor: pointer;
+  background-color: #000000;
+  color: #FFFFFF;
+
+  &:hover {
+      color:#ffffff;
+      background-color: #282727;
+      cursor: pointer;
+  }
+}
+
 
 @media (min-width: #{$tabletBreakpoint}) {
     width: 33%;
