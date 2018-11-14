@@ -49,16 +49,27 @@ public class ProductJdbcDatabase {
 			e.printStackTrace();
 		}
 	}
-
+	/**
+	 * add product to product table if it doesn't exist
+	 * 
+	 * @param product
+	 */
+	public void insertProduct(ProductItem product) {
+		SimpleJdbcCall jdbcCall = new SimpleJdbcCall(dataSource).withProcedureName("insertProduct");
+		MapSqlParameterSource in = new MapSqlParameterSource().addValue("site", product.getUrl());
+		in.addValue("item_name", product.getProductName());
+		in.addValue("price", product.getCurrentPrice());
+		Map<String, Object> out = jdbcCall.execute(in);
+	}
 	/**
 	 * add product to wishlist
 	 * 
 	 * @param product
 	 */
-	public void trackProduct(ProductRequest product) {
+	public void trackProduct(ProductRequest productReq) {
 		SimpleJdbcCall jdbcCall = new SimpleJdbcCall(dataSource).withProcedureName("trackProduct");
-		MapSqlParameterSource in = new MapSqlParameterSource().addValue("token", product.getLoginToken());
-		in.addValue("site", product.getUrl());
+		MapSqlParameterSource in = new MapSqlParameterSource().addValue("token", productReq.getLoginToken().getSessionToken());
+		in.addValue("site", productReq.getUrl());
 		Map<String, Object> out = jdbcCall.execute(in);
 	}
 
@@ -68,22 +79,20 @@ public class ProductJdbcDatabase {
 	 * @param productId
 	 */
 	public void untrackProduct(Long productId, ProductRequest product) {
-
 		SimpleJdbcCall jdbcCall = new SimpleJdbcCall(dataSource).withProcedureName("untrackProduct");
-		//MapSqlParameterSource in = new MapSqlParameterSource().addValue("token", product.getLoginToken());  //does this validatte the token? If so I already check if token is valid
-		//in.addValue("site", product.getUrl());
-		//Map<String, Object> out = jdbcCall.execute(in);
+		MapSqlParameterSource in = new MapSqlParameterSource().addValue("token", product.getLoginToken().getSessionToken());  //does this validatte the token? If so I already check if token is valid
+		in.addValue("site", product.getUrl());
+		Map<String, Object> out = jdbcCall.execute(in);
 	}
 
 	/**
-	 * update produce price
+	 * update product price
 	 * 
 	 * @param product
 	 */
 	public void updatePrice(ProductItem product) {
-		// check log in id
 		SimpleJdbcCall jdbcCall = new SimpleJdbcCall(dataSource).withProcedureName("updateProduct");
-		MapSqlParameterSource in = new MapSqlParameterSource().addValue("trigger_price", product.getCurrentPrice());
+		MapSqlParameterSource in = new MapSqlParameterSource().addValue("price", product.getCurrentPrice());
 		in.addValue("site", product.getUrl());
 		Map<String, Object> out = jdbcCall.execute(in);
 	}
@@ -94,11 +103,10 @@ public class ProductJdbcDatabase {
 	 * @param product
 	 */
 	public Map<String, Object> getProduct(ProductRequest product) {
-		// check log in id
 		SimpleJdbcCall jdbcCall = new SimpleJdbcCall(dataSource).withProcedureName("getProduct");
 		MapSqlParameterSource in = new MapSqlParameterSource().addValue("token", product.getLoginToken());
 		in.addValue("site", product.getUrl());
-		Map<String, Object> out = jdbcCall.execute(in);
+		Map<String, Object> out = jdbcCall.execute(in);		
 		return out;
 
 	}

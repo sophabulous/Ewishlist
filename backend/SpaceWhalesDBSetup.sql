@@ -240,4 +240,86 @@ END;
 $$
 language plpgsql; 
 
+-- Inserts product into table. If product exists return False
+CREATE OR REPLACE FUNCTION insertProduct(IN site text, IN item_name text, IN price real,OUT status boolean)
+AS $$
+begin
+    -- product in database already
+    IF EXISTS(SELECT * FROM products P WHERE P.site = insertProduct.site ) THEN
+        status := FALSE;
+        return;
+    END IF; 
+    
+    INSERT INTO products (item_name, site, yesterday_price,current_price)
+    VALUES (insertProduct.item_name, insertProduct.site, insertProduct.price,insertProduct.price);
+    
+    status := TRUE;
+END;
+$$
+language plpgsql;
 
+-- Track Product
+CREATE OR REPLACE FUNCTION trackProduct(IN token text, IN site text, OUT status boolean)
+AS $$
+DECLARE u_id INT;
+DECLARE trigger_p REAL;
+begin
+    -- find user
+    SELECT S.user_id INTO u_id FROM user_session S WHERE S.session_uuid = trackProduct.token;
+    SELECT P.current_price INTO trigger_p FROM products P WHERE P.site = trackProduct.site;
+    IF u_id IS NULL OR trigger_p IS NULL THEN
+        status := FALSE;
+        return;
+    END IF;
+    -- check if products already in wishlist
+    IF EXISTS(SELECT * FROM wishlist W WHERE W.site = trackProduct.site  AND W.user_id = u_id) THEN
+        status := FALSE;
+        return;
+    END IF;
+    -- insert product into wishlist
+    INSERT INTO wishlist (user_id, site, trigger_price)
+    VALUES (u_id, trackProduct.site, trigger_p);
+    
+    status := TRUE;
+END;
+$$
+language plpgsql;
+
+-- remove produce from wishlist of user
+CREATE OR REPLACE FUNCTION untrackProduct(IN token text, IN site text, OUT status boolean)
+AS $$
+DECLARE u_id INT;
+begin
+    -- find user
+    SELECT S.user_id INTO u_id FROM user_session S WHERE S.session_uuid = untrackProduct.token;
+    IF u_id IS NULL THEN
+        status := FALSE;
+        return;
+    END IF;
+    -- check if product is in wishlist
+    IF NOT EXISTS(SELECT * FROM wishlist W WHERE W.site = untrackProduct.site  AND W.user_id = u_id) THEN
+        status := FALSE;
+        return;
+    END IF;
+    -- delete product into wishlist
+    DELETE FROM wishlist WHERE user_id = u_id AND site = untrackProduct.site;
+    status := TRUE;
+END;
+$$
+language plpgsql;
+
+-- update product price
+CREATE OR REPLACE FUNCTION updateProduct(IN price real, IN site text, OUT status boolean)
+AS $$
+DECLARE y_price REAL;
+begin
+    SELECT P.current_price INTO y_price FROM products P WHERE P.site = updateProduct.site;
+    IF y_price IS NULL THEN
+        status := FALSE;
+        return;
+    END IF;
+    UPDATE products P SET yesterday_price = y_price, current_price = updateProduct.price WHERE P.site = updateProduct.site;
+    status := TRUE;
+END;
+$$
+language plpgsql;
