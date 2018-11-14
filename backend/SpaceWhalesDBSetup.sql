@@ -323,3 +323,26 @@ begin
 END;
 $$
 language plpgsql;
+
+-- get product name and the current price
+CREATE OR REPLACE FUNCTION getProduct(IN site text,OUT product_name text, OUT current_price real, OUT status boolean)
+AS $$
+begin
+    SELECT P.item_name, P.current_price INTO product_name, current_price FROM products P WHERE P.site = getProduct.site;
+    status := TRUE;
+END;
+$$
+language plpgsql;
+
+-- get products from user wishlist
+CREATE OR REPLACE FUNCTION getUserId(IN session_token text, OUT user_id int, OUT status boolean)
+AS $$
+begin
+    SELECT S.user_id INTO user_id FROM user_session S WHERE S.session_uuid = getUserId.session_token;
+    IF user_id IS NULL THEN
+        status := FALSE;
+        return;
+    END IF;
+END;
+$$
+language plpgsql;

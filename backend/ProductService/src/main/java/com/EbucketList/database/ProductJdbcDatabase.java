@@ -1,8 +1,10 @@
 package com.EbucketList.database;
 
+import org.postgresql.jdbc.PgArray;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -13,8 +15,10 @@ import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 
 import java.io.IOException;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 @Configuration
@@ -102,12 +106,37 @@ public class ProductJdbcDatabase {
 	 * 
 	 * @param product
 	 */
-	public Map<String, Object> getProduct(ProductRequest product) {
+	public ProductItem getProduct(ProductRequest product) {
 		SimpleJdbcCall jdbcCall = new SimpleJdbcCall(dataSource).withProcedureName("getProduct");
-		MapSqlParameterSource in = new MapSqlParameterSource().addValue("token", product.getLoginToken());
-		in.addValue("site", product.getUrl());
-		Map<String, Object> out = jdbcCall.execute(in);		
-		return out;
+		MapSqlParameterSource in = new MapSqlParameterSource().addValue("site", product.getUrl());
+		Map<String, Object> out = jdbcCall.execute(in);
+		ProductItem pi = new ProductItem();
+		pi.setProductName((String) out.get("product_name"));
+		pi.setUrl(product.getUrl());
+		Float price = (Float) out.get("current_price");
+		pi.setCurrentPrice(price.doubleValue());
+		return pi;
+
+	}
+	
+	/**
+	 * get Wishlist
+	 * 
+	 * @param product
+	 */
+	public List<String> getWishlist(LoginToken token) {
+		SimpleJdbcCall jdbcCall = new SimpleJdbcCall(dataSource).withProcedureName("getUserId");
+		MapSqlParameterSource in = new MapSqlParameterSource().addValue("session_token", token.getSessionToken());
+		Map<String, Object> out = jdbcCall.execute(in);
+		Integer user_id = (Integer) out.get("user_id");
+		List<String> products = this.jdbcTemplate.query(
+		        "SELECT site FROM public.wishlist WHERE user_id = "+user_id+";",
+		        new RowMapper<String>() {
+		            public String mapRow(ResultSet rs, int rowNum) throws SQLException {
+		            	return rs.getString("site");
+		            }
+		        });
+		return products;
 
 	}
 
@@ -121,7 +150,7 @@ public class ProductJdbcDatabase {
         SimpleJdbcCall jdbcCall = new SimpleJdbcCall(dataSource).withProcedureName("validateToken");
         MapSqlParameterSource in = new MapSqlParameterSource().addValue("user_name", token.getUsername());
         in.addValue("session_token", token.getSessionToken());
-
+        
         Map<String, Object> out = jdbcCall.execute(in);
 
         if (!(boolean)out.get("status") && (Date)out.get("expiry") == null)
