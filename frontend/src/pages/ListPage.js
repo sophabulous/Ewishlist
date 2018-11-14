@@ -12,7 +12,7 @@ class ListPage extends Component {
                 <div className="page listPage">
                   <div className="topRow">
                     <h1>MyList</h1>
-                    <a className="trackNewItemLink" href="#" >Track New Item</a>
+                    <a className="trackNewItemLink" href="/track" >Track New Item</a>
                   </div>
                   <ItemList/>
                 </div>
