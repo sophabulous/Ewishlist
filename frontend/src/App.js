@@ -7,6 +7,8 @@ import TrackingPage from './pages/TrackingPage';
 import Profile from './components/Profile';
 import LogInPage from './pages/LogInPage';
 import SignUpPage from './pages/SignUpPage';
+import ConfirmationPage from './pages/ConfirmationPage';
+import ConfirmationPage from './pages/DetailPage';
 
 class App extends Component {
   render () {
@@ -19,6 +21,9 @@ class App extends Component {
             <Route path="/profile"  component={Profile} />
             <Route path="/signUp" component={SignUpPage} />
             <Route path="/login" component={LogInPage} />
+            <Route path="/confirm" component={ConfirmationPage} />
+            <Route path="/item" component={DetailPage} />
+
 
           </Switch>
 
