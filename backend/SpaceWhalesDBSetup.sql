@@ -238,4 +238,15 @@ END;
 $$
 language plpgsql; 
 
-
+-- Takes a item name, price.
+CREATE OR REPLACE FUNCTION updatePrice(IN item_name text, IN price real) RETURNS void
+AS $$
+begin
+    
+    UPDATE products p
+    SET yesterday_price = current_price, current_price = updatePrice.price
+    WHERE p.item_name = updatePrice.item_name;
+    
+END;
+$$
+language plpgsql;
