@@ -15,7 +15,7 @@ class LogInPage extends Component {
                   <LogInForm />
                   <span className="dontHaveAccount">
                     {data.dontHaveAccountText}
-                    <a href="#">{data.signUpText}</a>
+                    <a href="/signUp">{data.signUpText}</a>
                   </span>
                 </div>
             </div>

@@ -10,7 +10,7 @@ class Header extends Component {
               <div id="menuIconContainer">
               </div>
               <h3>{data.siteName}</h3>
-              <a href="#" className="trackLinkInHeader">Track a new item!</a>
+              <a href="/track" className="trackLinkInHeader">Track a new item!</a>
             </header>
         );
     }
