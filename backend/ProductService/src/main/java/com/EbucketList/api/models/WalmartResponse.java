@@ -1,10 +1,10 @@
-package io.swagger.model;
+package com.EbucketList.api.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Item {
+public class WalmartResponse {
 
         @JsonProperty("itemId")
         long itemId;

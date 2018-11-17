@@ -1,10 +1,9 @@
-package io.swagger.dao;
+package com.EbucketList.api.dao;
 
-import io.swagger.model.Item;
+import com.EbucketList.api.models.WalmartResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriBuilder;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.MalformedURLException;
@@ -18,10 +17,10 @@ public class WalmartDao {
     @Value("#{new String('{WALMART_API_KEY}')}")
     String apiKey;
 
-    public Item getItem(String productUrl) throws MalformedURLException {
+    public WalmartResponse getItem(String productUrl) throws MalformedURLException {
         String[] components = productUrl.split("/");
         String itemId = components[components.length - 1];
-        System.out.println("url: " + productUrl + " item id: " + itemId);
+        System.out.println("url: " + productUrl + " walmartResponse id: " + itemId);
 
         URI uri = UriComponentsBuilder.fromHttpUrl(baseUrl)
                 .path("v1")
@@ -36,9 +35,9 @@ public class WalmartDao {
         System.out.println("URL value: " + url.toString());
 
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<Item> response = restTemplate.getForEntity(url.toString(), Item.class);
-        Item item = response.getBody();
-        return item;
+        ResponseEntity<WalmartResponse> response = restTemplate.getForEntity(url.toString(), WalmartResponse.class);
+        WalmartResponse walmartResponse = response.getBody();
+        return walmartResponse;
 
     }
 

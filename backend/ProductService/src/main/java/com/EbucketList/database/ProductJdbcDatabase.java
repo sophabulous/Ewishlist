@@ -103,31 +103,6 @@ public class ProductJdbcDatabase {
 
 	}
 
-    /**
-     * Validates whether a token is valid or not
-     *
-     * @param token
-     * @throws IOException
-     */
-    public boolean validateToken(LoginToken token) throws IOException {
-        SimpleJdbcCall jdbcCall = new SimpleJdbcCall(dataSource).withProcedureName("validateToken");
-        MapSqlParameterSource in = new MapSqlParameterSource().addValue("user_name", token.getUsername());
-        in.addValue("session_token", token.getSessionToken());
-
-        Map<String, Object> out = jdbcCall.execute(in);
-
-        if (!(boolean)out.get("status") && (Date)out.get("expiry") == null)
-        {
-            throw new IOException("counterfeit token");
-        }
-        else if ((Date)out.get("expiry") == null)
-        {
-            // expired token
-            return false;
-        }
-
-        return true;
-    }
 
 	/**
 	 * @return JdbcTemplate

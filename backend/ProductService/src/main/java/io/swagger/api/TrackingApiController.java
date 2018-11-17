@@ -1,5 +1,6 @@
 package io.swagger.api;
 
+import com.EbucketList.api.WalmartApiHandler;
 import com.EbucketList.database.ProductJdbcDatabase;
 import io.swagger.model.ProductRequest;
 import io.swagger.model.LoginToken;
@@ -9,7 +10,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -41,6 +41,11 @@ public class TrackingApiController implements TrackingApi {
         this.request = request;
     }
 
+    private boolean validateToken(LoginToken loginToken){
+
+
+    }
+
 
     public ResponseEntity<ProductItem> addTrackedProduct(@ApiParam(value = "" ,required=true )  @Valid @RequestBody ProductRequest body) {
         String accept = request.getHeader("Accept");
@@ -51,7 +56,7 @@ public class TrackingApiController implements TrackingApi {
                     return new ResponseEntity<ProductItem>(HttpStatus.FORBIDDEN);
                 }
                 else{
-                    db.trackProduct(body); //update to use new model
+                    db.trackProduct(body); //update to use new models
                     //TODO: update this to incorporate adding the product to the product table as well
                     WalmartApiHandler walmartApiHandler = new WalmartApiHandler();
                     double price = walmartApiHandler.getPrice(body.getUrl());

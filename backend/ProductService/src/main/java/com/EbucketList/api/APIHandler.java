@@ -1,4 +1,4 @@
-package io.swagger.api;
+package com.EbucketList.api;
 
 import io.swagger.model.Product;
 import org.springframework.boot.SpringApplication;
@@ -9,7 +9,7 @@ import java.net.MalformedURLException;
 public interface APIHandler {
 
 	/**
-	 * Get the price for an item. 
+	 * Get the price for an walmartResponse.
 	 */
 	public abstract Double getPrice(String url) throws MalformedURLException;
 
