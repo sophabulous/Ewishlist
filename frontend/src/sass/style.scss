@@ -173,7 +173,8 @@ h1 {
     background-color: #E8E6E6;
   }
 }
-.ProfilePage {
+
+.profilePage {
   font-family: $roboto;
 
   h1 {
@@ -182,7 +183,8 @@ h1 {
     margin: 0;
   }
 }
-.ProfileDetails{
+
+.profileDetails{
   text-align: left;
   padding: 5% 40%;
   display: block;
@@ -198,7 +200,7 @@ h1 {
   }
 }
 
-.ProfileImg{
+.profileImg{
   width: 50%;
   text-align: center;
   height: 50%;
@@ -328,9 +330,7 @@ h1 {
 }
 
 .listContainer{
-    //padding: 20px 0;
     margin-bottom: 50px;
-    background: #eaeaea;
 }
 
 .listItemSection{
