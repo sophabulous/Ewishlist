@@ -23,7 +23,7 @@ public class UserJdbcDatabase {
 	@Value("#{new String('{DB_URL}')}")
 	String dbUrl;
 
-	public UserJdbcDatabase() {
+	public UserJdbcDatabase() throws IOException {
 
 	}
 
