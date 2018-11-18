@@ -18,16 +18,16 @@ import javax.validation.constraints.*;
 
 public class ProductItem   {
   @JsonProperty("productId")
-  private Integer productId = null;
+  private Long productId = null;
 
   @JsonProperty("productName")
   private String productName = null;
 
   @JsonProperty("currentPrice")
-  private Float currentPrice = null;
+  private Double currentPrice = null;
 
   @JsonProperty("trackedPrice")
-  private Float trackedPrice = null;
+  private Double trackedPrice = null;
 
   @JsonProperty("trackedTime")
   private OffsetDateTime trackedTime = null;
@@ -38,10 +38,6 @@ public class ProductItem   {
   @JsonProperty("url")
   private String url = null;
 
-  public ProductItem productId(Integer productId) {
-    this.productId = productId;
-    return this;
-  }
 
   /**
    * Get productId
@@ -50,11 +46,11 @@ public class ProductItem   {
   @ApiModelProperty(value = "")
 
 
-  public Integer getProductId() {
+  public Long getProductId() {
     return productId;
   }
 
-  public void setProductId(Integer productId) {
+  public void setProductId(Long productId) {
     this.productId = productId;
   }
 
@@ -78,7 +74,7 @@ public class ProductItem   {
     this.productName = productName;
   }
 
-  public ProductItem currentPrice(Float currentPrice) {
+  public ProductItem currentPrice(Double currentPrice) {
     this.currentPrice = currentPrice;
     return this;
   }
@@ -90,15 +86,15 @@ public class ProductItem   {
   @ApiModelProperty(value = "")
 
 
-  public Float getCurrentPrice() {
+  public Double getCurrentPrice() {
     return currentPrice;
   }
 
-  public void setCurrentPrice(Float currentPrice) {
+  public void setCurrentPrice(Double currentPrice) {
     this.currentPrice = currentPrice;
   }
 
-  public ProductItem trackedPrice(Float trackedPrice) {
+  public ProductItem trackedPrice(Double trackedPrice) {
     this.trackedPrice = trackedPrice;
     return this;
   }
@@ -110,11 +106,11 @@ public class ProductItem   {
   @ApiModelProperty(value = "")
 
 
-  public Float getTrackedPrice() {
+  public Double getTrackedPrice() {
     return trackedPrice;
   }
 
-  public void setTrackedPrice(Float trackedPrice) {
+  public void setTrackedPrice(Double trackedPrice) {
     this.trackedPrice = trackedPrice;
   }
 
