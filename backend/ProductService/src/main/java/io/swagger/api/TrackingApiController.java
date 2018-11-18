@@ -10,11 +10,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.client.RestTemplate;
 
 import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
@@ -24,8 +27,12 @@ import java.util.ArrayList;
 import java.util.List;
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-11-01T17:36:03.863Z")
 
+
 @Controller
 public class TrackingApiController implements TrackingApi {
+
+    @Value( "${user.service.url}" )
+    private String userServiceUrl;
 
     private static final Logger log = LoggerFactory.getLogger(TrackingApiController.class);
 
@@ -40,10 +47,17 @@ public class TrackingApiController implements TrackingApi {
         this.objectMapper = objectMapper;
         this.request = request;
     }
-
+     /*uses the user service to authenticate user token*/
     private boolean validateToken(LoginToken loginToken){
-
-
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<String> response = restTemplate.postForEntity(userServiceUrl, loginToken, String.class);
+        int status = response.getStatusCode().value();
+        if(status == 200){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 
 
@@ -51,13 +65,12 @@ public class TrackingApiController implements TrackingApi {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
             try {
-                if(! db.validateToken(body.getLoginToken())){
+                if(!validateToken(body.getLoginToken())){
                     ProductItem productItem = null;
                     return new ResponseEntity<ProductItem>(HttpStatus.FORBIDDEN);
                 }
                 else{
                     db.trackProduct(body); //update to use new models
-                    //TODO: update this to incorporate adding the product to the product table as well
                     WalmartApiHandler walmartApiHandler = new WalmartApiHandler();
                     double price = walmartApiHandler.getPrice(body.getUrl());
                     Product product = walmartApiHandler.getProduct(body.getUrl());
@@ -67,87 +80,68 @@ public class TrackingApiController implements TrackingApi {
                     productItem.setProductName(product.getName());
                     productItem.setUrl(body.getUrl());
                     productItem.setVendor("Walmart");
+                    db.insertProduct(productItem);
+                    ProductRequest productRequest= new ProductRequest();
+                    db.trackProduct(body);
                     return new ResponseEntity<ProductItem>(productItem, HttpStatus.ACCEPTED);
                 }
 
 
             }
-            catch (MalformedURLException me){
+            catch (MalformedURLException me) {
                 log.error("url is not formatted properly");
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            }
-            catch (IOException e) {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<ProductItem>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-        }
-
-        return new ResponseEntity<ProductItem>(HttpStatus.NOT_IMPLEMENTED);
-    }
-
-    public ResponseEntity<ProductItem> deleteTrackedProduct(@ApiParam(value = "",required=true) @PathVariable("productId") Long productId, @Valid @RequestBody ProductRequest body) {
-        String accept = request.getHeader("Accept");
-        if (accept != null && accept.contains("application/json")) {
-            try {
-                if(! db.validateToken(body.getLoginToken())){
-                    ProductItem productItem = null;
-                    return new ResponseEntity<ProductItem>(HttpStatus.FORBIDDEN);
-                }
-                else{
-                    ProductItem productItem  = null; //TODO: Update this to fetch the actual product and return it once the fetch from db is implmented
-                    db.untrackProduct(productId, body);
-                    return new ResponseEntity<ProductItem>(productItem, HttpStatus.ACCEPTED);
-                }
-
-            } catch (IOException e) {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<ProductItem>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
 
         return new ResponseEntity<ProductItem>(HttpStatus.BAD_REQUEST);
     }
 
-    public ResponseEntity<ProductItem> getTrackedProductInfo(@ApiParam(value = "",required=true) @PathVariable("productId") Long productId,@ApiParam(value = "" ,required=true )  @Valid @RequestBody ProductRequest body) {
+    public ResponseEntity<ProductItem> deleteTrackedProduct(@ApiParam(value = "",required=true) @PathVariable("productUrl") String productUrl, @Valid @RequestBody ProductRequest body) {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
-            try {
-                if(! db.validateToken(body.getLoginToken())){
-                    ProductItem productItem = null;
-                    return new ResponseEntity<ProductItem>(HttpStatus.FORBIDDEN);
-                }
-                else{
-                    ProductItem productItem  = null; //TODO: Update this to fetch the actual product and return it once the fetch from db is implmented
-                    return new ResponseEntity<ProductItem>(HttpStatus.ACCEPTED);
-                }
-
-            } catch (IOException e) {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<ProductItem>(HttpStatus.INTERNAL_SERVER_ERROR);
+            if(!validateToken(body.getLoginToken())){
+                ProductItem productItem = null;
+                return new ResponseEntity<ProductItem>(HttpStatus.FORBIDDEN);
+            }
+            else{
+                db.untrackProduct(body);
+                return new ResponseEntity<ProductItem>(HttpStatus.ACCEPTED);
             }
         }
 
+        return new ResponseEntity<ProductItem>(HttpStatus.BAD_REQUEST);
+    }
+
+    public ResponseEntity<ProductItem> getTrackedProductInfo(@ApiParam(value = "",required=true) @PathVariable("productUrl") String  productUrl,@ApiParam(value = "" ,required=true )  @Valid @RequestBody ProductRequest body) {
+        String accept = request.getHeader("Accept");
+        if (accept != null && accept.contains("application/json")){
+                if(! validateToken(body.getLoginToken())){
+                    return new ResponseEntity<ProductItem>(HttpStatus.FORBIDDEN);
+                }
+                else {
+                    ProductItem item = db.getProduct(body);
+                    return new ResponseEntity<ProductItem>(item, HttpStatus.ACCEPTED);
+                }
+        }
         return new ResponseEntity<ProductItem>(HttpStatus.BAD_REQUEST);
     }
 
     public ResponseEntity<List<ProductItem>> getTrackedProducts(@ApiParam(value = "" ,required=true )  @Valid @RequestBody LoginToken body) {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
-            try {
-                if(! db.validateToken(body)){
-                    ProductItem productItem = null;
-                    ArrayList<ProductItem> productList = null;
-                    return new ResponseEntity<List<ProductItem>>(HttpStatus.FORBIDDEN);
+            if(! validateToken(body)){
+                return new ResponseEntity<List<ProductItem>>(HttpStatus.FORBIDDEN);
+            }
+            else{
+                List<String> productList = db.getWishlist(body);
+                List<ProductItem> products = new ArrayList<ProductItem>();
+                for(String url : productList){
+                    ProductItem item = new ProductItem();
+                    item.setUrl(url);
+                    products.add(item);
                 }
-                else{
-                    ProductItem productItem  = null; //TODO: Update this to fetch the actual product and return it once the fetch from db is implmented
-                    ArrayList<ProductItem> productList = null;
-                    return new ResponseEntity<List<ProductItem>>(HttpStatus.ACCEPTED);
-                }
-
-            } catch (IOException e) {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<List<ProductItem>>(HttpStatus.INTERNAL_SERVER_ERROR);
+                return new ResponseEntity<List<ProductItem>>(products, HttpStatus.ACCEPTED);
             }
         }
 
@@ -160,26 +154,23 @@ public class TrackingApiController implements TrackingApi {
         return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
     }
 
-    public ResponseEntity<ProductItem> updateProductItem(@ApiParam(value = "",required=true) @PathVariable("productId") Long productId,@ApiParam(value = "" ,required=true )  @Valid @RequestBody ProductRequest body) {
+    //assume can only update price
+    public ResponseEntity<ProductItem> updateProductItem(@ApiParam(value = "",required=true) @PathVariable("productUrl") String url, @PathVariable("price") Double price, @ApiParam(value = "" ,required=true )  @Valid @RequestBody LoginToken loginToken) {
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
-            try {
-                if(! db.validateToken(body.getLoginToken())){
-                    ProductItem productItem = null;
-                    return new ResponseEntity<ProductItem>(productItem, HttpStatus.FORBIDDEN);
-                }
-                else{
-                    ProductItem productItem  = null; //TODO: Update this to fetch the actual product and return it once the fetch from db is implmented
-                    return new ResponseEntity<ProductItem>(productItem, HttpStatus.ACCEPTED);
-                }
-
-            } catch (IOException e) {
-                log.error("Couldn't serialize response for content type application/json", e);
-                return new ResponseEntity<ProductItem>(HttpStatus.INTERNAL_SERVER_ERROR);
+            if(! validateToken(loginToken)){
+                return new ResponseEntity<ProductItem>(HttpStatus.FORBIDDEN);
+            }
+            else{
+                ProductRequest request = new ProductRequest();
+                request.setUrl(url);
+                ProductItem prodItem = db.getProduct(request);
+                prodItem.setCurrentPrice(price);
+                db.updatePrice(prodItem);
+                return new ResponseEntity<ProductItem>(prodItem, HttpStatus.ACCEPTED);
             }
         }
-
-        return new ResponseEntity<ProductItem>(HttpStatus.NOT_IMPLEMENTED);
+        return new ResponseEntity<ProductItem>(HttpStatus.BAD_REQUEST);
     }
 
 }

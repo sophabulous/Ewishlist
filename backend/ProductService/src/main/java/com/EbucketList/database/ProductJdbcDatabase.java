@@ -80,7 +80,7 @@ public class ProductJdbcDatabase {
 	 * 
 	 * @param productId
 	 */
-	public void untrackProduct(Long productId, ProductRequest product) {
+	public void untrackProduct(ProductRequest product) {
 		SimpleJdbcCall jdbcCall = new SimpleJdbcCall(dataSource).withProcedureName("untrackProduct");
 		MapSqlParameterSource in = new MapSqlParameterSource().addValue("token", product.getLoginToken().getSessionToken());  //does this validatte the token? If so I already check if token is valid
 		in.addValue("site", product.getUrl());

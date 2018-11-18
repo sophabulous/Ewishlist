@@ -38,7 +38,7 @@ public interface UsersApi {
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.POST)
-    ResponseEntity<Void> authenticateToken(@ApiParam(value = "" ,required=true )  @Valid @RequestBody LoginToken body);
+    ResponseEntity<String> authenticateToken(@ApiParam(value = "" ,required=true )  @Valid @RequestBody LoginToken body);
 
 
     @ApiOperation(value = "Delete a user", nickname = "deleteUser", notes = "", tags={ "User", })
@@ -50,7 +50,7 @@ public interface UsersApi {
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.DELETE)
-    ResponseEntity<Void> deleteUser(@ApiParam(value = "" ,required=true )  @Valid @RequestBody LoginToken body);
+    ResponseEntity<String> deleteUser(@ApiParam(value = "" ,required=true )  @Valid @RequestBody LoginToken body);
 
 
     @ApiOperation(value = "Create and return user login token based on provided username and password hash", nickname = "getUserToken", notes = "", response = LoginToken.class, tags={ "User", })
@@ -73,7 +73,7 @@ public interface UsersApi {
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.POST)
-    ResponseEntity<Void> invalidateToken(@ApiParam(value = "" ,required=true )  @Valid @RequestBody LoginToken body);
+    ResponseEntity<String> invalidateToken(@ApiParam(value = "" ,required=true )  @Valid @RequestBody LoginToken body);
 
 
     @ApiOperation(value = "Create new user", nickname = "newUser", notes = "", tags={ "User", })
@@ -84,7 +84,7 @@ public interface UsersApi {
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.PUT)
-    ResponseEntity<Void> newUser(@ApiParam(value = "" ,required=true )  @Valid @RequestBody NewUserRequest body);
+    ResponseEntity<String> newUser(@ApiParam(value = "" ,required=true )  @Valid @RequestBody NewUserRequest body);
 
 
     @ApiOperation(value = "ping", nickname = "pingUsers", notes = "", tags={ "User", })
@@ -92,7 +92,7 @@ public interface UsersApi {
         @ApiResponse(code = 200, message = "ping") })
     @RequestMapping(value = "/users/ping",
         method = RequestMethod.GET)
-    ResponseEntity<Void> pingUsers();
+    ResponseEntity<String> pingUsers();
 
 
     @ApiOperation(value = "Update a user's info", nickname = "updateUser", notes = "", tags={ "User", })
@@ -104,6 +104,6 @@ public interface UsersApi {
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.POST)
-    ResponseEntity<Void> updateUser(@ApiParam(value = "" ,required=true )  @Valid @RequestBody UpdateUserRequest body);
+    ResponseEntity<String> updateUser(@ApiParam(value = "" ,required=true )  @Valid @RequestBody UpdateUserRequest body);
 
 }

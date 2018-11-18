@@ -42,31 +42,31 @@ public class UsersApiController implements UsersApi {
         this.request = request;
     }
 
-    public ResponseEntity<Void> authenticateToken(@ApiParam(value = "" ,required=true )  @Valid @RequestBody LoginToken body) {
+    public ResponseEntity<String> authenticateToken(@ApiParam(value = "" ,required=true )  @Valid @RequestBody LoginToken body) {
         UserJdbcDatabase db;
         try {
             db = new UserJdbcDatabase();
             db.init();
         } catch (IOException e) {
             log.error("database connection could not be established");
-            return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
         
         try {
             if(db.validateToken(body)) {
-                return new ResponseEntity<Void>(HttpStatus.OK);
+                return new ResponseEntity<String>(HttpStatus.OK);
             } else {
-                return new ResponseEntity<Void>(HttpStatus.METHOD_NOT_ALLOWED);
+                return new ResponseEntity<String>(HttpStatus.METHOD_NOT_ALLOWED);
             }
         } catch (IOException e) {
-            return new ResponseEntity<Void>(HttpStatus.I_AM_A_TEAPOT);
+            return new ResponseEntity<String>(HttpStatus.I_AM_A_TEAPOT);
         }
         
     }
 
-    public ResponseEntity<Void> deleteUser(@ApiParam(value = "" ,required=true )  @Valid @RequestBody LoginToken body) {
+    public ResponseEntity<String> deleteUser(@ApiParam(value = "" ,required=true )  @Valid @RequestBody LoginToken body) {
         String accept = request.getHeader("Accept");
-        return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
+        return new ResponseEntity<String>(HttpStatus.NOT_IMPLEMENTED);
     }
 
     public ResponseEntity<LoginToken> getUserToken(@ApiParam(value = "" ,required=true )  @Valid @RequestBody LoginRequest body) {
@@ -96,53 +96,53 @@ public class UsersApiController implements UsersApi {
         return new ResponseEntity<LoginToken>(HttpStatus.METHOD_NOT_ALLOWED);
     }
 
-    public ResponseEntity<Void> invalidateToken(@ApiParam(value = "" ,required=true )  @Valid @RequestBody LoginToken body) {
+    public ResponseEntity<String> invalidateToken(@ApiParam(value = "" ,required=true )  @Valid @RequestBody LoginToken body) {
         UserJdbcDatabase db;
         try {
             db = new UserJdbcDatabase();
             db.init();
         } catch (IOException e) {
             log.error("database connection could not be established");
-            return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
         
         try {
             if(db.invalidateToken(body)) {
-                return new ResponseEntity<Void>(HttpStatus.OK);
+                return new ResponseEntity<String>(HttpStatus.OK);
             } else {
-                return new ResponseEntity<Void>(HttpStatus.METHOD_NOT_ALLOWED);
+                return new ResponseEntity<String>(HttpStatus.METHOD_NOT_ALLOWED);
             }
         } catch (IOException e) {
-            return new ResponseEntity<Void>(HttpStatus.I_AM_A_TEAPOT);
+            return new ResponseEntity<String>(HttpStatus.I_AM_A_TEAPOT);
         }
     }
 
-    public ResponseEntity<Void> newUser(@ApiParam(value = "" ,required=true )  @Valid @RequestBody NewUserRequest body) {
+    public ResponseEntity<String> newUser(@ApiParam(value = "" ,required=true )  @Valid @RequestBody NewUserRequest body) {
         UserJdbcDatabase db;
         try {
             db = new UserJdbcDatabase();
             db.init();
         } catch (IOException e) {
             log.error("database connection could not be established");
-            return new ResponseEntity<Void>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
         
         try {
             db.createUser(body);
-            return new ResponseEntity<Void>(HttpStatus.OK);
+            return new ResponseEntity<String>(HttpStatus.OK);
         } catch (IOException e) {
-            return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<String>(HttpStatus.UNAUTHORIZED);
         }
     }
 
-    public ResponseEntity<Void> pingUsers() {
+    public ResponseEntity<String> pingUsers() {
         String accept = request.getHeader("Accept");
-        return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
+        return new ResponseEntity<String>(HttpStatus.NOT_IMPLEMENTED);
     }
 
-    public ResponseEntity<Void> updateUser(@ApiParam(value = "" ,required=true )  @Valid @RequestBody UpdateUserRequest body) {
+    public ResponseEntity<String> updateUser(@ApiParam(value = "" ,required=true )  @Valid @RequestBody UpdateUserRequest body) {
         String accept = request.getHeader("Accept");
-        return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
+        return new ResponseEntity<String>(HttpStatus.NOT_IMPLEMENTED);
     }
 
 }
