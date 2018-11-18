@@ -20,13 +20,20 @@ h1 {
     text-align: center;
 }
 
-.banner-section-container {
+.page {
+  padding-top: 80px;
+}
+
+.headerContainer {
     width: 100%;
+    top: 0;
     background-color: #000000;
     color: #ffffff;
     text-align: center;
     overflow: hidden;
     font-family: $poppins;
+    position: fixed;
+    margin-bottom: 5%;
 
     h3 {
       font-size: 1.25em;
@@ -35,6 +42,96 @@ h1 {
     @media (min-width: #{$tabletBreakpoint}) {
         background-color: #000000;
     }
+}
+
+.trackLinkInHeader {
+    position: fixed;
+    float: right;
+    display: inline-block;
+    color: #ffffff;
+    right: 36px;
+    top: 20px;
+
+    &:hover {
+      -webkit-mask-image: linear-gradient(-75deg, rgba(0,0,0,.6) 30%, #000 50%, rgba(0,0,0,.6) 70%);
+      -webkit-mask-size: 200%;
+      animation: shine 2s infinite;
+    }
+
+    @-webkit-keyframes shine {
+      from {
+        -webkit-mask-position: 150%;
+      }
+
+      to {
+        -webkit-mask-position: -50%;
+      }
+    }
+}
+
+/* Individual item */
+.bm-item {
+  display: inline-block;
+
+  /* Our sidebar item styling */
+  text-decoration: none;
+  margin-bottom: 10px;
+  color: #d1d1d1;
+  transition: color 0.2s;
+}
+
+/* Change color on hover */
+.bm-item:hover {
+  color: #373a47;
+}
+
+/* The rest copied directly from react-burger-menu docs */
+
+/* Position and sizing of burger button */
+.bm-burger-button {
+  position: fixed;
+  width: 36px;
+  height: 30px;
+  left: 36px;
+  top: 20px;
+}
+
+/* Color/shape of burger icon bars */
+.bm-burger-bars {
+  background: #ffffff;
+}
+
+/* Position and sizing of clickable cross button */
+.bm-cross-button {
+  height: 24px;
+  width: 24px;
+}
+
+/* Color/shape of close button cross */
+.bm-cross {
+  background: #bdc3c7;
+}
+
+/* General sidebar styles */
+.bm-menu {
+  background: #373a47;
+  padding: 2.5em 1.5em 0;
+  font-size: 1.15em;
+}
+
+/* Morph shape necessary with bubble or elastic */
+.bm-morph-shape {
+  fill: #373a47;
+}
+
+/* Wrapper for item list */
+.bm-item-list {
+  color: #b8b7ad;
+}
+
+/* Styling of overlay */
+.bm-overlay {
+  background: rgba(0, 0, 0, 0.3);
 }
 
 .dontHaveAccount{
@@ -76,7 +173,8 @@ h1 {
     background-color: #E8E6E6;
   }
 }
-.ProfilePage {
+
+.profilePage {
   font-family: $roboto;
 
   h1 {
@@ -85,7 +183,8 @@ h1 {
     margin: 0;
   }
 }
-.ProfileDetails{
+
+.profileDetails{
   text-align: left;
   padding: 5% 40%;
   display: block;
@@ -100,7 +199,8 @@ h1 {
     background-color: #E8E6E6;
   }
 }
-.ProfileImg{
+
+.profileImg{
   width: 50%;
   text-align: center;
   height: 50%;
@@ -109,9 +209,10 @@ h1 {
   margin-right: auto;
   margin-top: 20px;
 }
+
 .logInForm {
   text-align: left;
-  padding: 5% 40%;
+  padding: 5% 40% 0;
 
   input {
       height: 50px;
@@ -150,12 +251,226 @@ h1 {
     }
 }
 
+.trackingPage {
+
+  h1 {
+    margin-top: 10%;
+    margin-bottom: 5%;
+  }
+}
+
+.trackingFormContent{
+    margin: auto 20%;
+    font-family: $roboto;
+    height: 50px;
+
+    .inputField {
+      width: 80%;
+      height: 50px;
+      font-size: 18px;
+      margin-bottom: 10px;
+      padding-left: 20px;
+      float: left;
+      box-shadow: 0 6px 10px 0 rgba(0, 0, 0 , .1);
+      border: 0;
+      outline: 0;
+    }
+
+    .trackButton{
+      font-size: 18px;
+      width: 17%;
+      float: right;
+      height: 50px;
+      padding: 0;
+      transition: all 200ms ease-in;
+      cursor: pointer;
+      background-color: #000000;
+      color: #FFFFFF;
+
+      &:hover {
+          color:#ffffff;
+          background-color: #282727;
+          cursor: pointer;
+      }
+    }
+}
+
+.listPage {
+  margin: auto 20%;
+}
+
+.topRow{
+    display: inline-block;
+    width: 100%;
+    padding: 0 20px;
+
+    h1 {
+      margin-top: 5%;
+      margin-bottom: 5%;
+      text-align: left;
+      float: left;
+    }
+
+    .trackNewItemLink{
+        margin: 5% 0;
+        padding: 20px 20px;
+        float: right;
+    }
+
+    a {
+      font-family: $roboto;
+      color: #000000;
+      background: yellow;
+      text-decoration: none;
+
+      &:hover{
+        text-decoration: underline;
+      }
+    }
+}
+
+.listContainer{
+    margin-bottom: 50px;
+}
+
+.listItemSection{
+    background: white;
+    overflow: hidden;
+    padding: 20px;
+    position: relative;
+    width: 100%;
+
+    &:hover{
+      background: #eaeaea;
+    }
+
+    .thumbnailContainer{
+        position: relative;
+        width: 100px;
+        height: 100px;
+        overflow: hidden;
+        float: left;
+    }
+
+    .thumbnailContainer img {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        height: 100%;
+        width: auto;
+        -webkit-transform: translate(-50%,-50%);
+            -ms-transform: translate(-50%,-50%);
+                transform: translate(-50%,-50%);
+    }
+}
+
+.listItemSection:not(:last-child){
+    border-bottom: 1px solid #EEE;
+}
+
+.listItemContentContainer{
+    width: 80%;
+    float: right;
+    text-align: left;
+    font-family: $roboto;
+
+    h2 {
+      margin-top: 0;
+    }
+
+    p {
+      color: #3b3d3f;
+    }
+}
+
+.confirmationPage {
+  text-align: center;
+  width: 100%;
+
+  h1 {
+    margin-top: 5%;
+    margin-bottom: 5%;
+  }
+}
+
+.confirmationContentContainer{
+  margin: auto 20%;
+
+  .thumbnailContainer{
+      position: relative;
+      width: 50%;
+      height: 200px;
+      overflow: hidden;
+      float: left;
+  }
+
+  .thumbnailContainer img {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      height: 100%;
+      width: auto;
+      -webkit-transform: translate(-50%,-50%);
+          -ms-transform: translate(-50%,-50%);
+              transform: translate(-50%,-50%);
+  }
+
+  .confirmationText{
+    width: 50%;
+    float: right;
+    text-align: left;
+    font-family: $roboto;
+
+    h2 {
+      margin-top: 0;
+    }
+
+    p {
+      color: #3b3d3f;
+    }
+  }
+}
+
+.confirmButtonsContainer{
+    margin-top: 10%;
+
+    button:last-child{
+      background-color: #7a7a7a;
+      color: #000000;
+      margin-left: 5%;
+
+      &:hover {
+          color:#ffffff;
+          background-color: #38BA7C;
+          cursor: pointer;
+      }
+    }
+}
+
+.confirmButton {
+  font-size: 18px;
+  width: 30%;
+  float: left;
+  height: 50px;
+  padding: 0;
+  transition: all 200ms ease-in;
+  cursor: pointer;
+  background-color: #000000;
+  color: #FFFFFF;
+
+  &:hover {
+      color:#ffffff;
+      background-color: #282727;
+      cursor: pointer;
+  }
+}
+
+
 @media (min-width: #{$tabletBreakpoint}) {
     width: 33%;
 }
 
 .footer{
-  height: 40px;
   background-color: #000000;
   color: #ffffff;
   font-family: $open-sans;

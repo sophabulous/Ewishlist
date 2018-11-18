@@ -3,27 +3,30 @@
     "dontHaveAccountText": "Don't have an account? ",
     "signUpText": "Sign up",
     "username": "Test-user1",
-    "Password": "Password",
+    "password": "Password",
     "img": "./src/assets/user.png",
 
     "itemList": [
         {
-            "sectionTitle": "Section Title",
-            "sectionHeading": "Heading of this section",
+            "sectionTitle": "Item Name",
             "sectionBody": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.",
             "sectionLogoURL": "./src/assets/wii.jpg"
         },
         {
-            "sectionTitle": "Section Title",
-            "sectionHeading": "Heading of this section",
+            "sectionTitle": "Item Name",
             "sectionBody": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.",
             "sectionLogoURL": "./src/assets/dress.jpg"
         },
         {
-            "sectionTitle": "Section Title",
-            "sectionHeading": "Heading of this section",
+            "sectionTitle": "Item Name",
             "sectionBody": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.",
             "sectionLogoURL": "./src/assets/racket.jpg"
         }
-    ]
+    ],
+
+    "confirmation": {
+      "productName": "Item Name",
+      "notes": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.",
+      "productPic": "./src/assets/dress.jpg"
+    }
 }

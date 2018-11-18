@@ -4,15 +4,16 @@ import data from '../data.json';
 class ItemList extends Component {
     render () {
         return (
-            <div className="simple-section-container">
+            <div className="listContainer">
                 { data.itemList.map((item) =>
-                    <div className="simpleSection">
-                        <div className="sectionLogoContainer">
+                    <div className="listItemSection">
+                        <div className="thumbnailContainer">
                             <img src={item.sectionLogoURL}></img>
                         </div>
-                        <h2>{item.sectionTitle}</h2>
-                        <h3>{item.sectionHeading}</h3>
-                        <p>{item.sectionBody}</p>
+                        <div className="listItemContentContainer">
+                          <h2>{item.sectionTitle}</h2>
+                          <p>{item.sectionBody}</p>
+                        </div>
                     </div>
                 )}
             </div>

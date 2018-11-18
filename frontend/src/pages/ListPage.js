@@ -9,8 +9,13 @@ class ListPage extends Component {
         return (
             <div className="container">
                 <Header />
-                <h1>MyList</h1>
-                <ItemList/>
+                <div className="page listPage">
+                  <div className="topRow">
+                    <h1>MyList</h1>
+                    <a className="trackNewItemLink" href="/track" >Track New Item</a>
+                  </div>
+                  <ItemList/>
+                </div>
                 <Footer />
             </div>
         );
