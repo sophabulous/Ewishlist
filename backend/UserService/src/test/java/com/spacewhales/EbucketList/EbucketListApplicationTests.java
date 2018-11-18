@@ -93,8 +93,8 @@ public class EbucketListApplicationTests
 
 		ResponseEntity<String> response = restTemplate.exchange(
 				createURLWithPort("/users/manage"),
-				HttpMethod.PUT, entity, String.class);
-
+	 			HttpMethod.PUT, entity, String.class);
+        print(response.getBody())
 		assert(response.getStatusCode().equals(HttpStatus.OK) || response.getStatusCode().equals(HttpStatus.UNAUTHORIZED));
 	}
 
