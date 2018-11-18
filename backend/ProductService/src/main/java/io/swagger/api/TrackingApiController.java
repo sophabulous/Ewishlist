@@ -31,7 +31,7 @@ import java.util.List;
 @Controller
 public class TrackingApiController implements TrackingApi {
 
-    @Value( "${user.service.url}" )
+    @Value( "${users.service.url}" )
     private String userServiceUrl;
 
     private static final Logger log = LoggerFactory.getLogger(TrackingApiController.class);
