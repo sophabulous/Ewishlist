@@ -5,6 +5,9 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
     devtool: 'cheap-module-eval-source-map',
     entry: './src/index.js',
+    devServer: {
+      historyApiFallback: true
+    },
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: 'bundle.js',
@@ -26,7 +29,7 @@ module.exports = {
                 exclude: /node_modules/,
                 use: [
                     { loader: 'style-loader'},
-                    { 
+                    {
                         loader: 'css-loader',
                         options: {
                             importLoaders: 1,

@@ -4,7 +4,9 @@ import data from '../data.json';
 class Footer extends Component {
     render () {
         return (
-            <footer className="footer">&reg; EBucketList 2018</footer>
+            <footer className="footer">
+              <p>&reg; EBucketList 2018</p>
+            </footer>
         );
     }
 }
