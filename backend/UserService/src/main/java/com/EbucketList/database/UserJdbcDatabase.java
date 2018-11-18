@@ -16,6 +16,8 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.Map;
 
+@Component
+@Configuration
 public class UserJdbcDatabase {
 	private JdbcTemplate jdbcTemplate;
 	private DriverManagerDataSource dataSource;
