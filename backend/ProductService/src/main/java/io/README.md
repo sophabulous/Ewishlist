@@ -16,3 +16,7 @@ You can view the api documentation in swagger-ui by pointing to
 http://localhost:8080/  
 
 Change default port value in application.properties
+
+Before running the application export the following environment variables:
+DB_URL : the url for the database. Ex - localhost or the cloud db instance
+WALMART_API_KEY: the api key for walmart api

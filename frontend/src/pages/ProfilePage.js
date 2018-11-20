@@ -6,7 +6,7 @@ class ProfilePage extends Component {
 
     render () {
         return (
-          <div className="container ProfilePage">
+          <div className="container profilePage">
               <Header />
               <div className="page">
                 <h1>Profile</h1>
