@@ -1,5 +1,6 @@
-package com.EbucketList.database;
+package io.swagger.database;
 
+import io.swagger.database.api.JdbcDatabase;
 import io.swagger.model.LoginToken;
 import io.swagger.model.ProductItem;
 import io.swagger.model.ProductRequest;
@@ -11,6 +12,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
@@ -21,7 +23,8 @@ import java.util.Map;
 
 @Configuration
 @Component
-public class ProductJdbcDatabase {
+@Repository
+public class ProductJdbcDatabase implements JdbcDatabase {
 
 	@Value("${DB_URL}")
 	String dbUrl;

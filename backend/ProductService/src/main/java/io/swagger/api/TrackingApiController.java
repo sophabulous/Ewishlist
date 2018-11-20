@@ -1,7 +1,7 @@
 package io.swagger.api;
 
 import com.EbucketList.api.WalmartApiHandler;
-import com.EbucketList.database.ProductJdbcDatabase;
+import io.swagger.database.api.JdbcDatabase;
 import io.swagger.model.ProductRequest;
 import io.swagger.model.LoginToken;
 import io.swagger.model.Product;
@@ -10,8 +10,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -21,7 +21,6 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,9 +39,10 @@ public class TrackingApiController implements TrackingApi {
 
     private final HttpServletRequest request;
 
-    private ProductJdbcDatabase db = new ProductJdbcDatabase();
+    @Autowired
+    private JdbcDatabase db ;
 
-    @org.springframework.beans.factory.annotation.Autowired
+    @Autowired
     public TrackingApiController(ObjectMapper objectMapper, HttpServletRequest request) {
         this.objectMapper = objectMapper;
         this.request = request;
