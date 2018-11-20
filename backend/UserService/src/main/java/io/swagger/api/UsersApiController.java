@@ -5,26 +5,21 @@ import io.swagger.model.LoginToken;
 import io.swagger.model.NewUserRequest;
 import io.swagger.model.UpdateUserRequest;
 
-import com.EbucketList.database.UserJdbcDatabase;
+import io.swagger.database.UserJdbcDatabase;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.constraints.*;
 import javax.validation.Valid;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.List;
+
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-11-01T17:36:03.863Z")
 
 @Controller
@@ -36,6 +31,7 @@ public class UsersApiController implements UsersApi {
 
     private final HttpServletRequest request;
 
+    @Autowired
     private UserJdbcDatabase db;
 
     @org.springframework.beans.factory.annotation.Autowired
@@ -45,14 +41,6 @@ public class UsersApiController implements UsersApi {
     }
 
     public ResponseEntity<String> authenticateToken(@ApiParam(value = "" ,required=true )  @Valid @RequestBody LoginToken body) {
-        try {
-            db = new UserJdbcDatabase();
-            
-        } catch (IOException e) {
-            log.error("database connection could not be established");
-            return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-
         try {
             if(db.validateToken(body)) {
                 return new ResponseEntity<String>(HttpStatus.OK);
@@ -98,15 +86,6 @@ public class UsersApiController implements UsersApi {
     }
 
     public ResponseEntity<String> invalidateToken(@ApiParam(value = "" ,required=true )  @Valid @RequestBody LoginToken body) {
-        UserJdbcDatabase db;
-        try {
-            db = new UserJdbcDatabase();
-
-        } catch (IOException e) {
-            log.error("database connection could not be established");
-            return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-        
         try {
             if(db.invalidateToken(body)) {
                 return new ResponseEntity<String>(HttpStatus.OK);
@@ -119,15 +98,6 @@ public class UsersApiController implements UsersApi {
     }
 
     public ResponseEntity<String> newUser(@ApiParam(value = "" ,required=true )  @Valid @RequestBody NewUserRequest body) {
-        UserJdbcDatabase db;
-        try {
-            db = new UserJdbcDatabase();
-
-        } catch (IOException e) {
-            log.error("database connection could not be established");
-            return new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-        
         try {
             db.createUser(body);
             return new ResponseEntity<String>(HttpStatus.OK);
