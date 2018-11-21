@@ -1,5 +1,3 @@
-package com.EbucketList.email;
-
 import java.util.*;
 import javax.mail.*;
 import javax.mail.internet.*;
