@@ -1,4 +1,4 @@
-package com.EbucketList.database;
+package io.swagger.database;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -19,7 +19,7 @@ import java.util.Map;
 
 @Component
 @Configuration
-public class UserJdbcDatabase {
+public class UserJdbcDatabase implements JdbcDatabase{
 	private JdbcTemplate jdbcTemplate;
 	private DriverManagerDataSource dataSource;
 
