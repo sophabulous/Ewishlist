@@ -16,11 +16,11 @@ class App extends Component {
       <div>
         <Header/>
           <Switch>
-            <Route path="/" exact component={ListPage} />
+            <Route path="/" exact component={LogInPage} />
             <Route exact path="/track"  component={TrackingPage} />
             <Route path="/profile"  component={ProfilePage} />
-            <Route path="/signUp" component={SignUpPage} />
-            <Route path="/login" component={LogInPage} />
+            <Route path="/signup" component={SignUpPage} />
+            <Route path="/list" component={ListPage} />
             <Route path="/confirm" component={ConfirmationPage} />
             <Route path="/item" component={DetailPage} />
 
