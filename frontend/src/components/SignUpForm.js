@@ -1,7 +1,4 @@
 import React, { Component } from 'react';
-import {
-  withRouter
-} from 'react-router-dom';
 
 class SignUpForm extends React.Component {
   constructor(props) {
@@ -37,9 +34,8 @@ class SignUpForm extends React.Component {
   }
 
   handleSubmit(event) {
-    //alert('Sign up finished for: ' + this.state.username);
+    alert('Sign up finished for: ' + this.state.username);
     event.preventDefault();
-    this.props.history.push('/list');
   }
 
   render() {
@@ -71,4 +67,4 @@ class SignUpForm extends React.Component {
   }
 }
 
-export default withRouter(SignUpForm);
+export default SignUpForm;
