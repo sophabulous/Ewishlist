@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import Header from '../components/Header';
+import {
+  withRouter
+} from 'react-router-dom';
 
 class TrackingPage extends Component {
 
@@ -10,12 +13,20 @@ class TrackingPage extends Component {
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleTrack = this.handleTrack.bind(this);
   }
 
   handleInputChange(event) {
     this.setState({
        query: this.search.value
     });
+  }
+
+  handleTrack(event) {
+    event.preventDefault();
+    this.props.history.push('/confirm');
+    //alert('yes we did the push');
+
   }
 
     render () {
@@ -32,7 +43,7 @@ class TrackingPage extends Component {
                         ref={input => this.search = input}
                         onChange={this.handleInputChange}
                      />
-                      <button type="submit" className="trackButton">Track</button>
+                      <button type="submit" className="trackButton" onClick={this.handleTrack}>Track</button>
                     </div>
                  </form>
                </div>
@@ -41,4 +52,4 @@ class TrackingPage extends Component {
     }
 }
 
-export default TrackingPage;
+export default withRouter(TrackingPage);
