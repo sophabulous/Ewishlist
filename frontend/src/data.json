@@ -28,5 +28,13 @@
       "productName": "Item Name",
       "notes": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.",
       "productPic": "./src/assets/dress.jpg"
+    },
+    "detail": {
+      "productName": "Item Name",
+      "description": "flary dress",
+      "oldPrice" :"$35",
+      "newPrice": "$30",
+      "notes": "I want this !!!!",
+      "productPic": "./src/assets/dress.jpg"
     }
 }

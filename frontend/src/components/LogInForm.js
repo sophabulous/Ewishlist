@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 
+import {
+  withRouter
+} from 'react-router-dom';
 class LogInForm extends React.Component {
   constructor(props) {
     super(props);
@@ -20,9 +23,15 @@ class LogInForm extends React.Component {
   }
 
   handleSubmit(event) {
-    alert('A name was submitted: ' + this.state.username);
+    //alert('A name was submitted: ' + this.state.username);
+    //this.context.router.push('/');
     event.preventDefault();
+    this.props.history.push('/list');
   }
+
+  /*handleClick(event) {
+    this.props.push('/');
+  }*/
 
   render() {
     return (
@@ -45,4 +54,4 @@ class LogInForm extends React.Component {
   }
 }
 
-export default LogInForm;
+export default withRouter(LogInForm);
