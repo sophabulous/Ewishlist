@@ -1,20 +1,25 @@
 import React, { Component } from 'react';
 import Header from '../components/Header';
 import data from '../data.json';
+import {
+  withRouter
+} from 'react-router-dom';
 
 class ConfirmationPage extends Component {
-    constructor() {
-      super();
-      this.handleCancelClick = this.handleCancelClick.bind(this);
-      this.handleConfirmClick = this.handleConfirmClick.bind(this);
+    constructor(props) {
+      super(props);
+      this.handleCancel = this.handleCancel.bind(this);
+      this.handleConfirm = this.handleConfirm.bind(this);
     }
-    handleCancelClick(event) {
+    handleCancel(event) {
       event.preventDefault();
-      //this.context.history.push('/track');
+      this.props.history.push('/track');
     }
-    handleConfirmClick(event) {
+    handleConfirm(event) {
       event.preventDefault();
-      //this.context.history.push('/');
+      this.props.history.push('/list');
+
+      // need to add this item to the bottom of the list
     }
     render () {
         return (
@@ -30,8 +35,8 @@ class ConfirmationPage extends Component {
                       <h2>{data.confirmation.productName}</h2>
                       <p>Notes: {data.confirmation.notes}</p>
                       <div className="confirmButtonsContainer">
-                        <button type="submit" className="confirmButton" onclick={this.handleCancelClick}>Cancel</button>
-                        <button type="submit" className="confirmButton" onclick={this.handleConfirmClick}>Yes!</button>
+                        <button type="submit" className="confirmButton" onClick={this.handleCancel}>Cancel</button>
+                        <button type="submit" className="confirmButton" onClick={this.handleConfirm}>Yes!</button>
                       </div>
                     </div>
                   </div>
@@ -41,4 +46,4 @@ class ConfirmationPage extends Component {
     }
 }
 
-export default ConfirmationPage;
+export default withRouter(ConfirmationPage);
