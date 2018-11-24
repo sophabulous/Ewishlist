@@ -302,7 +302,7 @@ begin
         return;
     END IF;
     -- delete product into wishlist
-    DELETE FROM wishlist WHERE user_id = u_id AND site = untrackProduct.site;
+    DELETE FROM wishlist W WHERE W.user_id = u_id AND W.site = untrackProduct.site;
     status := TRUE;
 END;
 $$
