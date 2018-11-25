@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import org.threeten.bp.OffsetDateTime;
@@ -60,7 +61,6 @@ public class LoginToken   {
   **/
   @ApiModelProperty(value = "")
 
-@Size(min=128,max=256) 
   public String getSessionToken() {
     return sessionToken;
   }

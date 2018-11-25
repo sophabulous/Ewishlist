@@ -1,14 +1,23 @@
-package com.EbucketList.api;
+package io.swagger.api;
 
 import com.EbucketList.api.models.WalmartResponse;
-import com.EbucketList.api.dao.WalmartDao;
+import io.swagger.dao.dao.EcommerceDao;
 import io.swagger.model.Product;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Configurable;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.net.MalformedURLException;
 
+@Component
+@Configurable
+@Service
 public class WalmartApiHandler implements APIHandler {
 
-    WalmartDao walmartDao = new WalmartDao();
+    @Autowired
+    EcommerceDao walmartDao;
+
     WalmartResponse walmartResponse = null;
 
     /**
