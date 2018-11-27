@@ -303,6 +303,10 @@ begin
     END IF;
     -- delete product into wishlist
     DELETE FROM wishlist W WHERE W.user_id = u_id AND W.site = untrackProduct.site;
+    -- check if product is still in other people's wishlist, if not delete product from products table
+    IF NOT EXISTS(SELECT * FROM wishlist W WHERE W.site = untrackProduct.site) THEN
+        DELETE FROM products P WHERE P.site = untrackProduct.site;
+    END IF;
     status := TRUE;
 END;
 $$
