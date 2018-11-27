@@ -18,7 +18,7 @@ import javax.validation.constraints.*;
 
 public class ProductItem   {
   @JsonProperty("productId")
-  private Long productId = null;
+  private String productId = null;
 
   @JsonProperty("productName")
   private String productName = null;
@@ -46,11 +46,11 @@ public class ProductItem   {
   @ApiModelProperty(value = "")
 
 
-  public Long getProductId() {
+  public String getProductId() {
     return productId;
   }
 
-  public void setProductId(Long productId) {
+  public void setProductId(String productId) {
     this.productId = productId;
   }
 

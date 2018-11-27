@@ -1,4 +1,4 @@
-package com.EbucketList.api;
+package io.swagger.api;
 
 import io.swagger.model.Product;
 import org.springframework.boot.SpringApplication;

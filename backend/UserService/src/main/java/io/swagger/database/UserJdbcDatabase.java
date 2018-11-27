@@ -23,8 +23,14 @@ public class UserJdbcDatabase implements JdbcDatabase{
 	private JdbcTemplate jdbcTemplate;
 	private DriverManagerDataSource dataSource;
 
-	@Value("#{new String('{DB_URL}')}")
+	@Value("${DB_URL}")
 	String dbUrl;
+
+	@Value("${DB_USER:username}")
+	String dbUsername;
+
+	@Value("${DB_PWD:password}")
+	String dbPassword;
 
 	public UserJdbcDatabase() throws IOException {
 
@@ -38,8 +44,8 @@ public class UserJdbcDatabase implements JdbcDatabase{
 		// this worked for me, you need to specify the actual path on the localhost
 		// dataSource.setUrl("jdbc:postgresql://localhost:5432/postgres");
 		dataSource.setUrl(dbUrl);
-		dataSource.setUsername("username");
-		dataSource.setPassword("password");
+		dataSource.setUsername(dbUsername);
+		dataSource.setPassword(dbPassword);
 		jdbcTemplate = new JdbcTemplate(dataSource);
 
 		// check connection

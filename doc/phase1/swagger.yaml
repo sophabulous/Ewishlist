@@ -241,7 +241,7 @@ paths:
         405:
           description: "Product could not be tracked"
     
-  /tracking/{productUrl}/info:
+  /tracking/{productId}/info:
     post:
       tags:
       - "Tracking"
@@ -253,16 +253,15 @@ paths:
       produces: 
       - "application/json"
       parameters:
-      - name: "productUrl"
+      - name: "productId"
         in: "path"
         required: true
         type: "string"
-        
       - in: "body"
         name: "body"
         required: true
         schema:
-          $ref: "#/definitions/LoginToken"
+          $ref: "#/definitions/NewProductRequest"
       responses:
         200:
           description: "Successful"
@@ -273,7 +272,7 @@ paths:
         405:
           description: "Product does not exist"
 
-  /tracking/{productUrl}:
+  /tracking/{productId}:
     post:
       tags: 
       - "Tracking"
@@ -281,7 +280,7 @@ paths:
       description: ""
       operationId: "updateProductItem"
       parameters: 
-      - name: "productUrl"
+      - name: "productId"
         in: "path"
         required: true
         description: "url of the product to update"
@@ -295,7 +294,7 @@ paths:
         name: "body"
         required: true
         schema:
-          $ref: "#/definitions/LoginToken"
+          $ref: "#/definitions/NewProductRequest"
       responses:
         200:
           description: "Successful"
@@ -317,10 +316,15 @@ paths:
       produces: 
       - "application/json"
       parameters: 
-      - name: "productUrl"
+      - name: "productId"
         in: "path"
         required: true
         type: "string"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/NewProductRequest"
       responses:
         200:
           description: "Successful"

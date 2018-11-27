@@ -25,7 +25,6 @@ import io.swagger.model.LoginToken;
 import io.swagger.model.NewUserRequest;
 import io.swagger.model.UpdateUserRequest;
 
-@Ignore
 @EnableAutoConfiguration
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = UsersApiController.class, webEnvironment = WebEnvironment.DEFINED_PORT)

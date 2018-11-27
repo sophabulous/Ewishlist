@@ -23,11 +23,16 @@ import java.util.Map;
 
 @Configuration
 @Component
-@Repository
 public class ProductJdbcDatabase implements JdbcDatabase {
 
 	@Value("${DB_URL}")
 	String dbUrl;
+
+	@Value("${DB_USER:username}")
+	String dbUsername;
+
+	@Value("${DB_PWD:password}")
+	String dbPassword;
 
 	private DriverManagerDataSource dataSource;
 
@@ -42,10 +47,9 @@ public class ProductJdbcDatabase implements JdbcDatabase {
 		dataSource = new DriverManagerDataSource();
 		dataSource.setDriverClassName("org.postgresql.Driver");
 		// replace with local database
-		System.out.println(dbUrl);
 		dataSource.setUrl(dbUrl);
-		dataSource.setUsername("username");
-		dataSource.setPassword("password");
+		dataSource.setUsername(dbUsername);
+		dataSource.setPassword(dbPassword);
 		jdbcTemplate = new JdbcTemplate(dataSource);
 		// check connection
 		try {
@@ -56,7 +60,7 @@ public class ProductJdbcDatabase implements JdbcDatabase {
 	}
 	/**
 	 * add product to product table if it doesn't exist
-	 * 
+	 *
 	 * @param product
 	 */
 	public void insertProduct(ProductItem product) {
@@ -68,7 +72,7 @@ public class ProductJdbcDatabase implements JdbcDatabase {
 	}
 	/**
 	 * add product to wishlist
-	 * 
+	 *
 	 * @param productReq
 	 */
 	public void trackProduct(ProductRequest productReq) {
@@ -80,7 +84,7 @@ public class ProductJdbcDatabase implements JdbcDatabase {
 
 	/**
 	 * delete product to wishlist
-	 * 
+	 *
 	 * @param productId
 	 */
 	public void untrackProduct(ProductRequest product) {
@@ -92,7 +96,7 @@ public class ProductJdbcDatabase implements JdbcDatabase {
 
 	/**
 	 * update product price
-	 * 
+	 *
 	 * @param product
 	 */
 	public void updatePrice(ProductItem product) {
@@ -104,7 +108,7 @@ public class ProductJdbcDatabase implements JdbcDatabase {
 
 	/**
 	 * getProduct info
-	 * 
+	 *
 	 * @param product
 	 */
 	public ProductItem getProduct(ProductRequest product) {
@@ -119,10 +123,10 @@ public class ProductJdbcDatabase implements JdbcDatabase {
 		return pi;
 
 	}
-	
+
 	/**
 	 * get Wishlist
-	 * 
+	 *
 	 * @param token
 	 */
 	public List<String> getWishlist(LoginToken token) {
@@ -131,12 +135,12 @@ public class ProductJdbcDatabase implements JdbcDatabase {
 		Map<String, Object> out = jdbcCall.execute(in);
 		Integer user_id = (Integer) out.get("user_id");
 		List<String> products = this.jdbcTemplate.query(
-		        "SELECT site FROM public.wishlist WHERE user_id = "+user_id+";",
-		        new RowMapper<String>() {
-		            public String mapRow(ResultSet rs, int rowNum) throws SQLException {
-		            	return rs.getString("site");
-		            }
-		        });
+				"SELECT site FROM public.wishlist WHERE user_id = "+user_id+";",
+				new RowMapper<String>() {
+					public String mapRow(ResultSet rs, int rowNum) throws SQLException {
+						return rs.getString("site");
+					}
+				});
 		return products;
 
 	}

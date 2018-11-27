@@ -10,15 +10,13 @@ import io.swagger.model.LoginToken;
 import io.swagger.model.ProductItem;
 import io.swagger.annotations.*;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
 @javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-11-01T17:36:03.863Z")
-
+@Controller
 @Api(value = "tracking", description = "the tracking API")
 public interface TrackingApi {
 
@@ -39,11 +37,11 @@ public interface TrackingApi {
         @ApiResponse(code = 200, message = "Successful", response = ProductItem.class),
         @ApiResponse(code = 401, message = "Invalid/expired login token"),
         @ApiResponse(code = 405, message = "Product could not be tracked") })
-    @RequestMapping(value = "/tracking/{productUrl}",
+    @RequestMapping(value = "/tracking/{productId}",
         produces = { "application/json" },
         consumes = { "application/json" },
         method = RequestMethod.DELETE)
-    ResponseEntity<ProductItem> deleteTrackedProduct(@ApiParam(value = "",required=true) @PathVariable("productUrl") String productUrl, @Valid @RequestBody ProductRequest body);
+    ResponseEntity<ProductItem> deleteTrackedProduct(@ApiParam(value = "",required=true) @PathVariable("productId") String productId, @Valid @RequestBody ProductRequest body);
 
 
     @ApiOperation(value = "Information about an item being tracked by the user defined by the login token", nickname = "getTrackedProductInfo", notes = "", response = ProductItem.class, tags={ "Tracking", })
@@ -51,11 +49,11 @@ public interface TrackingApi {
         @ApiResponse(code = 200, message = "Successful", response = ProductItem.class),
         @ApiResponse(code = 401, message = "Invalid/expired login token"),
         @ApiResponse(code = 405, message = "Product does not exist") })
-    @RequestMapping(value = "/tracking/{productUrl}/info",
+    @RequestMapping(value = "/tracking/{productId}/info",
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.POST)
-    ResponseEntity<ProductItem> getTrackedProductInfo(@ApiParam(value = "",required=true) @PathVariable("productUrl") String  productUrl,@ApiParam(value = "" ,required=true )  @Valid @RequestBody ProductRequest body);
+    ResponseEntity<ProductItem> getTrackedProductInfo(@ApiParam(value = "",required=true) @PathVariable("productId") String  productId,@ApiParam(value = "" ,required=true )  @Valid @RequestBody ProductRequest body);
 
 
     @ApiOperation(value = "Get all product information for a user defined by their token", nickname = "getTrackedProducts", notes = "", response = ProductItem.class, responseContainer = "List", tags={ "Tracking", })
@@ -83,8 +81,8 @@ public interface TrackingApi {
         @ApiResponse(code = 200, message = "Successful", response = ProductItem.class),
         @ApiResponse(code = 401, message = "Invalid/expired login token"),
         @ApiResponse(code = 405, message = "Could not update product item") })
-    @RequestMapping(value = "/tracking/{productUrl}",
+        @RequestMapping(value = "/tracking/{productId}",
         method = RequestMethod.POST)
-    ResponseEntity<ProductItem> updateProductItem(@ApiParam(value = "",required=true) @PathVariable("productUrl") String url, @PathVariable("price") Double price, @ApiParam(value = "" ,required=true )  @Valid @RequestBody LoginToken loginToken);
+    ResponseEntity<ProductItem> updateProductItem(@ApiParam(value = "",required=true) @PathVariable("productId") String productId, @RequestParam("price") Double price, @ApiParam(value = "" ,required=true )  @Valid @RequestBody ProductRequest productRequest);
 
 }

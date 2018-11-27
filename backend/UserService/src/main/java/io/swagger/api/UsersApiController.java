@@ -60,36 +60,36 @@ public class UsersApiController implements UsersApi {
 
     public ResponseEntity<LoginToken> getUserToken(@ApiParam(value = "" ,required=true )  @Valid @RequestBody LoginRequest body) {
         String accept = request.getHeader("Accept");
+        log.info("login: " + body.toString());
         if (accept != null && accept.contains("application/json")) {
             try {
 
                 LoginToken t;
-                UserJdbcDatabase db = new UserJdbcDatabase();
 
                 try {
                     t = db.loginUser(body);
                 } catch(IOException e) {
+                    log.info("couldn't authenticate"+body.toString());
                     return new ResponseEntity<LoginToken>(HttpStatus.METHOD_NOT_ALLOWED);
                 }
                 return new ResponseEntity<LoginToken>(t, HttpStatus.OK);
 
-            } catch (IOException e) {
-                log.error("database connection could not be established");
-                return new ResponseEntity<LoginToken>(HttpStatus.INTERNAL_SERVER_ERROR);
-            } catch (Exception e) {
+            }catch (Exception e) {
                 log.error("Couldn't serialize response for content type application/json", e);
                 return new ResponseEntity<LoginToken>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
-
+        log.error("headers of the request not set properly");
         return new ResponseEntity<LoginToken>(HttpStatus.METHOD_NOT_ALLOWED);
     }
 
     public ResponseEntity<String> invalidateToken(@ApiParam(value = "" ,required=true )  @Valid @RequestBody LoginToken body) {
         try {
+            log.info(body.toString());
             if(db.invalidateToken(body)) {
                 return new ResponseEntity<String>(HttpStatus.OK);
             } else {
+                log.error("couldn't invalidate token");
                 return new ResponseEntity<String>(HttpStatus.METHOD_NOT_ALLOWED);
             }
         } catch (IOException e) {
@@ -99,6 +99,7 @@ public class UsersApiController implements UsersApi {
 
     public ResponseEntity<String> newUser(@ApiParam(value = "" ,required=true )  @Valid @RequestBody NewUserRequest body) {
         try {
+            log.info(body.toString());
             db.createUser(body);
             return new ResponseEntity<String>(HttpStatus.OK);
         } catch (IOException e) {
