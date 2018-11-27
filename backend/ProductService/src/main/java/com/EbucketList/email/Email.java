@@ -9,9 +9,6 @@ import javax.activation.*;
 
 public class Email {
 
-	private static final String FROM = "spacewhales302@gmail.com";
-	private static final String PASSWORD = "proj_SpaceWhales";
-
 	/**
 	 * Returns true if email is formated correctly (not if it exists)
 	 */
@@ -48,7 +45,7 @@ public class Email {
 	/**
 	 * Sends an email to address 'to' from email 'FROM'
 	 */
-	public static void sendEmail(String to, String subject, String msg){    
+	public static void sendEmail(String from, String pword, String to, String subject, String msg){    
 
 		//Get properties object    
 		Properties props = new Properties();    
@@ -62,13 +59,13 @@ public class Email {
 		Session session = Session.getInstance(props,    
 				new javax.mail.Authenticator() {    
 			protected PasswordAuthentication getPasswordAuthentication() {    
-				return new PasswordAuthentication(FROM, PASSWORD);  
+				return new PasswordAuthentication(from, pword);  
 			}    
 		});
 
 		try {
 			MimeMessage message = new MimeMessage(session);
-			message.setFrom(new InternetAddress(FROM));
+			message.setFrom(new InternetAddress(from));
 			message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
 			message.setSubject(subject);
 
@@ -119,13 +116,15 @@ public class Email {
 	}
 
 	public static void main(String[] args){
+		String from = "spacewhales302@gmail.com";
+		String pword = "proj_SpaceWhales";
 		String to = "spacewhales302@gmail.com";
 		String subject = "URGENT: SALE NOTIFICATIONS FROM SPACEWHALES";
 		String msg = "THERE IS STUFF ON SALE \n\n "
 				+ "WOW GREAT PRICES \n\n\n "
 				+ "MUCH DISCOUNT \n\n\n\n "
 				+ "Koolaid";
-		sendEmail(to, subject, msg);
+		sendEmail(from, pword, to, subject, msg);
 	}
 
 }
