@@ -11,6 +11,7 @@ public interface JdbcDatabase {
 
     public void createUser(NewUserRequest user) throws IOException;
     public LoginToken loginUser(LoginRequest user) throws IOException;
+    public boolean validateAdmin(LoginToken token) throws IOException;
     public boolean validateToken(LoginToken token) throws IOException;
     public boolean invalidateToken(LoginToken token) throws IOException;
     public JdbcTemplate getJdbcTemplate();

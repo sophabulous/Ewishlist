@@ -46,6 +46,7 @@ CREATE TABLE public.users
     user_id serial,
     password_hash text COLLATE pg_catalog."default" NOT NULL,
     email text COLLATE pg_catalog."default" NOT NULL,
+    isAdmin boolean DEFAULT FALSE,
     CONSTRAINT users_pkey PRIMARY KEY (user_id)
 )
 WITH (
@@ -188,7 +189,7 @@ language plpgsql;
 -- if the token has ever been valid, return the expiration time, else null
 CREATE OR REPLACE FUNCTION validateToken(IN user_name text, IN session_token text, OUT expiry timestamp, OUT status boolean)
 AS $$
-begin
+BEGIN
     SELECT T.expiry_time INTO expiry
     FROM (SELECT expiry_time
             FROM users U 
@@ -200,8 +201,23 @@ begin
     status := expiry IS NOT NULL AND expiry > NOW();
 END;
 $$
-language plpgsql; 
+language plpgsql;
 
+-- same as validateToken, but returns t/f based on whether or not the token is valid and the holder is an admin
+CREATE OR REPLACE FUNCTION validateAdmin(IN user_name text, IN session_token text, OUT admin_status boolean)
+AS $$
+DECLARE t_status boolean;
+BEGIN
+	select status into t_status from validateToken(user_name, session_token);
+	IF (t_status IS FALSE) THEN
+		admin_status := FALSE;
+		RETURN;
+	END IF;
+	
+	admin_status := EXISTS(SELECT * FROM users U WHERE U.user_name = validateAdmin.user_name AND U.isAdmin IS TRUE);
+END;
+$$
+language plpgsql;
 
 -- Takes a parameterized login token 
 -- if the token is currently valid, set status to true and invalidate the user_session
@@ -355,3 +371,28 @@ END;
 $$
 language plpgsql;
 
+-- get all products in system - for batch ONLY
+CREATE OR REPLACE FUNCTION getAllProducts() RETURNS SETOF PRODUCTS
+AS $$
+BEGIN
+	RETURN QUERY SELECT * FROM PRODUCTS;
+END;
+$$
+language plpgsql;
+
+-- get all user wishlists that have been updated
+CREATE OR REPLACE FUNCTION getUsersToNotify() RETURNS TABLE (user_name text, email text)
+AS $$
+BEGIN
+	RETURN QUERY 
+		(
+		SELECT U.user_name AS user_name, U.email AS email
+		FROM users U
+		JOIN wishlist L ON L.user_id = U.user_id
+		JOIN products P ON P.site = L.site
+		WHERE P.current_price < P.yesterday_price AND P.current_price <= L.trigger_price
+		GROUP BY U.user_id
+		);
+END;
+$$
+language plpgsql;

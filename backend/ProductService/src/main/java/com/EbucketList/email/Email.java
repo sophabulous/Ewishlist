@@ -33,7 +33,6 @@ public class Email {
 		
 		for (int i = 0; i < text.length(); i++) {
 			index = rand.nextInt(colours.length);
-
 			if (text.charAt(i) == '\n')
 				colourMsg += "<br>";
 			else

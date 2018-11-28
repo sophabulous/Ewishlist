@@ -3,12 +3,15 @@ package io.swagger.database.api;
 import io.swagger.model.LoginToken;
 import io.swagger.model.ProductItem;
 import io.swagger.model.ProductRequest;
+import io.swagger.model.UserEmailItem;
+
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Stream;
 
 public interface JdbcDatabase {
 
@@ -56,5 +59,9 @@ public interface JdbcDatabase {
      * @return DataSource
      */
     public DataSource getDataSource();
+
+    public Stream<ProductItem> getAllProducts();
+
+    public Stream<UserEmailItem> getUsersToNotify();
 
 }

@@ -34,30 +34,43 @@ public class UsersApiController implements UsersApi {
     @Autowired
     private UserJdbcDatabase db;
 
-    @org.springframework.beans.factory.annotation.Autowired
+    @Autowired
     public UsersApiController(ObjectMapper objectMapper, HttpServletRequest request) {
         this.objectMapper = objectMapper;
         this.request = request;
     }
 
-    public ResponseEntity<String> authenticateToken(@ApiParam(value = "" ,required=true )  @Valid @RequestBody LoginToken body) {
+    public ResponseEntity<Void> authenticateAdminToken(@ApiParam(value = "" ,required=true )  @Valid @RequestBody LoginToken body) {
+        String accept = request.getHeader("Accept");
+        try {
+            if(db.validateAdmin(body)) {
+                return new ResponseEntity<Void>(HttpStatus.OK);
+            } else {
+                return new ResponseEntity<Void>(HttpStatus.METHOD_NOT_ALLOWED);
+            }
+        } catch (IOException e) {
+	        return new ResponseEntity<Void>(HttpStatus.SERVICE_UNAVAILABLE);
+        }
+    }
+
+    public ResponseEntity<Void> authenticateToken(@ApiParam(value = "" ,required=true )  @Valid @RequestBody LoginToken body) {
         log.info("authenticating user");
         try {
             if(db.validateToken(body)) {
-                return new ResponseEntity<String>(HttpStatus.OK);
+                return new ResponseEntity<Void>(HttpStatus.OK);
             } else {
-                return new ResponseEntity<String>(HttpStatus.METHOD_NOT_ALLOWED);
+                return new ResponseEntity<Void>(HttpStatus.METHOD_NOT_ALLOWED);
             }
         } catch (IOException e) {
-            return new ResponseEntity<String>(HttpStatus.I_AM_A_TEAPOT);
+            return new ResponseEntity<Void>(HttpStatus.I_AM_A_TEAPOT);
         }
         
     }
 
-    public ResponseEntity<String> deleteUser(@ApiParam(value = "" ,required=true )  @Valid @RequestBody LoginToken body) {
+    public ResponseEntity<Void> deleteUser(@ApiParam(value = "" ,required=true )  @Valid @RequestBody LoginToken body) {
         log.info("deleting user");
         String accept = request.getHeader("Accept");
-        return new ResponseEntity<String>(HttpStatus.NOT_IMPLEMENTED);
+        return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
     }
 
     public ResponseEntity<LoginToken> getUserToken(@ApiParam(value = "" ,required=true )  @Valid @RequestBody LoginRequest body) {
@@ -86,43 +99,42 @@ public class UsersApiController implements UsersApi {
         return new ResponseEntity<LoginToken>(HttpStatus.METHOD_NOT_ALLOWED);
     }
 
-    public ResponseEntity<String> invalidateToken(@ApiParam(value = "" ,required=true )  @Valid @RequestBody LoginToken body) {
+    public ResponseEntity<Void> invalidateToken(@ApiParam(value = "" ,required=true )  @Valid @RequestBody LoginToken body) {
         log.info("log off user");
         try {
             log.info(body.toString());
             if(db.invalidateToken(body)) {
-                return new ResponseEntity<String>(HttpStatus.OK);
+                return new ResponseEntity<Void>(HttpStatus.OK);
             } else {
                 log.error("couldn't invalidate token");
-                return new ResponseEntity<String>(HttpStatus.METHOD_NOT_ALLOWED);
+                return new ResponseEntity<Void>(HttpStatus.METHOD_NOT_ALLOWED);
             }
         } catch (IOException e) {
-            return new ResponseEntity<String>(HttpStatus.I_AM_A_TEAPOT);
+            return new ResponseEntity<Void>(HttpStatus.I_AM_A_TEAPOT);
         }
     }
 
-    public ResponseEntity<String> newUser(@ApiParam(value = "" ,required=true )  @Valid @RequestBody NewUserRequest body) {
+    public ResponseEntity<Void> newUser(@ApiParam(value = "" ,required=true )  @Valid @RequestBody NewUserRequest body) {
         log.info("create new user");
         try {
             log.info(body.toString());
             db.createUser(body);
-            return new ResponseEntity<String>(HttpStatus.OK);
+            return new ResponseEntity<Void>(HttpStatus.OK);
         } catch (IOException e) {
-            return new ResponseEntity<String>(HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
         }
     }
 
-
-    public ResponseEntity<String> pingUsers() {
+    public ResponseEntity<Void> pingUsers() {
         log.info("pinged");
         String accept = request.getHeader("Accept");
-        return new ResponseEntity<String>(HttpStatus.NOT_IMPLEMENTED);
+        return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
     }
 
-    public ResponseEntity<String> updateUser(@ApiParam(value = "" ,required=true )  @Valid @RequestBody UpdateUserRequest body) {
+    public ResponseEntity<Void> updateUser(@ApiParam(value = "" ,required=true )  @Valid @RequestBody UpdateUserRequest body) {
         log.info("update user");
         String accept = request.getHeader("Accept");
-        return new ResponseEntity<String>(HttpStatus.NOT_IMPLEMENTED);
+        return new ResponseEntity<Void>(HttpStatus.NOT_IMPLEMENTED);
     }
 
 }

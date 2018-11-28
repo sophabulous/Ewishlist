@@ -175,6 +175,29 @@ paths:
         418:
           description: "Fake token"
 
+  /users/token/validateToken/admin:
+    post:
+      tags:
+      - "User"
+      summary: "Validates whether a given token is a valid admin token"
+      description: ""
+      operationId: "authenticateAdminToken"
+      consumes: 
+      - "application/json"
+      produces: 
+      - "application/json"
+      parameters: 
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/LoginToken"
+      responses:
+        200:
+          description: "Token is valid admin token"
+        405:
+          description: "Invalid token"
+
   /tracking/ping:
     get:
       tags: 
@@ -334,8 +357,26 @@ paths:
           description: "Invalid/expired login token"
         405:
           description: "Product could not be tracked"
-
-
+  
+  /tracking/batch:
+    post:
+      tags: 
+      - "Tracking"
+      summary: "Runs the batch service"
+      description: "Privileged procedure. Requires an admin token."
+      operationId: "executeBatch"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/LoginToken"
+      responses:
+        200:
+          description: "Successful"
+        401:
+          description: "Invalid/expired login token"
+          
 definitions:
   Username:
     type: "string"

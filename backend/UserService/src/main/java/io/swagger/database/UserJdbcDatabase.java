@@ -102,6 +102,23 @@ public class UserJdbcDatabase implements JdbcDatabase{
 	}
 
 	/**
+	 * Intentionally opaque admin validation
+	 * 
+	 * @param token
+	 * @return
+	 * @throws IOException
+	 */
+	public boolean validateAdmin(LoginToken token) throws IOException {
+		SimpleJdbcCall jdbcCall = new SimpleJdbcCall(dataSource).withProcedureName("validateAdmin");
+		MapSqlParameterSource in = new MapSqlParameterSource().addValue("user_name", token.getUsername());
+		in.addValue("session_token", token.getSessionToken());
+
+		Map<String, Object> out = jdbcCall.execute(in);
+
+		return (boolean)out.get("admin_status");
+	}
+	
+	/**
 	 * Validates whether a token is valid or not
 	 * 
 	 * @param token

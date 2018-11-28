@@ -43,6 +43,15 @@ public interface TrackingApi {
         method = RequestMethod.DELETE)
     ResponseEntity<ProductItem> deleteTrackedProduct(@ApiParam(value = "",required=true) @PathVariable("productId") String productId, @Valid @RequestBody ProductRequest body);
 
+  
+    @ApiOperation(value = "Runs the batch service", nickname = "executeBatch", notes = "Privileged procedure. Requires an admin token.", tags={ "Tracking", })
+    @ApiResponses(value = { 
+        @ApiResponse(code = 200, message = "Successful"),
+        @ApiResponse(code = 401, message = "Invalid/expired login token") })
+    @RequestMapping(value = "/tracking/batch",
+        method = RequestMethod.POST)
+    ResponseEntity<Void> executeBatch(@ApiParam(value = "" ,required=true )  @Valid @RequestBody LoginToken body);
+
 
     @ApiOperation(value = "Information about an item being tracked by the user defined by the login token", nickname = "getTrackedProductInfo", notes = "", response = ProductItem.class, tags={ "Tracking", })
     @ApiResponses(value = { 
