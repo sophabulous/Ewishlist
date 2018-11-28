@@ -329,10 +329,14 @@ $$
 language plpgsql;
 
 -- get product name and the current price
-CREATE OR REPLACE FUNCTION getProduct(IN site text,OUT product_name text, OUT current_price real, OUT status boolean)
+CREATE OR REPLACE FUNCTION getProduct(IN site text,OUT product_name text, OUT current_price real, OUT yesterday_price real, OUT status boolean)
 AS $$
 begin
-    SELECT P.item_name, P.current_price INTO product_name, current_price FROM products P WHERE P.site = getProduct.site;
+    SELECT P.item_name, P.current_price, P.yesterday_price INTO product_name, current_price,yesterday_price FROM products P WHERE P.site = getProduct.site;
+    IF product_name IS NULL or current_price Is NULL or yesterday_price is NULL THEN
+        status := FALSE;
+        return;
+    END IF;
     status := TRUE;
 END;
 $$
