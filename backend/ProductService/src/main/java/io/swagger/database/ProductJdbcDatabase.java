@@ -115,11 +115,19 @@ public class ProductJdbcDatabase implements JdbcDatabase {
 		SimpleJdbcCall jdbcCall = new SimpleJdbcCall(dataSource).withProcedureName("getProduct");
 		MapSqlParameterSource in = new MapSqlParameterSource().addValue("site", product.getUrl());
 		Map<String, Object> out = jdbcCall.execute(in);
+
+		boolean status = (boolean) out.get("status");
+		if (!status) {
+			throw new NullPointerException("Cannot get product info if product is not tracked");
+		}
 		ProductItem pi = new ProductItem();
 		pi.setProductName((String) out.get("product_name"));
 		pi.setUrl(product.getUrl());
 		Float price = (Float) out.get("current_price");
+		Float y_price = (Float) out.get("yesterday_price");
+		pi.setTrackedPrice(y_price.doubleValue());
 		pi.setCurrentPrice(price.doubleValue());
+		
 		return pi;
 
 	}
