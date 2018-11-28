@@ -164,7 +164,7 @@ public class TrackingApiController implements TrackingApi {
                     ProductItem prodItem;
     				try {
     					prodItem = db.getProduct(productRequest);
-                        products.add(db.getProduct(productRequest));
+                        products.add(prodItem);
     				} catch (IOException e) {
     					log.info("Product not in database: " + productRequest.getUrl());
     					return new ResponseEntity<List<ProductItem>>(HttpStatus.METHOD_NOT_ALLOWED);
