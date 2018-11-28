@@ -16,6 +16,8 @@ import org.springframework.stereotype.Repository;
 
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
+
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -110,15 +112,16 @@ public class ProductJdbcDatabase implements JdbcDatabase {
 	 * getProduct info
 	 *
 	 * @param product
+	 * @throws IOException 
 	 */
-	public ProductItem getProduct(ProductRequest product) {
+	public ProductItem getProduct(ProductRequest product) throws IOException {
 		SimpleJdbcCall jdbcCall = new SimpleJdbcCall(dataSource).withProcedureName("getProduct");
 		MapSqlParameterSource in = new MapSqlParameterSource().addValue("site", product.getUrl());
 		Map<String, Object> out = jdbcCall.execute(in);
 
 		boolean status = (boolean) out.get("status");
 		if (!status) {
-			throw new NullPointerException("Cannot get product info if product is not tracked");
+			throw new IOException("Product not in database");
 		}
 		ProductItem pi = new ProductItem();
 		pi.setProductName((String) out.get("product_name"));

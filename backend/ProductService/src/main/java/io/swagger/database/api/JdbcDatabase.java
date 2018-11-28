@@ -6,6 +6,8 @@ import io.swagger.model.ProductRequest;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import javax.sql.DataSource;
+
+import java.io.IOException;
 import java.util.List;
 
 public interface JdbcDatabase {
@@ -35,8 +37,9 @@ public interface JdbcDatabase {
      * getProduct info
      *
      * @param product
+     * @throws IOException 
      */
-    public ProductItem getProduct(ProductRequest product);
+    public ProductItem getProduct(ProductRequest product) throws IOException;
     /**
      * get Wishlist
      *
