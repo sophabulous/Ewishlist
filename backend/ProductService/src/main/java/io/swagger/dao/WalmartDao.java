@@ -36,6 +36,7 @@ public class WalmartDao implements EcommerceDao{
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<WalmartResponse> response = restTemplate.getForEntity(url.toString(), WalmartResponse.class);
         WalmartResponse walmartResponse = response.getBody();
+        log.info("Response from walmart : " + walmartResponse.toString());
         return walmartResponse;
 
     }

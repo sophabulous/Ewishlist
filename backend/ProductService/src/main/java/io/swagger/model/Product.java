@@ -4,16 +4,34 @@ package io.swagger.model;
 The purpose of this class is to provide a uniform template for product information regardless of the API
  */
 public class Product {
-    long itemId;
+    String itemId;
     String name;
     double salePrice;
-    long upc;
+    String upc;
+    String longDescription;
+    String thumbnailImage;
 
-    public long getItemId() {
+    public String getLongDescription() {
+        return longDescription;
+    }
+
+    public void setLongDescription(String longDescription) {
+        this.longDescription = longDescription;
+    }
+
+    public String getThumbnailImage() {
+        return thumbnailImage;
+    }
+
+    public void setThumbnailImage(String thumbnailImage) {
+        this.thumbnailImage = thumbnailImage;
+    }
+
+    public String getItemId() {
         return itemId;
     }
 
-    public void setItemId(long itemId) {
+    public void setItemId(String itemId) {
         this.itemId = itemId;
     }
 
@@ -33,30 +51,11 @@ public class Product {
         this.salePrice = salePrice;
     }
 
-    public long getUpc() {
+    public String getUpc() {
         return upc;
     }
 
-    public void setUpc(long upc) {
+    public void setUpc(String upc) {
         this.upc = upc;
     }
-
-    public String getLongDescription() {
-        return longDescription;
-    }
-
-    public void setLongDescription(String longDescription) {
-        this.longDescription = longDescription;
-    }
-
-    public String getThumbnailImage() {
-        return thumbnailImage;
-    }
-
-    public void setThumbnailImage(String thumbnailImage) {
-        this.thumbnailImage = thumbnailImage;
-    }
-
-    String longDescription;
-    String thumbnailImage;
 }

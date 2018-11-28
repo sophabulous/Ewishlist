@@ -41,6 +41,7 @@ public class UsersApiController implements UsersApi {
     }
 
     public ResponseEntity<String> authenticateToken(@ApiParam(value = "" ,required=true )  @Valid @RequestBody LoginToken body) {
+        log.info("authenticating user");
         try {
             if(db.validateToken(body)) {
                 return new ResponseEntity<String>(HttpStatus.OK);
@@ -54,11 +55,13 @@ public class UsersApiController implements UsersApi {
     }
 
     public ResponseEntity<String> deleteUser(@ApiParam(value = "" ,required=true )  @Valid @RequestBody LoginToken body) {
+        log.info("deleting user");
         String accept = request.getHeader("Accept");
         return new ResponseEntity<String>(HttpStatus.NOT_IMPLEMENTED);
     }
 
     public ResponseEntity<LoginToken> getUserToken(@ApiParam(value = "" ,required=true )  @Valid @RequestBody LoginRequest body) {
+        log.info("login user");
         String accept = request.getHeader("Accept");
         log.info("login: " + body.toString());
         if (accept != null && accept.contains("application/json")) {
@@ -84,6 +87,7 @@ public class UsersApiController implements UsersApi {
     }
 
     public ResponseEntity<String> invalidateToken(@ApiParam(value = "" ,required=true )  @Valid @RequestBody LoginToken body) {
+        log.info("log off user");
         try {
             log.info(body.toString());
             if(db.invalidateToken(body)) {
@@ -98,6 +102,7 @@ public class UsersApiController implements UsersApi {
     }
 
     public ResponseEntity<String> newUser(@ApiParam(value = "" ,required=true )  @Valid @RequestBody NewUserRequest body) {
+        log.info("create new user");
         try {
             log.info(body.toString());
             db.createUser(body);
@@ -107,12 +112,15 @@ public class UsersApiController implements UsersApi {
         }
     }
 
+
     public ResponseEntity<String> pingUsers() {
+        log.info("pinged");
         String accept = request.getHeader("Accept");
         return new ResponseEntity<String>(HttpStatus.NOT_IMPLEMENTED);
     }
 
     public ResponseEntity<String> updateUser(@ApiParam(value = "" ,required=true )  @Valid @RequestBody UpdateUserRequest body) {
+        log.info("update user");
         String accept = request.getHeader("Accept");
         return new ResponseEntity<String>(HttpStatus.NOT_IMPLEMENTED);
     }

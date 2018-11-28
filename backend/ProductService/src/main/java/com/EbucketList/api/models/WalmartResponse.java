@@ -7,10 +7,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class WalmartResponse {
 
         @JsonProperty("itemId")
-        long itemId;
+        String itemId;
 
         @JsonProperty("parentItemId")
-        long parentItemId;
+        String parentItemId;
 
         @JsonProperty("name")
         String name;
@@ -19,7 +19,7 @@ public class WalmartResponse {
         double salePrice;
 
         @JsonProperty("upc")
-        long upc;
+        String upc;
 
         @JsonProperty("longDescription")
         String longDescription;
@@ -34,19 +34,19 @@ public class WalmartResponse {
         String productTrackingUrl;
 
 
-        public long getItemId() {
+        public String getItemId() {
                 return itemId;
         }
 
-        public void setItemId(long itemId) {
+        public void setItemId(String itemId) {
                 this.itemId = itemId;
         }
 
-        public long getParentItemId() {
+        public String getParentItemId() {
                 return parentItemId;
         }
 
-        public void setParentItemId(long parentItemId) {
+        public void setParentItemId(String parentItemId) {
                 this.parentItemId = parentItemId;
         }
 
@@ -66,11 +66,11 @@ public class WalmartResponse {
                 this.salePrice = salePrice;
         }
 
-        public long getUpc() {
+        public String getUpc() {
                 return upc;
         }
 
-        public void setUpc(long upc) {
+        public void setUpc(String upc) {
                 this.upc = upc;
         }
 
@@ -104,6 +104,18 @@ public class WalmartResponse {
 
         public void setProductTrackingUrl(String productTrackingUrl) {
                 this.productTrackingUrl = productTrackingUrl;
+        }
+
+        @Override
+        public String toString(){
+                return "itemid: " + itemId +"\n" +
+                        "parentItemId: " + parentItemId + "\n" +
+                        "name: " + name + "\n" +
+                        "salePrice: " +  salePrice + "\n" +
+                        "upc: " +  upc.toString() + "\n" +
+                        "longDescription: " + longDescription + "\n" +
+                        "brandName: " + brandName + "\n" +
+                        "thumbnailImage: " + thumbnailImage + "\n";
         }
 }
 

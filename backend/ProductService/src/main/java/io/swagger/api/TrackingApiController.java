@@ -50,8 +50,9 @@ public class TrackingApiController implements TrackingApi {
         this.objectMapper = objectMapper;
         this.request = request;
     }
-     /*uses the user service to authenticate user token*/
+    /*uses the user service to authenticate user token*/
     private boolean validateToken(LoginToken loginToken){
+        log.info("validating user: " + loginToken);
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> response = restTemplate.postForEntity(userServiceUrl, loginToken, String.class);
         int status = response.getStatusCode().value();
@@ -65,14 +66,17 @@ public class TrackingApiController implements TrackingApi {
 
 
     public ResponseEntity<ProductItem> addTrackedProduct(@ApiParam(value = "" ,required=true )  @Valid @RequestBody ProductRequest body) {
+        log.info("adding product: " + body);
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
             try {
                 if(!validateToken(body.getLoginToken())){
+                    log.info("add product: not authenticated");
                     ProductItem productItem = null;
                     return new ResponseEntity<ProductItem>(HttpStatus.FORBIDDEN);
                 }
                 else{
+                    log.info("add product: authenticated");
                     double price = walmartApiHandler.getPrice(body.getUrl());
                     Product product = walmartApiHandler.getProduct(body.getUrl());
                     ProductItem  productItem = new ProductItem();
@@ -97,13 +101,16 @@ public class TrackingApiController implements TrackingApi {
     }
 
     public ResponseEntity<ProductItem> deleteTrackedProduct(@ApiParam(value = "",required=true) @PathVariable("productId") String productId, @Valid @RequestBody ProductRequest body) {
+        log.info("deleting product: " + body);
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
             if(!validateToken(body.getLoginToken())){
+                log.info("delete product: not authenticated");
                 ProductItem productItem = null;
                 return new ResponseEntity<ProductItem>(HttpStatus.FORBIDDEN);
             }
             else{
+                log.info("delete product: authenticated");
                 db.untrackProduct(body);
                 return new ResponseEntity<ProductItem>(HttpStatus.OK);
             }
@@ -113,32 +120,39 @@ public class TrackingApiController implements TrackingApi {
     }
 
     public ResponseEntity<ProductItem> getTrackedProductInfo(@ApiParam(value = "",required=true) @PathVariable("productId") String  productId,@ApiParam(value = "" ,required=true )  @Valid @RequestBody ProductRequest body) {
+        log.info("get tracked product info: " + body);
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")){
-                if(! validateToken(body.getLoginToken())){
-                    return new ResponseEntity<ProductItem>(HttpStatus.FORBIDDEN);
-                }
-                else {
-                    ProductItem item = db.getProduct(body);
-                    return new ResponseEntity<ProductItem>(item, HttpStatus.OK);
-                }
+            if(! validateToken(body.getLoginToken())){
+                log.info("get tracked product info: not authenticated");
+                return new ResponseEntity<ProductItem>(HttpStatus.FORBIDDEN);
+            }
+            else {
+                log.info("get tracked product info: authenticated");
+                ProductItem item = db.getProduct(body);
+                return new ResponseEntity<ProductItem>(item, HttpStatus.OK);
+            }
         }
         return new ResponseEntity<ProductItem>(HttpStatus.BAD_REQUEST);
     }
 
     public ResponseEntity<List<ProductItem>> getTrackedProducts(@ApiParam(value = "" ,required=true )  @Valid @RequestBody LoginToken body) {
+        log.info("getting all tracked product: " + body);
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
             if(! validateToken(body)){
+                log.info("getting all tracked products: not authenticated");
                 return new ResponseEntity<List<ProductItem>>(HttpStatus.FORBIDDEN);
             }
             else{
+                log.info("getting all tracked product: authenticated");
                 List<String> productList = db.getWishlist(body);
                 List<ProductItem> products = new ArrayList<ProductItem>();
                 for(String url : productList){
-                    ProductItem item = new ProductItem();
-                    item.setUrl(url);
-                    products.add(item);
+                    ProductRequest productRequest = new ProductRequest();
+                    productRequest.setUrl(url);
+                    productRequest.setLoginToken(body);
+                    products.add(db.getProduct(productRequest));
                 }
                 return new ResponseEntity<List<ProductItem>>(products, HttpStatus.OK);
             }
@@ -149,19 +163,25 @@ public class TrackingApiController implements TrackingApi {
 
 
     public ResponseEntity<Void> pingTracking() {
+        log.info("pinged");
         String accept = request.getHeader("Accept");
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
     //assume can only update price
     public ResponseEntity<ProductItem> updateProductItem(@ApiParam(value = "",required=true) @PathVariable("productId") String productId, @RequestParam("price") Double price, @ApiParam(value = "" ,required=true )  @Valid @RequestBody ProductRequest productRequest) {
+        log.info("update product item: " + productRequest);
         String accept = request.getHeader("Accept");
         if (accept != null && accept.contains("application/json")) {
             if(! validateToken(productRequest.getLoginToken())){
+                log.info("update product: not authenticated");
                 return new ResponseEntity<ProductItem>(HttpStatus.FORBIDDEN);
             }
             else{
+                log.info("update product: authenticated");
+
                 ProductItem prodItem = db.getProduct(productRequest);
+                prodItem.setTrackedPrice(prodItem.getCurrentPrice());
                 prodItem.setCurrentPrice(price);
                 db.updatePrice(prodItem);
                 return new ResponseEntity<ProductItem>(prodItem, HttpStatus.OK);

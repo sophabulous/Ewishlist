@@ -24,9 +24,7 @@ public class WalmartApiHandler implements APIHandler {
      * Get the price for an walmartResponse.
      */
     public Double getPrice(String url) throws MalformedURLException {
-        if(walmartResponse == null){
-            walmartResponse = walmartDao.getItem(url);
-        }
+        walmartResponse = walmartDao.getItem(url);
         return walmartResponse.getSalePrice();
     }
 
