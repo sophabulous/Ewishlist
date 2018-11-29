@@ -112,7 +112,7 @@ TABLESPACE pg_default;
 ALTER TABLE public.user_session
     OWNER to postgres;
 
-
+DROP FUNCTION IF EXISTS createUser;
 -- Takes a username, password and email.
 -- if conflicting credentials exist in database, or the provided credentials are invalid for any other reason, return false
 -- otherwise return true
@@ -133,6 +133,7 @@ END;
 $$
 language plpgsql;
 
+DROP FUNCTION IF EXISTS loginUser;
 -- Takes a username and password hash
 -- if invalid credentials, return null.
 -- else refreshes tokens which are still valid.
@@ -183,7 +184,7 @@ END;
 $$
 language plpgsql;
 
-
+DROP FUNCTION IF EXISTS validateToken;
 -- Takes a parameterized login token
 -- if the token is currently valid, set status to true, else false
 -- if the token has ever been valid, return the expiration time, else null
@@ -203,6 +204,7 @@ END;
 $$
 language plpgsql;
 
+DROP FUNCTION IF EXISTS validateAdmin;
 -- same as validateToken, but returns t/f based on whether or not the token is valid and the holder is an admin
 CREATE OR REPLACE FUNCTION validateAdmin(IN user_name text, IN session_token text, OUT admin_status boolean)
 AS $$
@@ -219,6 +221,7 @@ END;
 $$
 language plpgsql;
 
+DROP FUNCTION IF EXISTS invalidateToken;
 -- Takes a parameterized login token 
 -- if the token is currently valid, set status to true and invalidate the user_session
 -- if the token has been previously terminated or has expired, set status to false, else true.
@@ -254,8 +257,9 @@ BEGIN
     END IF;
 END;
 $$
-language plpgsql; 
+language plpgsql;
 
+DROP FUNCTION IF EXISTS insertProduct;
 -- Inserts product into table. If product exists return False
 CREATE OR REPLACE FUNCTION insertProduct(IN site text, IN item_name text, IN price real,OUT status boolean)
 AS $$
@@ -274,6 +278,7 @@ END;
 $$
 language plpgsql;
 
+DROP FUNCTION IF EXISTS trackProduct;
 -- Track Product
 CREATE OR REPLACE FUNCTION trackProduct(IN token text, IN site text, OUT status boolean)
 AS $$
@@ -301,6 +306,7 @@ END;
 $$
 language plpgsql;
 
+DROP FUNCTION IF EXISTS untrackProduct;
 -- remove produce from wishlist of user
 CREATE OR REPLACE FUNCTION untrackProduct(IN token text, IN site text, OUT status boolean)
 AS $$
@@ -328,6 +334,7 @@ END;
 $$
 language plpgsql;
 
+DROP FUNCTION IF EXISTS updateProduct;
 -- update product price
 CREATE OR REPLACE FUNCTION updateProduct(IN price real, IN site text, OUT status boolean)
 AS $$
@@ -344,6 +351,7 @@ END;
 $$
 language plpgsql;
 
+DROP FUNCTION IF EXISTS getProduct;
 -- get product name and the current price
 CREATE OR REPLACE FUNCTION getProduct(IN site text,OUT product_name text, OUT current_price real, OUT yesterday_price real, OUT status boolean)
 AS $$
@@ -358,6 +366,7 @@ END;
 $$
 language plpgsql;
 
+DROP FUNCTION IF EXISTS getUserId;
 -- get products from user wishlist
 CREATE OR REPLACE FUNCTION getUserId(IN session_token text, OUT user_id int, OUT status boolean)
 AS $$
@@ -371,6 +380,7 @@ END;
 $$
 language plpgsql;
 
+DROP FUNCTION IF EXISTS getAllProducts;
 -- get all products in system - for batch ONLY
 CREATE OR REPLACE FUNCTION getAllProducts() RETURNS SETOF PRODUCTS
 AS $$
@@ -380,6 +390,7 @@ END;
 $$
 language plpgsql;
 
+DROP FUNCTION IF EXISTS getUsersToNotify;
 -- get all user wishlists that have been updated
 CREATE OR REPLACE FUNCTION getUsersToNotify() RETURNS TABLE (user_name text, email text)
 AS $$
