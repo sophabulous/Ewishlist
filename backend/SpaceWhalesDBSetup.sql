@@ -133,18 +133,38 @@ END;
 $$
 language plpgsql;
 
-DROP FUNCTION IF EXISTS loginUser;
+DROP FUNCTION IF EXISTS getUserHash;
+-- Grabs a user's password hash for authentication
+-- returns null string if user doesn't exist
+CREATE OR REPLACE FUNCTION getUserHash(IN user_name text, OUT hash text)
+AS $$
+DECLARE u_hash text;
+BEGIN
+    SELECT U.password_hash INTO u_hash
+    FROM users U
+    WHERE U.user_name = getUserHash.user_name;
+
+    IF u_hash IS NULL THEN
+	RETURN;
+    END IF;
+    
+    hash := u_hash;
+END;
+$$
+language plpgsql;
+
+DROP FUNCTION IF EXISTS loginUser(text);
 -- Takes a username and password hash
 -- if invalid credentials, return null.
 -- else refreshes tokens which are still valid.
 -- else logs in a user and gives them a new token.
-CREATE OR REPLACE FUNCTION loginUser(IN user_name text, IN password text, OUT session_token text, OUT expiry timestamp)
+CREATE OR REPLACE FUNCTION loginUser(IN user_name text, OUT session_token text, OUT expiry timestamp)
 AS $$
 DECLARE u_id INT;
 BEGIN
     SELECT U.user_id INTO u_id
     FROM users U
-    WHERE U.user_name = loginUser.user_name AND U.password_hash = loginUser.password;
+    WHERE U.user_name = loginUser.user_name;
 
     -- user doesn't exist in system
     IF u_id IS NULL THEN

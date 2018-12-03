@@ -76,7 +76,26 @@ public class UserJdbcDatabase implements JdbcDatabase{
 	}
 
 	/**
+	 * Get's user's password hash for authentication
+	 *
+	 */
+	public String getUserHash(LoginRequest user) throws IOException {
+
+		SimpleJdbcCall jdbcCall = new SimpleJdbcCall(dataSource).withProcedureName("getUserHash");
+		MapSqlParameterSource in = new MapSqlParameterSource().addValue("user_name", user.getUsername());
+		Map<String, Object> out = jdbcCall.execute(in);
+
+		if (out.get("hash") == null)
+		{
+			throw new IOException("invalid login information");
+		}
+
+		return out.get("hash").toString();
+	}
+
+	/**
 	 * logs a user in (creates session token)
+	 * should only be called after password has been authenticated
 	 * 
 	 * @param user
 	 * @throws IOException 
@@ -84,8 +103,6 @@ public class UserJdbcDatabase implements JdbcDatabase{
 	public LoginToken loginUser(LoginRequest user) throws IOException {
 		SimpleJdbcCall jdbcCall = new SimpleJdbcCall(dataSource).withProcedureName("loginUser");
 		MapSqlParameterSource in = new MapSqlParameterSource().addValue("user_name", user.getUsername());
-		in.addValue("password", user.getPassword());
-		//in.addValue("email", user.getPassword());
 		Map<String, Object> out = jdbcCall.execute(in);
 
 		if (out.get("session_token") == null || out.get("expiry") == null)

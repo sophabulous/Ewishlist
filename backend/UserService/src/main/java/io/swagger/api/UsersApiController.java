@@ -4,7 +4,7 @@ import io.swagger.model.LoginRequest;
 import io.swagger.model.LoginToken;
 import io.swagger.model.NewUserRequest;
 import io.swagger.model.UpdateUserRequest;
-
+import util.HashingUtil;
 import io.swagger.database.UserJdbcDatabase;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.*;
@@ -77,18 +77,24 @@ public class UsersApiController implements UsersApi {
     public ResponseEntity<LoginToken> getUserToken(@ApiParam(value = "" ,required=true )  @Valid @RequestBody LoginRequest body) {
         log.info("login user");
         String accept = request.getHeader("Accept");
-        log.info("login: " + body.toString());
+        log.info("login: " + body.getUsername()); // shouldn't log password
         if (accept != null && accept.contains("application/json")) {
             try {
-
-                LoginToken t;
+                String hash;
 
                 try {
-                    t = db.loginUser(body);
+                    hash = db.getUserHash(body);
                 } catch(IOException e) {
-                    log.info("couldn't authenticate"+body.toString());
+                    log.info("User doesn't exist " + body.getUsername());
                     return new ResponseEntity<LoginToken>(HttpStatus.METHOD_NOT_ALLOWED);
                 }
+
+                if (!HashingUtil.checkPassword(body.getPassword(), hash)) {
+                    log.info("invalid password " + body.getUsername());
+                    return new ResponseEntity<LoginToken>(HttpStatus.METHOD_NOT_ALLOWED);
+                }
+
+                LoginToken t = db.loginUser(body);
                 return new ResponseEntity<LoginToken>(t, HttpStatus.OK);
 
             }catch (Exception e) {
@@ -118,6 +124,7 @@ public class UsersApiController implements UsersApi {
     public ResponseEntity<Void> newUser(@ApiParam(value = "" ,required=true )  @Valid @RequestBody NewUserRequest body) {
         log.info("create new user");
         try {
+            body.setPassword(HashingUtil.hashPassword(body.getPassword()));
             log.info(body.toString());
             db.createUser(body);
             return new ResponseEntity<Void>(HttpStatus.OK);
