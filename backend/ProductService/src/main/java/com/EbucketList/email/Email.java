@@ -1,14 +1,25 @@
 package com.EbucketList.email;
 
+import java.net.URL;
 import java.util.*;
 import javax.mail.*;
 import javax.mail.internet.*;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import io.swagger.api.TrackingApiController;
+
 import java.util.Random;
 
 import javax.activation.*;
 
 public class Email {
 
+    private static final Logger log = LoggerFactory.getLogger(TrackingApiController.class);
+	
+	private static URL backgroundUrl = Email.class.getResource("/background.jpg");
+	
 	/**
 	 * Returns true if email is formated correctly (not if it exists)
 	 */
@@ -98,7 +109,7 @@ public class Email {
 			multipart.addBodyPart(msgBodyPart);
 
 			// add img for background to multipart
-			DataSource imgFile = new FileDataSource("background.jpg");
+			DataSource imgFile = new FileDataSource(backgroundUrl.getFile());
 			msgBodyPart = new MimeBodyPart();
 			msgBodyPart.setDataHandler(new DataHandler(imgFile));
 			msgBodyPart.setHeader("Content-ID", "<image>");
@@ -107,9 +118,10 @@ public class Email {
 			message.setContent(multipart);
 
 			Transport.send(message);
-			System.out.println("Sent message successfully....");
+			log.debug("Sent message successfully to " + to);
 		
 		} catch (MessagingException mex) {
+			log.error("Failed to send message to " + to);
 			mex.printStackTrace();
 		}
 	}

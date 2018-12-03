@@ -51,6 +51,9 @@ public class TrackingApiController implements TrackingApi {
 	APIHandler walmartApiHandler;
 
 	@Autowired
+	BatchProductUpdate batch;
+	
+	@Autowired
 	public TrackingApiController(ObjectMapper objectMapper, HttpServletRequest request) {
 		this.objectMapper = objectMapper;
 		this.request = request;
@@ -114,8 +117,8 @@ public class TrackingApiController implements TrackingApi {
 			if(!userServiceApi.validateAdmin(body)) {
 				return new ResponseEntity<Void>(HttpStatus.UNAUTHORIZED);
 			} else {
-				BatchProductUpdate.updateAllProducts(db, walmartApiHandler);
-				BatchProductUpdate.sendEmailsForUpdatedProducts(db);
+				batch.updateAllProducts(db, walmartApiHandler);
+				batch.sendEmailsForUpdatedProducts(db);
 				return new ResponseEntity<Void>(HttpStatus.OK);
 			}
 		}
