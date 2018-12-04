@@ -24,10 +24,21 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.util.List;
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-11-27T23:34:02.379Z")
 
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.SpringCodegen", date = "2018-11-07T19:11:02.761Z")
 @Api(value = "users", description = "the users API")
 public interface UsersApi {
+
+    @ApiOperation(value = "Validates whether a given token is a valid admin token", nickname = "authenticateAdminToken", notes = "", tags={ "User", })
+    @ApiResponses(value = { 
+        @ApiResponse(code = 200, message = "Token is valid admin token"),
+        @ApiResponse(code = 405, message = "Invalid token") })
+    @RequestMapping(value = "/users/token/validateToken/admin",
+        produces = { "application/json" }, 
+        consumes = { "application/json" },
+        method = RequestMethod.POST)
+    ResponseEntity<Void> authenticateAdminToken(@ApiParam(value = "" ,required=true )  @Valid @RequestBody LoginToken body);
+
 
     @ApiOperation(value = "Validates whether a given token is valid - primarily for inter-service communication", nickname = "authenticateToken", notes = "", tags={ "User", })
     @ApiResponses(value = { 
@@ -38,7 +49,7 @@ public interface UsersApi {
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.POST)
-    ResponseEntity<String> authenticateToken(@ApiParam(value = "" ,required=true )  @Valid @RequestBody LoginToken body);
+    ResponseEntity<Void> authenticateToken(@ApiParam(value = "" ,required=true )  @Valid @RequestBody LoginToken body);
 
 
     @ApiOperation(value = "Delete a user", nickname = "deleteUser", notes = "", tags={ "User", })
@@ -50,7 +61,7 @@ public interface UsersApi {
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.DELETE)
-    ResponseEntity<String> deleteUser(@ApiParam(value = "" ,required=true )  @Valid @RequestBody LoginToken body);
+    ResponseEntity<Void> deleteUser(@ApiParam(value = "" ,required=true )  @Valid @RequestBody LoginToken body);
 
 
     @ApiOperation(value = "Create and return user login token based on provided username and password hash", nickname = "getUserToken", notes = "", response = LoginToken.class, tags={ "User", })
@@ -73,7 +84,7 @@ public interface UsersApi {
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.POST)
-    ResponseEntity<String> invalidateToken(@ApiParam(value = "" ,required=true )  @Valid @RequestBody LoginToken body);
+    ResponseEntity<Void> invalidateToken(@ApiParam(value = "" ,required=true )  @Valid @RequestBody LoginToken body);
 
 
     @ApiOperation(value = "Create new user", nickname = "newUser", notes = "", tags={ "User", })
@@ -84,7 +95,7 @@ public interface UsersApi {
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.PUT)
-    ResponseEntity<String> newUser(@ApiParam(value = "" ,required=true )  @Valid @RequestBody NewUserRequest body);
+    ResponseEntity<Void> newUser(@ApiParam(value = "" ,required=true )  @Valid @RequestBody NewUserRequest body);
 
 
     @ApiOperation(value = "ping", nickname = "pingUsers", notes = "", tags={ "User", })
@@ -92,7 +103,7 @@ public interface UsersApi {
         @ApiResponse(code = 200, message = "ping") })
     @RequestMapping(value = "/users/ping",
         method = RequestMethod.GET)
-    ResponseEntity<String> pingUsers();
+    ResponseEntity<Void> pingUsers();
 
 
     @ApiOperation(value = "Update a user's info", nickname = "updateUser", notes = "", tags={ "User", })
@@ -104,6 +115,6 @@ public interface UsersApi {
         produces = { "application/json" }, 
         consumes = { "application/json" },
         method = RequestMethod.POST)
-    ResponseEntity<String> updateUser(@ApiParam(value = "" ,required=true )  @Valid @RequestBody UpdateUserRequest body);
+    ResponseEntity<Void> updateUser(@ApiParam(value = "" ,required=true )  @Valid @RequestBody UpdateUserRequest body);
 
 }

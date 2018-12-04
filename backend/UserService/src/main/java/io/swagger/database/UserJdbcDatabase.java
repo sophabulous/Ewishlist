@@ -23,8 +23,14 @@ public class UserJdbcDatabase implements JdbcDatabase{
 	private JdbcTemplate jdbcTemplate;
 	private DriverManagerDataSource dataSource;
 
-	@Value("#{new String('{DB_URL}')}")
+	@Value("${DB_URL}")
 	String dbUrl;
+
+	@Value("${DB_USER:username}")
+	String dbUsername;
+
+	@Value("${DB_PWD:password}")
+	String dbPassword;
 
 	public UserJdbcDatabase() throws IOException {
 
@@ -38,8 +44,8 @@ public class UserJdbcDatabase implements JdbcDatabase{
 		// this worked for me, you need to specify the actual path on the localhost
 		// dataSource.setUrl("jdbc:postgresql://localhost:5432/postgres");
 		dataSource.setUrl(dbUrl);
-		dataSource.setUsername("username");
-		dataSource.setPassword("password");
+		dataSource.setUsername(dbUsername);
+		dataSource.setPassword(dbPassword);
 		jdbcTemplate = new JdbcTemplate(dataSource);
 
 		// check connection
@@ -70,7 +76,26 @@ public class UserJdbcDatabase implements JdbcDatabase{
 	}
 
 	/**
+	 * Get's user's password hash for authentication
+	 *
+	 */
+	public String getUserHash(LoginRequest user) throws IOException {
+
+		SimpleJdbcCall jdbcCall = new SimpleJdbcCall(dataSource).withProcedureName("getUserHash");
+		MapSqlParameterSource in = new MapSqlParameterSource().addValue("user_name", user.getUsername());
+		Map<String, Object> out = jdbcCall.execute(in);
+
+		if (out.get("hash") == null)
+		{
+			throw new IOException("invalid login information");
+		}
+
+		return out.get("hash").toString();
+	}
+
+	/**
 	 * logs a user in (creates session token)
+	 * should only be called after password has been authenticated
 	 * 
 	 * @param user
 	 * @throws IOException 
@@ -78,8 +103,6 @@ public class UserJdbcDatabase implements JdbcDatabase{
 	public LoginToken loginUser(LoginRequest user) throws IOException {
 		SimpleJdbcCall jdbcCall = new SimpleJdbcCall(dataSource).withProcedureName("loginUser");
 		MapSqlParameterSource in = new MapSqlParameterSource().addValue("user_name", user.getUsername());
-		in.addValue("password", user.getPassword());
-		//in.addValue("email", user.getPassword());
 		Map<String, Object> out = jdbcCall.execute(in);
 
 		if (out.get("session_token") == null || out.get("expiry") == null)
@@ -95,6 +118,23 @@ public class UserJdbcDatabase implements JdbcDatabase{
 		return t;
 	}
 
+	/**
+	 * Intentionally opaque admin validation
+	 * 
+	 * @param token
+	 * @return
+	 * @throws IOException
+	 */
+	public boolean validateAdmin(LoginToken token) throws IOException {
+		SimpleJdbcCall jdbcCall = new SimpleJdbcCall(dataSource).withProcedureName("validateAdmin");
+		MapSqlParameterSource in = new MapSqlParameterSource().addValue("user_name", token.getUsername());
+		in.addValue("session_token", token.getSessionToken());
+
+		Map<String, Object> out = jdbcCall.execute(in);
+
+		return (boolean)out.get("admin_status");
+	}
+	
 	/**
 	 * Validates whether a token is valid or not
 	 * 

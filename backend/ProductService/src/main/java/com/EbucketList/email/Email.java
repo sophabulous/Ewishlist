@@ -1,15 +1,25 @@
+package com.EbucketList.email;
+
+import java.net.URL;
 import java.util.*;
 import javax.mail.*;
 import javax.mail.internet.*;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import io.swagger.api.TrackingApiController;
+
 import java.util.Random;
 
 import javax.activation.*;
 
 public class Email {
 
-	private static final String FROM = "spacewhales302@gmail.com";
-	private static final String PASSWORD = "proj_SpaceWhales";
-
+    private static final Logger log = LoggerFactory.getLogger(TrackingApiController.class);
+	
+	private static URL backgroundUrl = Email.class.getResource("/background.jpg");
+	
 	/**
 	 * Returns true if email is formated correctly (not if it exists)
 	 */
@@ -34,7 +44,6 @@ public class Email {
 		
 		for (int i = 0; i < text.length(); i++) {
 			index = rand.nextInt(colours.length);
-
 			if (text.charAt(i) == '\n')
 				colourMsg += "<br>";
 			else
@@ -46,7 +55,7 @@ public class Email {
 	/**
 	 * Sends an email to address 'to' from email 'FROM'
 	 */
-	public static void sendEmail(String to, String subject, String msg){    
+	public static void sendEmail(String from, String pword, String to, String subject, String msg){    
 
 		//Get properties object    
 		Properties props = new Properties();    
@@ -60,13 +69,13 @@ public class Email {
 		Session session = Session.getInstance(props,    
 				new javax.mail.Authenticator() {    
 			protected PasswordAuthentication getPasswordAuthentication() {    
-				return new PasswordAuthentication(FROM, PASSWORD);  
+				return new PasswordAuthentication(from, pword);  
 			}    
 		});
 
 		try {
 			MimeMessage message = new MimeMessage(session);
-			message.setFrom(new InternetAddress(FROM));
+			message.setFrom(new InternetAddress(from));
 			message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
 			message.setSubject(subject);
 
@@ -100,7 +109,7 @@ public class Email {
 			multipart.addBodyPart(msgBodyPart);
 
 			// add img for background to multipart
-			DataSource imgFile = new FileDataSource("background.jpg");
+			DataSource imgFile = new FileDataSource(backgroundUrl.getFile());
 			msgBodyPart = new MimeBodyPart();
 			msgBodyPart.setDataHandler(new DataHandler(imgFile));
 			msgBodyPart.setHeader("Content-ID", "<image>");
@@ -109,21 +118,24 @@ public class Email {
 			message.setContent(multipart);
 
 			Transport.send(message);
-			System.out.println("Sent message successfully....");
+			log.debug("Sent message successfully to " + to);
 		
 		} catch (MessagingException mex) {
+			log.error("Failed to send message to " + to);
 			mex.printStackTrace();
 		}
 	}
 
 	public static void main(String[] args){
+		String from = "spacewhales302@gmail.com";
+		String pword = "proj_SpaceWhales";
 		String to = "spacewhales302@gmail.com";
 		String subject = "URGENT: SALE NOTIFICATIONS FROM SPACEWHALES";
 		String msg = "THERE IS STUFF ON SALE \n\n "
 				+ "WOW GREAT PRICES \n\n\n "
 				+ "MUCH DISCOUNT \n\n\n\n "
 				+ "Koolaid";
-		sendEmail(to, subject, msg);
+		sendEmail(from, pword, to, subject, msg);
 	}
 
 }
