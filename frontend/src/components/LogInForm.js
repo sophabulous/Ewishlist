@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { AsyncStorage } from "react"
 
 import {
   withRouter
@@ -21,17 +22,37 @@ class LogInForm extends React.Component {
       password: event.target.value
     });
   }
-
   handleSubmit(event) {
+    const userreq = {
+      username: this.state.username,
+      password: this.state.password,
+    };
+
     //alert('A name was submitted: ' + this.state.username);
     //this.context.router.push('/');
     event.preventDefault();
-    this.props.history.push('/list');
+    // this.props.history.push('/list');
+    fetch('http://localhost:8081/users/token/login', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userreq)
+
+      })
+    .then(response => response.json())
+    .then((response) => {
+        localStorage.setItem("token",JSON.stringify(response))
+        this.props.history.push('/list'); 
+      }, (error) => {
+        if (error) {
+          // handle error here
+          console.log(error)
+        }
+    });
   }
 
-  /*handleClick(event) {
-    this.props.push('/');
-  }*/
 
   render() {
     return (
@@ -39,11 +60,11 @@ class LogInForm extends React.Component {
       <form className="logInForm" onSubmit={this.handleSubmit}>
         <label>
           <p>Username</p>
-          <input type="text" value={this.state.username} onChange={this.handleChange} />
+          <input name="username" type="text" value={this.state.username} onChange={this.handleChange} />
         </label>
         <label>
           <p>Password</p>
-          <input type="text" value={this.state.password} onChange={this.handleChange} />
+          <input name="password" type="text" value={this.state.password} onChange={this.handleChange} />
         </label>
         <div className="submitBtn">
           <input type="submit" value="Submit" />
