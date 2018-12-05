@@ -7,5 +7,3 @@ dist
 .project
 .settings
 *.package-lock.json
-*.properties
-frontend/package-lock.json
