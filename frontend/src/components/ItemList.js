@@ -5,13 +5,11 @@ class ItemList extends Component {
   constructor(props) {
     super(props);
     const string = localStorage.getItem("token")
-    console.log("new"+string)
     const userreq = JSON.parse(string)
     this.state = { items: []};
     }
     componentDidMount() {
         const string = localStorage.getItem("token")
-        console.log("new"+string)
         const userreq = JSON.parse(string)
         fetch('http://localhost:9090/tracking/all', {
             method: 'POST',
