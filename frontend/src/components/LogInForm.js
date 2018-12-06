@@ -8,24 +8,37 @@ class LogInForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      username: '',
-      password: ''
+      Person: [
+        {
+          username: '',
+          password: ''
+        }
+      ]
+
     };
 
-    this.handleChange = this.handleChange.bind(this);
+    //this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-  }
+    this.handleNameChange = this.handleNameChange.bind(this);
 
-  handleChange(event) {
+  }
+  handleNameChange(event){
+    this.setState({
+      username: event.target.value,
+      password: event.target.value
+    })
+  }
+  /*handleChange(event) {
+    //this.preventDefault();
     this.setState({
       username: event.target.value,
       password: event.target.value
     });
-  }
+  }*/
   handleSubmit(event) {
     const userreq = {
-      username: this.state.username,
-      password: this.state.password,
+      username: event.target.username.value,
+      password: event.target.password.value
     };
 
     //alert('A name was submitted: ' + this.state.username);
@@ -60,11 +73,11 @@ class LogInForm extends React.Component {
       <form className="logInForm" onSubmit={this.handleSubmit}>
         <label>
           <p>Username</p>
-          <input name="username" type="text" value={this.state.username} onChange={this.handleChange} />
+          <input name="username" type="text" value={this.state.Person.username} onChange={this.handleNameChange} />
         </label>
         <label>
           <p>Password</p>
-          <input name="password" type="password" value={this.state.password} onChange={this.handleChange} />
+          <input name="password" type="Password" value={this.state.Person.password} onChange={this.handleNameChange} />
         </label>
         <div className="submitBtn">
           <input type="submit" value="Submit" />
