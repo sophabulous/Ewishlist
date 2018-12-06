@@ -5,6 +5,7 @@
     "username": "Test-user1",
     "password": "Password",
     "img": "./src/assets/user.png",
+    "productPlaceholder": "./src/assets/productplaceholder.png",
 
     "itemList": [
         {

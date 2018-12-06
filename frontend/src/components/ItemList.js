@@ -45,6 +45,7 @@ class ItemList extends Component {
                 { this.state.items.map((item) =>
                     <div className="listItemSection">
                         <div className="thumbnailContainer">
+                          <img src={data.productPlaceholder}></img>
                         </div>
                         <div className="listItemContentContainer">
                           <h2>{item.productName}</h2>
