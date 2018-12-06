@@ -7,9 +7,7 @@ class ItemList extends Component {
     const string = localStorage.getItem("token")
     const userreq = JSON.parse(string)
     this.state = { items: []};
-
-    //this.handleItem = this.handleItem.bind(this);
-  }
+    }
     componentDidMount() {
         const string = localStorage.getItem("token")
         const userreq = JSON.parse(string)
@@ -33,12 +31,6 @@ class ItemList extends Component {
         });
     }
 
-  /*  handleItem(event) {
-      event.preventDefault();
-      //localStorage.setItem("Item", this.state.items.)
-      console.log(event.target.value);
-    } */
-
     render () {
         return (
             <div className="listContainer">
@@ -47,7 +39,7 @@ class ItemList extends Component {
                         <div className="thumbnailContainer">
                         </div>
                         <div className="listItemContentContainer">
-                          <h2>{item.productName}</h2>
+                          <h2><a href={item.url}>{item.productName}</a></h2>
                           <p>Current Price: {item.currentPrice}</p>
                           <p>Tracking Price: {item.trackedPrice}</p>
                         </div>
