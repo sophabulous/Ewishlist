@@ -3,14 +3,14 @@
 -- DROP DATABASE "SpaceWhales";
 
 CREATE DATABASE "SpaceWhales"
-    WITH 
+    WITH
     OWNER = postgres
     ENCODING = 'UTF8'
     LC_COLLATE = 'English_Canada.1252'
     LC_CTYPE = 'English_Canada.1252'
     TABLESPACE = pg_default
     CONNECTION LIMIT = -1;
-    
+
 
 -- Extension for uuid generation (primarily for tokens)
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
@@ -35,7 +35,7 @@ TABLESPACE pg_default;
 
 ALTER TABLE public.products
     OWNER to postgres;
-    
+
 -- Table: public.users
 
 DROP TABLE IF EXISTS public.users CASCADE;
@@ -123,11 +123,11 @@ begin
     IF EXISTS(SELECT * FROM users U WHERE U.user_name = createUser.user_name OR U.email = createUser.email) THEN
         status := FALSE;
         return;
-    END IF; 
-    
+    END IF;
+
     INSERT INTO users (user_name, password_hash, email)
     VALUES (createUser.user_name, createUser.password, createUser.email);
-    
+
     status := TRUE;
 END;
 $$
@@ -147,7 +147,7 @@ BEGIN
     IF u_hash IS NULL THEN
 	RETURN;
     END IF;
-    
+
     hash := u_hash;
 END;
 $$
@@ -170,34 +170,34 @@ BEGIN
     IF u_id IS NULL THEN
         session_token := NULL;
         expiry := NULL;
-        return;    
+        return;
     END IF;
 
     expiry := NOW() + interval '24 hours';
 
     -- existing active session - we'll extend it
-    -- can reasonably occur if a user uses multiple devices - we don't want to invalidate the 
+    -- can reasonably occur if a user uses multiple devices - we don't want to invalidate the
     -- other session, and it's a lot more work to make device-based sessions.
     IF EXISTS(SELECT * FROM user_session S WHERE S.user_id = u_id AND S.expiry_time > NOW() AND S.terminated = FALSE) THEN
         UPDATE user_session S
         SET expiry_time = expiry, extended_count = extended_count + 1
-        WHERE S.user_id = u_id 
-        AND S.expiry_time > NOW() 
+        WHERE S.user_id = u_id
+        AND S.expiry_time > NOW()
         AND S.terminated = FALSE;
 
         session_token := (
-            SELECT S.session_uuid 
-            FROM user_session S 
-            WHERE S.user_id = u_id 
-            AND S.expiry_time > NOW() 
+            SELECT S.session_uuid
+            FROM user_session S
+            WHERE S.user_id = u_id
+            AND S.expiry_time > NOW()
             AND S.terminated = FALSE);
         RETURN;
     END IF;
 
     session_token := uuid_generate_v4();
 
-    -- new session    
-    INSERT INTO user_session 
+    -- new session
+    INSERT INTO user_session
         VALUES (u_id, session_token, NOW(), expiry, 0);
 
 END;
@@ -213,10 +213,10 @@ AS $$
 BEGIN
     SELECT T.expiry_time INTO expiry
     FROM (SELECT expiry_time
-            FROM users U 
-            JOIN user_session S on U.user_id = S.user_id 
-            WHERE U.user_name = validateToken.user_name 
-            AND S.session_uuid = session_token 
+            FROM users U
+            JOIN user_session S on U.user_id = S.user_id
+            WHERE U.user_name = validateToken.user_name
+            AND S.session_uuid = session_token
             AND S.terminated = FALSE) AS T;
 
     status := expiry IS NOT NULL AND expiry > NOW();
@@ -235,14 +235,14 @@ BEGIN
 		admin_status := FALSE;
 		RETURN;
 	END IF;
-	
+
 	admin_status := EXISTS(SELECT * FROM users U WHERE U.user_name = validateAdmin.user_name AND U.isAdmin IS TRUE);
 END;
 $$
 language plpgsql;
 
 DROP FUNCTION IF EXISTS invalidateToken;
--- Takes a parameterized login token 
+-- Takes a parameterized login token
 -- if the token is currently valid, set status to true and invalidate the user_session
 -- if the token has been previously terminated or has expired, set status to false, else true.
 -- if the provided token was invalid, set legalToken to false, else true.
@@ -253,8 +253,8 @@ DECLARE term boolean;
 BEGIN
     SELECT U.user_id, S.terminated OR S.expiry_time < NOW() INTO u_id, term
         FROM users U
-        JOIN user_session S on U.user_id = S.user_id 
-        WHERE U.user_name = invalidateToken.user_name 
+        JOIN user_session S on U.user_id = S.user_id
+        WHERE U.user_name = invalidateToken.user_name
         AND S.session_uuid = session_token;
 
     IF u_id IS NOT NULL THEN
@@ -288,11 +288,11 @@ begin
     IF EXISTS(SELECT * FROM products P WHERE P.site = insertProduct.site ) THEN
         status := FALSE;
         return;
-    END IF; 
-    
+    END IF;
+
     INSERT INTO products (item_name, site, yesterday_price,current_price)
     VALUES (insertProduct.item_name, insertProduct.site, insertProduct.price,insertProduct.price);
-    
+
     status := TRUE;
 END;
 $$
@@ -320,7 +320,7 @@ begin
     -- insert product into wishlist
     INSERT INTO wishlist (user_id, site, trigger_price)
     VALUES (u_id, trackProduct.site, trigger_p);
-    
+
     status := TRUE;
 END;
 $$
@@ -415,7 +415,7 @@ DROP FUNCTION IF EXISTS getUsersToNotify;
 CREATE OR REPLACE FUNCTION getUsersToNotify() RETURNS TABLE (user_name text, email text)
 AS $$
 BEGIN
-	RETURN QUERY 
+	RETURN QUERY
 		(
 		SELECT U.user_name AS user_name, U.email AS email
 		FROM users U
