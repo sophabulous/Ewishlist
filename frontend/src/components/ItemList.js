@@ -49,8 +49,8 @@ class ItemList extends Component {
                         </div>
                         <div className="listItemContentContainer">
                           <h2>{item.productName}</h2>
-                          <p>Current Price: {item.currentPrice}</p>
-                          <p>Tracking Price: {item.trackedPrice}</p>
+                          <p>Current Price: ${(item.currentPrice).toFixed(2)}</p>
+                          <p>Tracking Price: ${(item.trackedPrice).toFixed(2)}</p>
                         </div>
                     </div>
                 )}

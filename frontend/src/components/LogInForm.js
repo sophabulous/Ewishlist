@@ -44,7 +44,7 @@ class LogInForm extends React.Component {
     .then(response => response.json())
     .then((response) => {
         localStorage.setItem("token",JSON.stringify(response))
-        this.props.history.push('/list'); 
+        this.props.history.push('/list');
       }, (error) => {
         if (error) {
           // handle error here
@@ -64,7 +64,7 @@ class LogInForm extends React.Component {
         </label>
         <label>
           <p>Password</p>
-          <input name="password" type="text" value={this.state.password} onChange={this.handleChange} />
+          <input name="password" type="password" value={this.state.password} onChange={this.handleChange} />
         </label>
         <div className="submitBtn">
           <input type="submit" value="Submit" />
