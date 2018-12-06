@@ -125,17 +125,4 @@ public class Email {
 			mex.printStackTrace();
 		}
 	}
-
-	public static void main(String[] args){
-		String from = "spacewhales302@gmail.com";
-		String pword = "proj_SpaceWhales";
-		String to = "spacewhales302@gmail.com";
-		String subject = "URGENT: SALE NOTIFICATIONS FROM SPACEWHALES";
-		String msg = "THERE IS STUFF ON SALE \n\n "
-				+ "WOW GREAT PRICES \n\n\n "
-				+ "MUCH DISCOUNT \n\n\n\n "
-				+ "Koolaid";
-		sendEmail(from, pword, to, subject, msg);
-	}
-
 }
