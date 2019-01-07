@@ -1,6 +1,6 @@
 Misc
 
-1. import ProductService and UserService as maven projects in Intellij, then add environmental variables
+1. import ProductService and UserService as maven projects in Intellij, then add environmental variables (stored in env_var.txt file)
 2. Run Swagger2SpringBoot in each service
 3. Run "/Applications/Postgres.app/Contents/Versions/11/bin/psql" -p5432 -d "postgres" in command line to see values inside the database
 4. Run “nom start” in “frontend”
