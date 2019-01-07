@@ -23,6 +23,12 @@ public class ProductItem   {
   @JsonProperty("productName")
   private String productName = null;
 
+  @JsonProperty("productImg")
+  private String productImg = null;
+
+  @JsonProperty("productDescription")
+  private String productDescription = null;
+
   @JsonProperty("currentPrice")
   private Double currentPrice = null;
 
@@ -52,6 +58,35 @@ public class ProductItem   {
 
   public void setProductId(String productId) {
     this.productId = productId;
+  }
+
+  /**
+   * Get productImg
+   * @return productImg
+   **/
+  @ApiModelProperty(value = "")
+
+  public String getProductImg() {
+    return productImg;
+  }
+
+  public void setProductImg(String productImg) {
+    this.productImg = productImg;
+  }
+
+
+  /**
+   * Get productDescription
+   * @return productDescription
+   **/
+  @ApiModelProperty(value = "")
+
+  public String getProductDescription() {
+    return productDescription;
+  }
+
+  public void setProductDescription(String productDescription) {
+    this.productDescription = productDescription;
   }
 
   public ProductItem productName(String productName) {

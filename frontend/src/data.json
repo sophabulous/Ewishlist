@@ -1,5 +1,5 @@
 {
-    "siteName": "EBUCKETLIST",
+    "siteName": "EWISHLIST",
     "dontHaveAccountText": "Don't have an account? ",
     "signUpText": "Sign up",
     "username": "Test-user1",
@@ -32,10 +32,9 @@
     },
     "detail": {
       "productName": "Item Name",
-      "description": "flary dress",
+      "description": "Your description",
       "oldPrice" :"$35",
       "newPrice": "$30",
-      "notes": "I want this !!!!",
       "productPic": "./src/assets/dress.jpg"
     }
 }
