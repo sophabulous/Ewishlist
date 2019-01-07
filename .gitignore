@@ -7,3 +7,4 @@ dist
 .project
 .settings
 *.package-lock.json
+env_var.txt
