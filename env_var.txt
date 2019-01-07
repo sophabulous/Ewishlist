@@ -1,0 +1,4 @@
+DB_URL=jdbc:postgresql:postgres;
+DB_USER=sophie;
+DB_PWD=;
+WALMART_API_KEY=z6ten3pp98s82u3e3gccdce6
