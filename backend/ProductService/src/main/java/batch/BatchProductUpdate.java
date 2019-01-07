@@ -48,6 +48,7 @@ public class BatchProductUpdate {
 	{
 		Stream<UserEmailItem> items = db.getUsersToNotify();
 
+
 		final String subject = "URGENT: SALE NOTIFICATIONS FROM SPACEWHALES";
 		final String msg = "THERE IS STUFF ON SALE \n\n "
 						+ "WOW GREAT PRICES \n\n\n "
@@ -55,7 +56,7 @@ public class BatchProductUpdate {
 						+ "Koolaid";
 		
 		items.forEach(i -> {
-			log.debug("Emailing User[" + i.getUsername() + "] at [" + i.getEmail() + "]");
+			log.error("Emailing User[" + i.getUsername() + "] at [" + i.getEmail() + "]");
 			Email.sendEmail(email_address, email_password, i.getEmail(), subject, i.getUsername().toUpperCase() + " " + msg);
 		});
 		

@@ -75,6 +75,8 @@ public class TrackingApiController implements TrackingApi {
 					ProductItem  productItem = new ProductItem();
 					productItem.setCurrentPrice(product.getSalePrice());
 					productItem.setProductId(new Long(product.getItemId()).toString());
+					productItem.setProductImg(product.getThumbnailImage());
+					productItem.setProductDescription(product.getLongDescription());
 					productItem.setProductName(product.getName());
 					productItem.setUrl(body.getUrl());
 					productItem.setVendor("Walmart");

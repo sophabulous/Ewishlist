@@ -1,6 +1,7 @@
 const path = require('path');
 const autoprefixer = require('autoprefixer');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ROOT = path.resolve(__dirname, '..');
 
 module.exports = {
     devtool: 'cheap-module-eval-source-map',
@@ -9,7 +10,8 @@ module.exports = {
       historyApiFallback: true
     },
     output: {
-        path: path.resolve(__dirname, 'dist'),
+        //path: path.resolve(__dirname, 'dist'),
+        path: path.join(ROOT, 'dist'),
         filename: 'bundle.js',
         chunkFilename: '[id].js',
         publicPath: ''

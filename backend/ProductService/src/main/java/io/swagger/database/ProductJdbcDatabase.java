@@ -73,7 +73,10 @@ public class ProductJdbcDatabase implements JdbcDatabase {
 	public void insertProduct(ProductItem product) {
 		SimpleJdbcCall jdbcCall = new SimpleJdbcCall(dataSource).withProcedureName("insertProduct");
 		MapSqlParameterSource in = new MapSqlParameterSource().addValue("site", product.getUrl());
+		in.addValue("item_id", product.getProductId());
+		in.addValue("item_img", product.getProductImg());
 		in.addValue("item_name", product.getProductName());
+		in.addValue("item_desc", product.getProductDescription());
 		in.addValue("price", product.getCurrentPrice());
 		Map<String, Object> out = jdbcCall.execute(in);
 	}
@@ -130,6 +133,9 @@ public class ProductJdbcDatabase implements JdbcDatabase {
 		}
 		ProductItem pi = new ProductItem();
 		pi.setProductName((String) out.get("product_name"));
+		pi.setProductId((String) out.get("product_id"));
+		pi.setProductImg((String) out.get("product_img"));
+		pi.setProductDescription((String) out.get("product_desc"));
 		pi.setUrl(product.getUrl());
 		Float price = (Float) out.get("current_price");
 		Float y_price = (Float) out.get("yesterday_price");

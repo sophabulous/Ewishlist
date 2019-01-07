@@ -22,7 +22,7 @@ class App extends Component {
             <Route path="/signup" component={SignUpPage} />
             <Route path="/list" component={ListPage} />
             <Route path="/confirm" component={ConfirmationPage} />
-            <Route path="/item" component={DetailPage} />
+            <Route path="/item_:id" component={DetailPage} />
 
 
           </Switch>
